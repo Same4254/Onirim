@@ -67,8 +67,8 @@ public class Game extends JPanel{
 		
 		
 		update();
-//		update();
-//		update();
+		update();
+		update();
 	}
 	
 	public void update(){
