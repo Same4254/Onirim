@@ -11,6 +11,7 @@ import dev.Same4254.ThisGame.Game;
 import dev.Same4254.ThisGame.Entities.Card;
 import dev.Same4254.ThisGame.Entities.Deck;
 import dev.Same4254.ThisGame.Entities.Discard;
+import dev.Same4254.ThisGame.Entities.DoorsCompleted;
 import dev.Same4254.ThisGame.Entities.Hand;
 import dev.Same4254.ThisGame.Entities.Limbo;
 import dev.Same4254.ThisGame.Entities.PlayArea;
@@ -28,6 +29,7 @@ public class GameState extends State{
 	private Discard discard;
 	private Font myFont;
 	private Prophecy prophecy;
+	private DoorsCompleted doorsCompleted;
 	
 	public GameState(Game game){
 		super(game);
@@ -40,7 +42,8 @@ public class GameState extends State{
 		limbo = new Limbo(game, 585, 10, 100, 550);
 		deck = new Deck(game, this, 10, 10, 100, 158);
 		myFont = new Font("myFont", Font.PLAIN, 18);
-		prophecy = new Prophecy(game, this, 0, 625, 240, 550);
+		prophecy = new Prophecy(game, this, 0, 620, game.getDisplay().getFrame().getWidth(), 170);
+		doorsCompleted = new DoorsCompleted(game, this, 0, 790, game.getDisplay().getFrame().getWidth(), 170);
 	}
 	
 	public void update() {
@@ -50,8 +53,7 @@ public class GameState extends State{
 		limbo.update();
 		playArea.update();
 		discard.update();
-		
-		
+		doorsCompleted.update();
 		
 //		for(int i = 0; i < cardsOutOfDeck.size(); i++){
 //			cardsOutOfDeck.get(i).update();
@@ -80,6 +82,7 @@ public class GameState extends State{
 		hand.render(g2);
 		discard.render(g2);
 		prophecy.render(g2);
+		doorsCompleted.render(g2);
 //		for(int i = 0; i < playerHandSlots.length; i++){
 //			playerHandSlots[i].render(g2);
 //		}
@@ -122,6 +125,10 @@ public class GameState extends State{
 
 	public Discard getDiscard() {
 		return discard;
+	}
+
+	public DoorsCompleted getDoorsCompleted() {
+		return doorsCompleted;
 	}
 
 	public ArrayList<Card> getCardsOutOfDeck() {

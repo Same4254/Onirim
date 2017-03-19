@@ -32,19 +32,36 @@ public class Discard extends Entity{
 		g.drawRect(x, y, width, height);
 		slot.render(g);
 	}
-
+	
+	//Method for just simply adding a card to the discard without checking with other components
+	public void addCardWithoutCheck(Card c){
+		slot.addCard(c);
+	}
+	
 	public void addCard(Card c){
 		slot.addCard(c);
 		
-		if(c.getSymbol() == Card.CardSymbols.KEY && !Prophecy.prophosizing){
+		//The card in Limbo is still in play, and the player just discarded a key, check if limbo card is door or nightmare
+		if(c.getSymbol() == Card.CardSymbols.KEY && Limbo.currentDrawnCard != null){
+			if(Limbo.currentDrawnCard.getType() == Card.CardTypes.DREAM){
+				addCardWithoutCheck(Limbo.currentDrawnCard);
+			}
+			else if(Limbo.currentDrawnCard.getType() == Card.CardTypes.DOOR && Limbo.currentDrawnCard.getColor() == c.getColor()){
+				gameState.getDoorsCompleted().addDoor(Limbo.currentDrawnCard);
+			}
+			else{
+				gameState.getProphecy().clearAllProphecy();
+				gameState.getProphecy().restockProphecy(); 
+				System.out.println("Start Pro");
+			}
+			Limbo.currentDrawnCard = null;
+		}
+		
+		//Key drawn while not prophosizing, and limbo card is not in play, starts the prophecy
+		else if(c.getSymbol() == Card.CardSymbols.KEY && !Prophecy.prophosizing){
 			gameState.getProphecy().clearAllProphecy();
 			gameState.getProphecy().restockProphecy(); 
 			System.out.println("Start Pro");
-//			for(int i = 0; i < gameState.getLimbo().getSlots().length; i++){
-//				if(gameState.getLimbo().getSlots()[i].storedCard.getType() == Card.CardTypes.DOOR && c.getColor() == gameState.getLimbo().getSlots()[i].storedCard.getColor()){
-//					
-//				} 
-//			}
 		}
 	}
 	

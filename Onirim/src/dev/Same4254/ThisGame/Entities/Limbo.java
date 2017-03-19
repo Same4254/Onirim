@@ -8,6 +8,7 @@ public class Limbo extends Entity{
 
 	private Slot[] slots;
 	private Game game;
+	public static Card currentDrawnCard;
 	
 	public Limbo(Game game, int x, int y, int width, int height) {
 		super(x, y, width, height);
@@ -32,6 +33,7 @@ public class Limbo extends Entity{
 		for(int i = 0; i < slots.length; i++){
 			if(slots[i].storedCard == null){
 				slots[i].addCard(c);
+				currentDrawnCard = c;
 				break;
 			}
 		}
@@ -40,7 +42,7 @@ public class Limbo extends Entity{
 	public void shuffleToDeck(){
 		for(Slot s : slots){
 			if(s.storedCard == null){
-				return;
+				break;
 			}
 			s.storedCard.setInSlot(null);
 			s.storedCard.inDeck = true;
@@ -48,13 +50,15 @@ public class Limbo extends Entity{
 			game.getGameState().getCardsOutOfDeck().remove(s.storedCard);
 			s.storedCard = null;
 		}
+		System.out.println("SHUFFLE");
 		game.getGameState().getDeck().shuffle();
 	}
 	
 	public void update() {
-		if(Hand.handSize == 5){
-			shuffleToDeck();
-		}
+//		System.out.println(currentDrawnCard);
+//		if(Hand.handSize == 5){
+//			shuffleToDeck();
+//		}
 	}
 
 	public void render(Graphics g) {

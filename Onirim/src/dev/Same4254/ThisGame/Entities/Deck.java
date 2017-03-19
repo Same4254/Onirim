@@ -3,6 +3,8 @@ package dev.Same4254.ThisGame.Entities;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Random;
 
 import dev.Same4254.ThisGame.Game;
@@ -14,7 +16,7 @@ import dev.Same4254.ThisGame.States.GameState;
 import dev.Same4254.ThisGame.gfx.Assets;
 
 public class Deck extends Entity{
-	private ArrayList<Card> cards; //68 cards
+	private ArrayList<Card> cards; 
 	
 	private MouseManager mouse;
 	private Rectangle hitBox;
@@ -84,38 +86,28 @@ public class Deck extends Entity{
 	}
 
 	public void shuffle(){
-		for(int i = cards.size() - 1; i > 0; i--){
-	      int index = randy.nextInt(i + 1);
-	      Card a = cards.get(index);
-	      cards.set(index, cards.get(i));
-	      cards.set(i, a);
-	    }
+		Collections.shuffle(cards);
 	}
 	
 	public void update() {
 		if(!Prophecy.prophecyFull && hitBox.contains(MouseManager.mouseX, MouseManager.mouseY) && MouseManager.justReleased){
-//			System.out.println("MREG");
-//			outOfDeck.add(cards.get(cards.size() - 1));
-//			cards.get(cards.size() - 1).makeVisible();
-//			cards.remove(cards.size() - 1);
 			for(int i = 0; i < slots.length; i++){
 				if(slots[i].storedCard == null){
-//					notifyProphecy();
-//					
 					Card temp = null;
 					boolean cardFound = false;
+					
+					//Checks to see if there is a card in prophecy to draw
 					for(int k = 0; k < game.getGameState().getProphecy().getSlots().length; k++){
 						if(game.getGameState().getProphecy().getSlots()[k].storedCard != null){
-//							System.out.println("Bye");
 							temp = game.getGameState().getProphecy().getSlots()[k].storedCard;
 							cardFound = true;
-							temp.setInProphecy(true);
+							temp.setInProphecy(false);
 							break;
 						}
 					}
 					
+					//No card in prohecy was found, so get card from deck
 					if(!cardFound){
-						System.out.println("Hi");
 						temp = cards.remove(cards.size()-1);
 						temp.setInProphecy(false);
 					}
@@ -124,14 +116,17 @@ public class Deck extends Entity{
 					temp.makeVisible();
 					outOfDeck.add(temp);
 					
-					
 					if(temp.getType() != CardTypes.LOCATION){
 						limbo.addCard(temp);
 						break;
 					}
 					else{
 						game.getGameState().getHand().addCard(temp);
-//						game.update();
+						Limbo.currentDrawnCard = null;
+						Hand.handSize++;
+						if(Hand.handSize == 5 && game.getGameState().getLimbo().getSlots()[0].storedCard != null){
+							game.getGameState().getLimbo().shuffleToDeck();
+						}
 						break;
 					}
 				}

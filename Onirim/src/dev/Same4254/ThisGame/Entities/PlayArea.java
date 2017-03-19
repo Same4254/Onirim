@@ -96,6 +96,7 @@ public class PlayArea extends Entity{
 						if(c.getType() == Card.CardTypes.DOOR && c.getColor() == slots[i].storedCard.getColor()){
 							deck.remove(c);
 							game.getGameState().getLimbo().addCard(c);
+							c.setSelectableDoor(true);
 							break mark;
 						}
 					}

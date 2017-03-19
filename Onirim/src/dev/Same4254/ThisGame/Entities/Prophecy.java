@@ -120,6 +120,7 @@ public class Prophecy extends Entity{
 			toRender = null;
 		}
 		
+//		g.fillRect(x, y, width, height);
 //		g.drawString("Top", (int)wordLoc.getX(), (int)wordLoc.getY());
 	}
 

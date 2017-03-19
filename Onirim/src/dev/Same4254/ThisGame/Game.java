@@ -41,6 +41,25 @@ public class Game extends JPanel{
 	private Music music;
 	private Prophecy prophecy;
 	
+	/**
+	 * TODO LIST
+	 * 
+	 * Click on Door in Limbo From 3 In A Row
+	 * Completed Doors
+	 * Winning Conditions
+	 * Nightmare
+	 * 
+	 * Clean up/Comments 
+	 * TEST TEST TEST
+	 * 
+	 * EXTRA:
+	 * Music
+	 * Menu
+	 * Saving/Loading
+	 * 
+	 * EXTRA EXTRA:
+	 * Multiplayer
+	 */
 	public Game(String title, int width, int height){
 		this.title = title;
 		this.width = width;
