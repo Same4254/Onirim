@@ -44,12 +44,13 @@ public class GameState extends State{
 	}
 	
 	public void update() {
+		prophecy.update();
 		deck.update();
 		hand.update();
 		limbo.update();
 		playArea.update();
 		discard.update();
-		prophecy.update();
+		
 		
 		
 //		for(int i = 0; i < cardsOutOfDeck.size(); i++){

@@ -71,7 +71,6 @@ public class Prophecy extends Entity{
 			slots[i].addCard(deckCards.remove(deckCards.size()-1));
 			slots[i].storedCard.setInProphecy(true);
 			slots[i].storedCard.setMoveable(false);
-			prophosizing = true;
 		}
 	}
 	
@@ -85,11 +84,21 @@ public class Prophecy extends Entity{
 	
 	public void update() {
 		boolean temp = true;
+		int temp2 = 0;
 		for(int i = 0; i < slots.length; i++){
 			slots[i].update();
 			if(slots[i].storedCard == null){
 				temp = false;
 			}
+			else{
+				temp2++;
+			}
+		}
+		if(temp2 == 5){
+			prophosizing = true;
+		}
+		else{
+			prophosizing = false;
 		}
 		prophecyFull = temp;
 	}

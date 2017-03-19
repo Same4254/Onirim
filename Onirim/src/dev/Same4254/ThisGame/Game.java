@@ -88,7 +88,7 @@ public class Game extends JPanel{
 			State.getCurrentState().update();
 		repaint();
 //		render();
-		System.out.println("Pro: " + Prophecy.prophosizing);
+//		System.out.println("Pro: " + Prophecy.prophosizing);
 	}
 	
 	public void paintComponent(Graphics g){

@@ -103,13 +103,23 @@ public class Card extends Entity{
 //		System.out.println(MouseManager.mouseX.rightPressed);
 		
 		/***************************************************************************
-		 * Card In Prophecy
+		 * Card In Prophecy and Prophosizing 
 		 */
 		if(inProphecy && Prophecy.prophosizing){
-			System.out.println("njindfnnjdfjdfjfjkjj");
+//			System.out.println("njindfnnjdfjdfjfjkjj");
 			Slot[] proSlots = gameState.getProphecy().getSlots();
 //			System.out.println(mouse.rightPressed);
 			System.out.println(cardSelected);
+			
+			if(Prophecy.prophosizing && MouseManager.rightPressed && hitBox.contains(MouseManager.mouseX, MouseManager.mouseY)){
+				System.out.println("Pro: " + Prophecy.prophosizing);
+				discard.addCard(this);
+//				x = (int) inSlot.getX();
+//				y = (int) inSlot.getY();
+				hitBox.setLocation(x, y);
+//					gameState.getProphecy().end();
+				MouseManager.rightPressed = false;
+			 }
 			
 			if(MouseManager.justEntered && hitBox.contains(MouseManager.mouseX, MouseManager.mouseY)){
 				preX = x - MouseManager.mouseX;
@@ -141,21 +151,20 @@ public class Card extends Entity{
 		/******************************************************************************************************************
 		 * Card in Non-Full Hand Not Prophosizing
 		 */
-		else if(!moveable && !Prophecy.prophosizing){
+		else if(!moveable && !Prophecy.prophosizing && !inProphecy){
 			if(MouseManager.rightPressed && hitBox.contains(MouseManager.mouseX, MouseManager.mouseY)){
 				System.out.println("end");
 				discard.addCard(this);
 //				x = (int) inSlot.getX();
 //				y = (int) inSlot.getY();
 				hitBox.setLocation(x, y);
-				Prophecy.prophosizing = false;
 //					gameState.getProphecy().end();
 				MouseManager.rightPressed = false;
 			 }
 		}
 		
 		/*****************************************************************************************************************
-		 * Card in Full Hand not prophecizing 
+		 * Card in Full Hand not Prophosizing 
 		 */
 		else if(moveable && !Prophecy.prophosizing){
 			if(MouseManager.rightPressed && hitBox.contains(MouseManager.mouseX, MouseManager.mouseY)){
@@ -164,7 +173,6 @@ public class Card extends Entity{
 //				x = (int) inSlot.getX();
 //				y = (int) inSlot.getY();
 				hitBox.setLocation(x, y);
-				Prophecy.prophosizing = false;
 //					gameState.getProphecy().end();
 				MouseManager.rightPressed = false;
 			 }
@@ -243,7 +251,7 @@ public class Card extends Entity{
 
 	public void render(Graphics g) {
 		g.drawImage(texture, x, y, null);
-		g.fillRect((int)hitBox.getX(), (int)hitBox.getY(), (int)hitBox.getWidth() + 10, (int)hitBox.getHeight() + 10);
+//		g.fillRect((int)hitBox.getX(), (int)hitBox.getY(), (int)hitBox.getWidth() + 10, (int)hitBox.getHeight() + 10);
 	}
 	
 	public void makeVisible(){
