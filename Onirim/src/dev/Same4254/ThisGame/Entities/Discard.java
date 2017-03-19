@@ -40,10 +40,11 @@ public class Discard extends Entity{
 			gameState.getProphecy().clearAllProphecy();
 			gameState.getProphecy().restockProphecy(); 
 			Prophecy.prophosizing = true;
+			System.out.println("Start Pro");
 //			for(int i = 0; i < gameState.getLimbo().getSlots().length; i++){
 //				if(gameState.getLimbo().getSlots()[i].storedCard.getType() == Card.CardTypes.DOOR && c.getColor() == gameState.getLimbo().getSlots()[i].storedCard.getColor()){
 //					
-//				}
+//				} 
 //			}
 		}
 	}

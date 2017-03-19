@@ -93,7 +93,7 @@ public class Deck extends Entity{
 	}
 	
 	public void update() {
-		if(!Prophecy.prophosizing && hitBox.contains(mouse.getMouseX(), mouse.getMouseY()) && mouse.justReleased){
+		if(!Prophecy.prophecyFull && hitBox.contains(MouseManager.mouseX, MouseManager.mouseY) && MouseManager.justReleased){
 //			System.out.println("MREG");
 //			outOfDeck.add(cards.get(cards.size() - 1));
 //			cards.get(cards.size() - 1).makeVisible();
@@ -106,9 +106,10 @@ public class Deck extends Entity{
 					boolean cardFound = false;
 					for(int k = 0; k < game.getGameState().getProphecy().getSlots().length; k++){
 						if(game.getGameState().getProphecy().getSlots()[k].storedCard != null){
-							System.out.println("Bye");
+//							System.out.println("Bye");
 							temp = game.getGameState().getProphecy().getSlots()[k].storedCard;
 							cardFound = true;
+							temp.setInProphecy(true);
 							break;
 						}
 					}
@@ -116,10 +117,10 @@ public class Deck extends Entity{
 					if(!cardFound){
 						System.out.println("Hi");
 						temp = cards.remove(cards.size()-1);
+						temp.setInProphecy(false);
 					}
 					
 					cardFound = false;
-					temp.setInProphecy(false);
 					temp.makeVisible();
 					outOfDeck.add(temp);
 					
@@ -135,7 +136,7 @@ public class Deck extends Entity{
 					}
 				}
 			}
-			mouse.justReleased = false;
+			MouseManager.justReleased = false;
 		}
 	}
 	

@@ -13,7 +13,6 @@ public class Card extends Entity{
 
 	private BufferedImage texture;
 	private Rectangle hitBox;
-	private MouseManager mouse;
 	public boolean inDeck;
 //	private int slotNum = -1;
 	
@@ -55,7 +54,6 @@ public class Card extends Entity{
 		super(x, y, img.getWidth(), img.getHeight());
 		texture = img;
 		hitBox = new Rectangle(x, y, width, height);
-		mouse = game.getMouseManager();
 		inDeck = true;
 		
 		if(cardType == CardTypes.LOCATION)
@@ -81,7 +79,6 @@ public class Card extends Entity{
 		this.gameState = gameState;
 		
 		inProphecy = inPro;
-		mouse = game.getMouseManager();
 		
 		texture = card.getTexture();
 		hitBox = card.getHitBox();
@@ -103,24 +100,25 @@ public class Card extends Entity{
 	}
 	
 	public void update() {
-//		System.out.println(moveable);
+//		System.out.println(MouseManager.mouseX.rightPressed);
+		
+		/***************************************************************************
+		 * Card In Prophecy
+		 */
 		if(inProphecy && Prophecy.prophosizing){
+			System.out.println("njindfnnjdfjdfjfjkjj");
 			Slot[] proSlots = gameState.getProphecy().getSlots();
 //			System.out.println(mouse.rightPressed);
+			System.out.println(cardSelected);
 			
-			 if(mouse.rightPressed && hitBox.contains(mouse.getMouseX(),mouse.getMouseY())){
-				System.out.println("end");
-				discard.addCard(this);
-//				x = (int) inSlot.getX();
-//				y = (int) inSlot.getY();
-				hitBox.setLocation(x, y);
-				Prophecy.prophosizing = false;
-//				gameState.getProphecy().end();
-				mouse.rightPressed = false;
+			if(MouseManager.justEntered && hitBox.contains(MouseManager.mouseX, MouseManager.mouseY)){
+				preX = x - MouseManager.mouseX;
+				MouseManager.justEntered = false;
+				cardSelected = true;
 			}
 			
-			 else if(mouse.isMouseDragged() && cardSelected){ //&& hitBox.contains(mouse.getMouseX(),mouse.getMouseY()) && cardSelected){
-				x = preX + mouse.getMouseX();
+			if(MouseManager.mouseDragged && cardSelected && hitBox.contains(MouseManager.mouseX, MouseManager.mouseY)){
+				x = preX + MouseManager.mouseX;
 				
 				for(int i = 0; i < proSlots.length; i++){
 					if(proSlots[i].getHitBox().contains(x, y) && proSlots[i] != inSlot){
@@ -129,13 +127,8 @@ public class Card extends Entity{
 					}
 				}
 			}
-			else if(mouse.justEntered && hitBox.contains(mouse.getMouseX(),mouse.getMouseY())){
-				preX = x - mouse.getMouseX();
-				mouse.justEntered = false;
-				cardSelected = true;
-			}
-			
-			else if(mouse.justReleased && cardSelected){
+			 
+			if(MouseManager.justReleased && cardSelected){
 				cardSelected = false;
 				x = (int) inSlot.getX();
 				y = (int) inSlot.getY();
@@ -144,25 +137,44 @@ public class Card extends Entity{
 			
 			hitBox.setLocation(x, y);
 		}
-		
-		else if(moveable && !Prophecy.prophosizing){
-			 if(mouse.rightPressed && hitBox.contains(mouse.getMouseX(),mouse.getMouseY())){
-					System.out.println("end");
-					discard.addCard(this);
-					x = (int) inSlot.getX();
-					y = (int) inSlot.getY();
-					hitBox.setLocation(x, y);
-					Prophecy.prophosizing = false;
+
+		/******************************************************************************************************************
+		 * Card in Non-Full Hand Not Prophosizing
+		 */
+		else if(!moveable && !Prophecy.prophosizing){
+			if(MouseManager.rightPressed && hitBox.contains(MouseManager.mouseX, MouseManager.mouseY)){
+				System.out.println("end");
+				discard.addCard(this);
+//				x = (int) inSlot.getX();
+//				y = (int) inSlot.getY();
+				hitBox.setLocation(x, y);
+				Prophecy.prophosizing = false;
 //					gameState.getProphecy().end();
-					mouse.rightPressed = false;
-				}
+				MouseManager.rightPressed = false;
+			 }
+		}
+		
+		/*****************************************************************************************************************
+		 * Card in Full Hand not prophecizing 
+		 */
+		else if(moveable && !Prophecy.prophosizing){
+			if(MouseManager.rightPressed && hitBox.contains(MouseManager.mouseX, MouseManager.mouseY)){
+				System.out.println("end");
+				discard.addCard(this);
+//				x = (int) inSlot.getX();
+//				y = (int) inSlot.getY();
+				hitBox.setLocation(x, y);
+				Prophecy.prophosizing = false;
+//					gameState.getProphecy().end();
+				MouseManager.rightPressed = false;
+			 }
 			
-			if(mouse.isMouseDragged() && cardSelected){ //&& hitBox.contains(mouse.getMouseX(),mouse.getMouseY()) && cardSelected){
-				x = preX + mouse.getMouseX();
-				y = preY + mouse.getMouseY();
+			if(MouseManager.mouseDragged && cardSelected){ //&& hitBox.contains(mouse.getMouseX(),mouse.getMouseY()) && cardSelected){
+				x = preX + MouseManager.mouseX;
+				y = preY + MouseManager.mouseY;
 			}
-			else if(mouse.justEntered && hitBox.contains(mouse.getMouseX(),mouse.getMouseY())){
-//				System.out.println("Hhoasdf");
+			else if(MouseManager.justEntered && hitBox.contains(MouseManager.mouseX, MouseManager.mouseY)){
+//				System.out.println("Hhoasdf"); 
 //				if(slotNum >= 0){
 //					slots[slotNum].filled = false;
 //				}
@@ -173,13 +185,13 @@ public class Card extends Entity{
 //					}
 //				}
 				
-				preX = x - mouse.getMouseX();
-				preY = y - mouse.getMouseY();
-				mouse.justEntered = false;
+				preX = x - MouseManager.mouseX;
+				preY = y - MouseManager.mouseY;
+				MouseManager.justEntered = false;
 				cardSelected = true;
 			}
 			
-			else if(mouse.justReleased && cardSelected){
+			else if(MouseManager.justReleased && cardSelected){
 				cardSelected = false;
 //				for(int i = 0; i < slots.length; i++){
 //					if(hitBox.intersects(slots[i].getHitBox()) && slots[i].filled == false){
@@ -231,7 +243,7 @@ public class Card extends Entity{
 
 	public void render(Graphics g) {
 		g.drawImage(texture, x, y, null);
-//		g.fillRect((int)hitBox.getX(), (int)hitBox.getY(), (int)hitBox.getWidth() + 10, (int)hitBox.getHeight() + 10);
+		g.fillRect((int)hitBox.getX(), (int)hitBox.getY(), (int)hitBox.getWidth() + 10, (int)hitBox.getHeight() + 10);
 	}
 	
 	public void makeVisible(){

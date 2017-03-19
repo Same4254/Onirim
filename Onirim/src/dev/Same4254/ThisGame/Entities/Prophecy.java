@@ -17,7 +17,8 @@ public class Prophecy extends Entity{
 	
 	private Point wordLoc;
 	
-	public static boolean prophosizing = true;
+	public static boolean prophosizing = false;
+	public static boolean prophecyFull = false;
 	
 	public Prophecy(Game game, GameState gameState, int x, int y, int width, int height) {
 		super(x,y,width,height);
@@ -38,7 +39,7 @@ public class Prophecy extends Entity{
 		/**
 		 * TEMP CODE
 		 */
-		restockProphecy();
+//		restockProphecy();
 	}
 	
 //	public void end(){
@@ -70,6 +71,7 @@ public class Prophecy extends Entity{
 			slots[i].addCard(deckCards.remove(deckCards.size()-1));
 			slots[i].storedCard.setInProphecy(true);
 			slots[i].storedCard.setMoveable(false);
+			prophosizing = true;
 		}
 	}
 	
@@ -82,9 +84,14 @@ public class Prophecy extends Entity{
 	}
 	
 	public void update() {
+		boolean temp = true;
 		for(int i = 0; i < slots.length; i++){
 			slots[i].update();
+			if(slots[i].storedCard == null){
+				temp = false;
+			}
 		}
+		prophecyFull = temp;
 	}
 	
 	public void render(Graphics g) {

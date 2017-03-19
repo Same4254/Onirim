@@ -61,6 +61,10 @@ public class Slot extends Entity{
 		
 		storedCard = c;
 		c.setInSlot(this);
+		
+		c.x = x;
+		c.y = y;
+		c.getHitBox().setLocation(c.x, c.y);
 	}
 	
 	public void swapCardsWith(Slot s, boolean inPro){

@@ -8,11 +8,11 @@ import dev.Same4254.ThisGame.Game;
 
 public class MouseManager implements MouseListener, MouseMotionListener{
 
-	public boolean leftPressed, rightPressed;
-	private boolean mouseDragged;
-	private int mouseX, mouseY;
+	public static boolean leftPressed, rightPressed;
+	public static boolean mouseDragged;
+	public static int mouseX, mouseY;
 	
-	public boolean justEntered, justReleased;
+	public static boolean justEntered, justReleased;
 
 	private Game game;
 	
@@ -46,6 +46,7 @@ public class MouseManager implements MouseListener, MouseMotionListener{
 			justReleased = false;
 		}
 		if(e.getButton() == MouseEvent.BUTTON3){
+			System.out.println("RIGHT");
 			rightPressed = true;
 			justEntered = true;
 			justReleased = false;
@@ -73,17 +74,5 @@ public class MouseManager implements MouseListener, MouseMotionListener{
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
-	}
-
-	public int getMouseX() {
-		return mouseX;
-	}
-
-	public int getMouseY() {
-		return mouseY;
-	}
-
-	public boolean isMouseDragged() {
-		return mouseDragged;
 	}
 }

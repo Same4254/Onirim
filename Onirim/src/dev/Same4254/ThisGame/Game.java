@@ -64,11 +64,12 @@ public class Game extends JPanel{
 		menuState = new MenuState(this);
 		State.setCurrentState(gameState);
 		
-		
-		
-		update();
-		update();
-		update();
+		/*
+		 * starts the game
+		 * don't be concerned about this....
+		 */
+		for(int i = 0; i < 50; i++)
+			update();
 	}
 	
 	public void update(){
@@ -87,6 +88,7 @@ public class Game extends JPanel{
 			State.getCurrentState().update();
 		repaint();
 //		render();
+		System.out.println("Pro: " + Prophecy.prophosizing);
 	}
 	
 	public void paintComponent(Graphics g){
