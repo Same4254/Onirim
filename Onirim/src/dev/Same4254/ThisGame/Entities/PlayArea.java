@@ -61,26 +61,67 @@ public class PlayArea extends Entity{
 		}
 		
 		int temp = 0;
-		for(int i = slots.length - 1; i >= 0; i--){
-			if(i == 0  && slots[i].storedCard != null){
-				if(slots[i+1].storedCard != null && slots[i].storedCard.getColor() == slots[i+1].storedCard.getColor())
+		for(int i = 0; i < slots.length; i++){
+			if(slots[i].storedCard != null && slots[i+1].storedCard != null){
+				if(slots[i].storedCard.isUsed()){
+					continue;
+				}
+				if((i==0 || slots[i-1].storedCard.isUsed()) && slots[i].storedCard.getColor() == slots[i+1].storedCard.getColor()){
+					temp+=2;
+				}
+				else if(slots[i].storedCard.getColor() == slots[i+1].storedCard.getColor()){
 					temp++;
-				else if(slots[i+1].storedCard == null){
+				}
+				else{
 					temp = 1;
 				}
 			}
 			
-			else if(slots[i].storedCard != null && i != 0){
-//				System.out.println("CHeck");
-				if(slots[i - 1].storedCard.getColor() == slots[i].storedCard.getColor() && temp != 3 && !slots[i].storedCard.isUsed()){
-					temp++;
-//					System.out.println("ADD");
-				}
-				else{
-					temp++;
-					break;
-				}
-			}
+//			if(slots[i].storedCard != null){
+//				if(i!=0 && slots[i-1].storedCard.getColor() != slots[i].storedCard.getColor() && slots[i-1].storedCard.isUsed()){
+//					temp = 1;
+//					break;
+//				}
+//				
+//				if(i!=0 && slots[i-1].storedCard.isUsed()){
+//					temp++;
+//					break;
+//				}
+//				
+//				if(i - 1 == 0 && slots[i-1].storedCard.getColor() == slots[i].storedCard.getColor()){
+//					temp+=2;
+//				}
+//				
+//				else if(i!=0 && slots[i-1].storedCard.getColor() == slots[i].storedCard.getColor()){
+//					temp++;
+//				}
+//			}
+			
+			
+			
+//			if(i == 0  && slots[i].storedCard != null){
+//				if(slots[i+1].storedCard != null && slots[i].storedCard.getColor() == slots[i+1].storedCard.getColor())
+//					temp++;
+//				else if(slots[i+1].storedCard == null){
+//					temp++;
+//				}
+//			}
+//			
+//			else if(slots[i].storedCard != null && i != 0){
+////				System.out.println("CHeck");
+//				if(slots[i - 1].storedCard.getColor() == slots[i].storedCard.getColor() && temp != 3 && !slots[i].storedCard.isUsed()){
+//					temp++;
+////					System.out.println("ADD");
+//				}
+//				else if(slots[i].storedCard.isUsed()){
+////					temp++;
+//					break;
+//				}
+//				else{
+//					temp++;
+//					break;
+//				}
+//			}
 		}
 		
 		if(temp % 3 != 0)
@@ -119,7 +160,6 @@ public class PlayArea extends Entity{
 			if(slots[i].storedCard != null){
 				slots[i].storedCard.setUsed(true);
 				slots[i].storedCard.setMoveable(false);
-				break;
 			}
 		}
 	}

@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import dev.Same4254.ThisGame.Entities.Card;
+import dev.Same4254.ThisGame.Entities.PlayArea;
 import dev.Same4254.ThisGame.Entities.Prophecy;
 import dev.Same4254.ThisGame.Entities.Slot;
 import dev.Same4254.ThisGame.Input.KeyManager;
@@ -263,7 +264,6 @@ public class Game extends JPanel implements ActionListener{
 				if(slots[i].storedCard != null){
 					slots[i].storedCard.setUsed(true);
 					slots[i].storedCard.setMoveable(false);
-					break;
 				}
 			}
 		
