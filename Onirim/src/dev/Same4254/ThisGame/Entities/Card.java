@@ -165,14 +165,6 @@ public class Card extends Entity{
 				preY = y - MouseManager.mouseY;
 				MouseManager.justEntered = false;
 				cardSelected = true;
-				
-				if(game.getCompleteDoor().isEnabled()){
-					game.getCompleteDoor().setEnabled(false);
-//					gameState.getDeck().getCards().add(Limbo.currentDrawnCard);
-//					Limbo.currentDrawnCard.inSlot.storedCard = null;
-//					Limbo.currentDrawnCard = null;
-				}
-//				PlayArea.inRow = 1;
 			}	
 			
 			else if(MouseManager.justReleased && cardSelected){

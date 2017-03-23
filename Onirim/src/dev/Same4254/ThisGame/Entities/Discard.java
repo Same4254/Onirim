@@ -38,6 +38,10 @@ public class Discard extends Entity{
 	}
 	
 	public void addCard(Card c){
+		if(game.getCompleteDoor().isEnabled()){
+			game.getCompleteDoor().setEnabled(false);
+		}
+		
 		slot.addCard(c);
 		c.setInPlayArea(false);
 		c.setInProphecy(false);

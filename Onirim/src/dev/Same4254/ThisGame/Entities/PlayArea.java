@@ -45,11 +45,10 @@ public class PlayArea extends Entity{
 			slots[2].storedCard = slots[3].storedCard;
 			slots[3].storedCard = slots[4].storedCard;
 			slots[4].storedCard = null;
-			
-			slots[0].storedCard.update();
-			slots[1].storedCard.update();
-			slots[2].storedCard.update();
-			slots[3].storedCard.update();
+//			
+//			game.update();
+//			game.update();
+//			game.update();
 		}
 		
 		if(Hand.handSize==5){

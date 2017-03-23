@@ -64,6 +64,10 @@ public class Hand extends Entity{
 	}
 	
 	public void addCard(Card c){
+		if(game.getCompleteDoor().isEnabled()){
+			game.getCompleteDoor().setEnabled(false);
+		}
+		
 		for(int i = slots.length - 1; i >= 0; i--){
 			if(slots[i].storedCard == null){
 				for(int k = 0; k < game.getGameState().getPlayArea().getSlots().length; k++){

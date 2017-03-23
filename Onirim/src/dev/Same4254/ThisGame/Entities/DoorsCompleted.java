@@ -31,7 +31,7 @@ public class DoorsCompleted extends Entity{
 			System.out.println("TRIED TO DISCARD A KEY FOR A NON DOOR!");
 			return;
 		}
-		for(int i = slots.length - 1; i >= 0; i--){
+		for(int i = 0; i < slots.length; i++){
 			if(slots[i].storedCard == null){
 				slots[i].addCard(c);
 				break;
@@ -53,5 +53,8 @@ public class DoorsCompleted extends Entity{
 //		g.setColor(Color.WHITE);
 //		g.fillRect(x, y, width, height);
 	}
-	
+
+	public Slot[] getSlots() {
+		return slots;
+	}
 }

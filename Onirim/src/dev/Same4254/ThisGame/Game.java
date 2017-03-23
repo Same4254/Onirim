@@ -54,13 +54,14 @@ public class Game extends JPanel implements ActionListener{
 	private BufferedImage field;
 	
 	private float heightOffSet, widthOffSet;
+	
 	/**
 	 * TODO LIST
 	 * 
-	 * Putting card in and out of play area cheat fix
 	 * Double Check Hit Boxes (in play area, hit boxes don't move when the cards shift over)
-	 * Winning/Losing Conditions
 	 * Nightmare
+	 *	 Send a Played Door to Limbo to discard Nightmare
+	 *	 Draw 5 cards (locations go to discard, dreams & doors go to limbo)
 	 * Helper Menu
 	 * 
 	 * Clean up/Comments 
@@ -94,11 +95,11 @@ public class Game extends JPanel implements ActionListener{
 		display = new Display(this, title, width, height);
 		addMouseListener(mouseManager);
 		addMouseMotionListener(mouseManager);
+		addKeyListener(keyManager);
 		
 		gameState = new GameState(this);
 		menuState = new MenuState(this);
 		State.setCurrentState(gameState);
-		
 		
 		completeDoor.setVisible(true);
 		completeDoor.setEnabled(false);
@@ -122,7 +123,7 @@ public class Game extends JPanel implements ActionListener{
 		height = display.getFrame().getHeight();
 		
 		keyManager.update();
-//		System.out.println(keyManager.space);
+		System.out.println(keyManager.space);
 //		
 //		if(keyManager.space){
 //			System.out.println("fff");
@@ -174,6 +175,14 @@ public class Game extends JPanel implements ActionListener{
 			completeDoor.setSize((int)(percentWidth * (getWidth() - widthOffSet*2)), (int)(percentHeight * (getHeight() - heightOffSet*2)));
 		}
 //		System.out.println("Width: " + getWidth() + " Height: " + getHeight());
+	}
+	
+	public void lose(){
+		System.out.println("YOU LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOSSSSSSSSSSSSSSSSSSSEEEEEEEEEEEEe");
+	}
+	
+	public void win(){
+		System.out.println("YYYYYYYYYYYYYYYYYYYYOOOOOOOOOOOOUUUUUUUUUUUU WWWWWWWWOOOOOOOOOONNNNNNNNNNNN");
 	}
 
     public void endMenuState(){

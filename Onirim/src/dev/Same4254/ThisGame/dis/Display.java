@@ -28,6 +28,7 @@ public class Display {
 		frame.setLocationRelativeTo(null);
 		frame.setIconImage(Assets.logo);
 		frame.setVisible(true);
+		frame.addKeyListener(game.getKeyManager());
 		
 		panel = game;
 		panel.setPreferredSize(new Dimension(width, height));
@@ -36,7 +37,6 @@ public class Display {
 		panel.setFocusable(false);
 		panel.setBackground(Color.BLACK);
 		
-		panel.addKeyListener(game.getKeyManager());
 		frame.add(panel);
 		frame.pack();
 	}

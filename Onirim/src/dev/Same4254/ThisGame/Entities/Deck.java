@@ -90,10 +90,21 @@ public class Deck extends Entity{
 	}
 	
 	public void update() {
+		if(game.getGameState().getDoorsCompleted().getSlots()[game.getGameState().getDoorsCompleted().getSlots().length - 1].storedCard != null){
+			game.win();
+			return;
+		}
+		
+		else if(cards.size() == 0 && Hand.handSize < 5){
+			game.lose();
+			return;
+		}
+		
 		if(!Prophecy.prophecyFull && hitBox.contains(MouseManager.mouseX, MouseManager.mouseY) && MouseManager.justReleased){
 			if(game.getCompleteDoor().isEnabled()){
 				game.getGameState().getPlayArea().overRide();
 			}
+			
 			for(int i = 0; i < slots.length; i++){
 				if(slots[i].storedCard == null){
 					Card temp = null;
