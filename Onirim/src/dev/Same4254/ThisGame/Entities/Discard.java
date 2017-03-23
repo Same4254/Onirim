@@ -42,6 +42,8 @@ public class Discard extends Entity{
 			game.getCompleteDoor().setEnabled(false);
 		}
 		
+		System.out.println(c);
+		gameState.getCardsOutOfDeck().remove(c);
 		slot.addCard(c);
 		c.setInPlayArea(false);
 		c.setInProphecy(false);

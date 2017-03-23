@@ -34,15 +34,17 @@ public class DoorsCompleted extends Entity{
 		for(int i = 0; i < slots.length; i++){
 			if(slots[i].storedCard == null){
 				slots[i].addCard(c);
+				c.clearAllDependencies();
+				c.setCompleted(true);
 				break;
 			}
 		}
 	}
 
 	public void update() {
-//		for(int i = 0; i < slots.length; i++){
-//			slots[i].update();
-//		}
+		for(int i = 0; i < slots.length; i++){
+			slots[i].update();
+		}
 	}
 
 	public void render(Graphics g) {

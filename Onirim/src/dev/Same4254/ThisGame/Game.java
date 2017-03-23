@@ -58,7 +58,6 @@ public class Game extends JPanel implements ActionListener{
 	/**
 	 * TODO LIST
 	 * 
-	 * Double Check Hit Boxes (in play area, hit boxes don't move when the cards shift over)
 	 * Nightmare
 	 *	 Send a Played Door to Limbo to discard Nightmare
 	 *	 Draw 5 cards (locations go to discard, dreams & doors go to limbo)
@@ -74,6 +73,15 @@ public class Game extends JPanel implements ActionListener{
 	 * EXTRA EXTRA:
 	 * Saving/Loading
 	 * Multiplayer
+	 */
+	
+	/**
+	 * Qs
+	 * 
+	 * Trigger prophecy while Prophesizing?
+	 * Draw 5 cards from hand or deck?
+	 * Multiple nightmares in the reshuffle to the deck?
+	 *  
 	 */
 	public Game(String title, int width, int height){
 		this.title = title;
@@ -123,12 +131,15 @@ public class Game extends JPanel implements ActionListener{
 		height = display.getFrame().getHeight();
 		
 		keyManager.update();
-		System.out.println(keyManager.space);
+//		System.out.println(keyManager.space);
 //		
-//		if(keyManager.space){
-//			System.out.println("fff");
-//		
-//		}
+		if(keyManager.space){
+			System.out.println("---------------------------------------------------" + "\nTOP");
+			for(int i = gameState.getDeck().getCards().size()-1; i >= 0; i--){
+				System.out.println(gameState.getDeck().getCards().get(i));
+			}
+			System.out.println("---------------------------------------------------");
+		}
 		
 		if(State.getCurrentState() != null)
 			State.getCurrentState().update();

@@ -18,12 +18,12 @@ import dev.Same4254.ThisGame.gfx.Assets;
 public class Deck extends Entity{
 	private ArrayList<Card> cards; 
 	
-	private MouseManager mouse;
+//	private MouseManager mouse;
 	private Rectangle hitBox;
 	
 	private ArrayList<Card> outOfDeck;
 	
-	private Random randy = new Random();
+//	private Random randy = new Random();
 	private Slot[] slots;
 	private Limbo limbo;
 	private Game game;
@@ -32,7 +32,7 @@ public class Deck extends Entity{
 		super(x, y, width, height);
 		cards = new ArrayList<Card>();
 		this.game = game;
-		mouse = game.getMouseManager();
+//		mouse = game.getMouseManager();
 		
 		this.slots = gameState.getHand().getSlots();
 		this.limbo = gameState.getLimbo();

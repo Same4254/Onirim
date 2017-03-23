@@ -47,9 +47,10 @@ public class Prophecy extends Entity{
 	}
 	
 	public void clearAllProphecy(){
+		ArrayList<Card> deckCards = gameState.getDeck().getCards();
 		for(int i = 0; i < slots.length; i++){
 			if(slots[i].storedCard != null){
-				slots[i].storedCard = null;
+				deckCards.add(slots[i].storedCard);
 			}
 		}
 	}

@@ -25,6 +25,7 @@ public class Card extends Entity{
 	private boolean inProphecy;
 	private boolean inPlayArea;
 	private boolean used;
+	private boolean completed;
 	
 	public static enum CardSymbols{
 		SUN, MOON, KEY, NIGHTMARE, DOOR
@@ -115,7 +116,7 @@ public class Card extends Entity{
 			Slot[] proSlots = gameState.getProphecy().getSlots();
 //			System.out.println(cardSelected);
 			
-			if(Prophecy.prophosizing && MouseManager.rightPressed && hitBox.contains(MouseManager.mouseX, MouseManager.mouseY)){
+			if(Prophecy.prophosizing && cardType != CardTypes.DOOR &&  MouseManager.rightPressed && hitBox.contains(MouseManager.mouseX, MouseManager.mouseY)){
 //				System.out.println("Pro: " + Prophecy.prophosizing);
 				discard.addCard(this);
 				hitBox.setLocation(x, y);
@@ -150,6 +151,14 @@ public class Card extends Entity{
 
 		else if(inProphecy && !Prophecy.prophosizing){
 			
+		}
+		
+		else if(completed && MouseManager.rightPressed && hitBox.contains(MouseManager.mouseX, MouseManager.mouseY)){
+			if(Limbo.currentDrawnCard.getType() == CardTypes.DREAM){
+				discard.addCard(Limbo.currentDrawnCard);
+				gameState.getLimbo().addCard(this);
+				Limbo.currentDrawnCard = this;
+			}
 		}
 		
 		/*
@@ -194,7 +203,7 @@ public class Card extends Entity{
 		/******************************************************************************************************************
 		 * Card in Non-Full Hand Not Prophosizing
 		 */
-		else if(!moveable && !inProphecy){
+		else if(!moveable && !Prophecy.prophosizing){
 			if(MouseManager.rightPressed && hitBox.contains(MouseManager.mouseX, MouseManager.mouseY)){
 				System.out.println("Discard");
 				discard.addCard(this);
@@ -274,6 +283,14 @@ public class Card extends Entity{
 //		g.fillRect((int)hitBox.getX() + 20, (int)hitBox.getY() + 20, (int)hitBox.getWidth(), (int)hitBox.getHeight());
 	}
 	
+	public void clearAllDependencies(){
+		inDeck = false;
+		inPlayArea = false;
+		inProphecy = false;
+		completed = false;
+		used = false;
+	}
+	
 	public void makeVisible(){
 		inDeck = false;
 	}
@@ -317,6 +334,14 @@ public class Card extends Entity{
 
 	public void setUsed(boolean used) {
 		this.used = used;
+	}
+	
+	public boolean isCompleted() {
+		return completed;
+	}
+
+	public void setCompleted(boolean completed) {
+		this.completed = completed;
 	}
 
 	public CardColors getColor(){return cardColor;}
