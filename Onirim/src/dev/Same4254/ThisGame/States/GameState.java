@@ -17,6 +17,7 @@ import dev.Same4254.ThisGame.Entities.Limbo;
 import dev.Same4254.ThisGame.Entities.PlayArea;
 import dev.Same4254.ThisGame.Entities.Prophecy;
 import dev.Same4254.ThisGame.Input.KeyManager;
+import dev.Same4254.ThisGame.Input.MouseManager;
 import dev.Same4254.ThisGame.dis.Display;
 
 public class GameState extends State{
@@ -39,7 +40,7 @@ public class GameState extends State{
 		discard = new Discard(game, this, 400, 10, 110, 160);
 		hand = new Hand(game, 10, 420, 560, 170);
 		playArea = new PlayArea(game, 10, 180, 550, 158);
-		limbo = new Limbo(game, 585, 10, 100, 550);
+		limbo = new Limbo(game, 585, 10, 200, 550);
 		deck = new Deck(game, this, 10, 10, 100, 158);
 		myFont = new Font("myFont", Font.PLAIN, 18);
 		prophecy = new Prophecy(game, this, 0, 620, game.getDisplay().getFrame().getWidth(), 170);
@@ -55,11 +56,13 @@ public class GameState extends State{
 		discard.update();
 		doorsCompleted.update();
 		
-//		for(int i = 0; i < cardsOutOfDeck.size(); i++){
+		game.getMouseManager();
+		//		for(int i = 0; i < cardsOutOfDeck.size(); i++){
 //			cardsOutOfDeck.get(i).update();
 //		}
-		if(game.getMouseManager().justReleased){
-			game.getMouseManager().justReleased = false;
+		if(MouseManager.justReleased){
+			game.getMouseManager();
+			MouseManager.justReleased = false;
 		}
 		for(int i = 0; i < cardsOutOfDeck.size(); i++){
 			if(cardsOutOfDeck.get(i).isSelected())
@@ -70,9 +73,13 @@ public class GameState extends State{
 	public void render(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setStroke(new BasicStroke(6));
-		g2.setColor(Color.RED);
 		
+		g2.setColor(Color.GRAY);
+		g.fillRect(0, 0, game.getField().getWidth(), game.getField().getHeight());
+		
+		g2.setColor(Color.RED);
 		g2.drawLine(0, 610, game.getDisplay().getFrame().getWidth(), 610);
+		
 		g2.setStroke(new BasicStroke(3));
 		g2.setColor(Color.WHITE);
 		

@@ -28,7 +28,6 @@ public class Discard extends Entity{
 	}
 
 	public void render(Graphics g) {
-		g.setColor(Color.RED);
 		g.drawRect(x, y, width, height);
 		slot.render(g);
 	}
@@ -40,9 +39,22 @@ public class Discard extends Entity{
 	
 	public void addCard(Card c){
 		slot.addCard(c);
+		c.setInPlayArea(false);
+		c.setInProphecy(false);
+		c.setMoveable(false);
+		/*
+		 * This is a key card, meaning the user is trying to continue, so the complete card button is disabled because it is 
+		 * no imidietaely after that door was added to limbo
+		 */
+		if(c.getSymbol() == Card.CardSymbols.KEY){
+			game.getCompleteDoor().setEnabled(false);
+		}
 		
-		//The card in Limbo is still in play, and the player just discarded a key, check if limbo card is door or nightmare
-		if(c.getSymbol() == Card.CardSymbols.KEY && Limbo.currentDrawnCard != null){
+		/*
+		* The card in Limbo is still in play, and the player just discarded a key, check if limbo card is door or nightmare
+		* While not prophosizing
+		*/
+		if(c.getSymbol() == Card.CardSymbols.KEY && Limbo.currentDrawnCard != null && !Prophecy.prophosizing){
 			if(Limbo.currentDrawnCard.getType() == Card.CardTypes.DREAM){
 				addCardWithoutCheck(Limbo.currentDrawnCard);
 			}

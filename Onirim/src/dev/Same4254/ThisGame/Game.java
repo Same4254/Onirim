@@ -1,10 +1,20 @@
 package dev.Same4254.ThisGame;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
+import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import dev.Same4254.ThisGame.Entities.Card;
 import dev.Same4254.ThisGame.Entities.Prophecy;
+import dev.Same4254.ThisGame.Entities.Slot;
 import dev.Same4254.ThisGame.Input.KeyManager;
 import dev.Same4254.ThisGame.Input.MouseManager;
 import dev.Same4254.ThisGame.Sound.Music;
@@ -14,17 +24,12 @@ import dev.Same4254.ThisGame.States.State;
 import dev.Same4254.ThisGame.dis.Display;
 import dev.Same4254.ThisGame.gfx.Assets;
 
-public class Game extends JPanel{
+public class Game extends JPanel implements ActionListener{
 	private static final long serialVersionUID = 1L;
 
 	private Display display;
 	
-//	private BufferStrategy bs;
 	private Graphics g;
-	
-//	private Thread thread;
-	
-//	public static boolean running;
 	
 	private String title;
 	private int width;
@@ -41,23 +46,32 @@ public class Game extends JPanel{
 	private Music music;
 	private Prophecy prophecy;
 	
+	private JButton completeDoor;
+	
+	/*
+	 * This is the image that the paint component will draw to then will get scaled
+	 */
+	private BufferedImage field;
+	
+	private float heightOffSet, widthOffSet;
 	/**
 	 * TODO LIST
 	 * 
-	 * Click on Door in Limbo From 3 In A Row
-	 * Completed Doors
-	 * Winning Conditions
+	 * Putting card in and out of play area cheat fix
+	 * Double Check Hit Boxes (in play area, hit boxes don't move when the cards shift over)
+	 * Winning/Losing Conditions
 	 * Nightmare
+	 * Helper Menu
 	 * 
 	 * Clean up/Comments 
 	 * TEST TEST TEST
 	 * 
 	 * EXTRA:
-	 * Music
 	 * Menu
-	 * Saving/Loading
+	 * Music
 	 * 
 	 * EXTRA EXTRA:
+	 * Saving/Loading
 	 * Multiplayer
 	 */
 	public Game(String title, int width, int height){
@@ -74,14 +88,26 @@ public class Game extends JPanel{
 	}
 
 	public void init(){
+		Assets.init();
+		completeDoor = new JButton("Complete The Door!");
+		field = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		display = new Display(this, title, width, height);
 		addMouseListener(mouseManager);
 		addMouseMotionListener(mouseManager);
-		Assets.init();
 		
 		gameState = new GameState(this);
 		menuState = new MenuState(this);
 		State.setCurrentState(gameState);
+		
+		
+		completeDoor.setVisible(true);
+		completeDoor.setEnabled(false);
+		completeDoor.addActionListener(this);
+		setLayout(null);
+		add(completeDoor);
+		completeDoor.setSize(200,40);
+		completeDoor.setLocation((int)gameState.getLimbo().getX(), (int)gameState.getLimbo().getY()+ gameState.getLimbo().getHeight());
+		completeDoor.setFont(new Font("myFont",0, 16));
 		
 		/*
 		 * starts the game
@@ -113,86 +139,42 @@ public class Game extends JPanel{
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 		
+		heightOffSet = widthOffSet = 0;
+//		((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, .5f));
+		Graphics2D g2 = field.createGraphics();
+		g2.setBackground(new Color(255, 255, 255, 0));
+		g2.clearRect(0, 0, width, height);
+		
 		if(State.getCurrentState() != null)
-			State.getCurrentState().render(g);
+			State.getCurrentState().render(g2);
+		
+		float ratio = (float)field.getWidth() / field.getHeight();
+		
+		if((float)getWidth() / field.getWidth() < (float)getHeight() / field.getHeight()){
+			float height = getWidth() / ratio;
+			heightOffSet = getHeight() - height;
+			heightOffSet /= 2;
+			g.drawImage(field, 0, (int)heightOffSet, getWidth(), (int)(height), null);
+		}
+		
+		else{
+			float width = getHeight() * ratio;
+			widthOffSet = getWidth() - width;
+			widthOffSet /= 2;
+			g.drawImage(field, (int)widthOffSet, 0, (int)width, getHeight(), null);
+		}
+		if(gameState != null){
+			float percentX = (float)gameState.getLimbo().getX() / field.getWidth();
+			float percentY = ((float)gameState.getLimbo().getY() + gameState.getLimbo().getHeight()) / field.getHeight();
+			completeDoor.setLocation((int)(percentX * (getWidth() - widthOffSet*2) + widthOffSet), (int)(percentY * (getHeight() - heightOffSet*2) + heightOffSet));
+			
+			
+			float percentWidth = (float)gameState.getLimbo().getWidth() / field.getWidth();
+			float percentHeight = ((float)40 / field.getHeight());
+			completeDoor.setSize((int)(percentWidth * (getWidth() - widthOffSet*2)), (int)(percentHeight * (getHeight() - heightOffSet*2)));
+		}
+//		System.out.println("Width: " + getWidth() + " Height: " + getHeight());
 	}
-	
-//	private void render(){
-//		bs = display.getCanvas().getBufferStrategy();
-//		if(bs == null){
-//			display.getCanvas().createBufferStrategy(2);
-//			return;
-//		}
-//		g = bs.getDrawGraphics();
-//		
-//		g.clearRect(0, 0, width, height);
-//		
-//		//draw here
-//		
-//		if(State.getCurrentState() != null)
-//			State.getCurrentState().render(g);
-//		
-//		//end draw
-//		bs.show();
-//		g.dispose();
-//	}
-	
-//	public void run(){
-//		init();
-//		
-//		int fps = 60;
-//		double timePerTick =  1000000000 / fps;
-//		double delta = 0;
-//		long now;
-//		long lastTime = System.nanoTime();
-//		long timer = 0;
-//		int ticks = 0;
-//		boolean b2 = true;
-//		
-//		while(b2)
-//			if(running){
-//				now = System.nanoTime();
-//				delta += (now - lastTime) / timePerTick;
-//				timer += now - lastTime;
-//				lastTime = now;
-//				
-//				if(delta >= 1){
-//					update();
-//					render();
-//					ticks++;
-//					delta--;
-//				}
-//				if(timer >= 1000000000){
-//	//				System.out.println("Ticks and Frames: " + ticks);
-//	//				display.getFrame().setTitle(display.getFrame().getTitle().substring(0, display.getFrame().getTitle().length() - 3) + ticks);
-//					ticks = 0;
-//					timer = 0;
-//				}
-//				
-//			}
-//		stop();
-//	}
-//	
-//	public synchronized void start(){
-//		if(running)
-//			return;
-//		
-//		running = true;
-//		thread = new Thread(this);
-//		thread.start();
-//	}
-//	
-//    public synchronized void stop(){
-//    	if(!running)
-//    		return;
-//    	
-//    	running = false;
-//		try {
-//			thread.join();
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
-//	}
 
     public void endMenuState(){
     	State.setCurrentState(gameState);
@@ -209,4 +191,65 @@ public class Game extends JPanel{
 	public KeyManager getKeyManager(){return keyManager;}
 	public MouseManager getMouseManager(){return mouseManager;}
 	public Display getDisplay(){return display;}
+
+	public JButton getCompleteDoor() {
+		return completeDoor;
+	}
+
+	public BufferedImage getField() {
+		return field;
+	}
+
+	public float getHeightOffSet() {
+		return heightOffSet;
+	}
+
+	public float getWidthOffSet() {
+		return widthOffSet;
+	}
+
+	public void actionPerformed(ActionEvent e) {
+		/*
+		 * This button is only enabled when the 3 cards get matched up
+		 * So, if this is pressed, that must mean that the last card is the door that is going to be completed
+		 * Searches through limbo, starting from the end, and finds the first slot with a card, adds to completed doors
+		 */
+		if(e.getSource() == completeDoor){
+//			Slot[] slots = gameState.getLimbo().getSlots();
+//			for(int i = slots.length - 1; i >= 0; i--){
+//				if(slots[i].storedCard != null){
+//					gameState.getDoorsCompleted().addDoor(slots[i].storedCard);
+//				}
+//			}
+			Slot[] slots = gameState.getPlayArea().getSlots();
+			Card.CardColors color = null;
+			for(int i = slots.length - 1; i >= 0; i--){
+				if(slots[i].storedCard != null){
+					color = slots[i].storedCard.getColor();
+					break;
+				}
+			}
+		
+			ArrayList<Card> deck = gameState.getDeck().getCards();
+			for(Card c : deck){
+				if(c.getType() == Card.CardTypes.DOOR && c.getColor() == color){
+					deck.remove(c);
+					gameState.getDoorsCompleted().addDoor(c);
+					break;
+				}
+			}
+			
+			for(int i = slots.length - 1; i >= 0; i--){
+				if(slots[i].storedCard != null){
+					slots[i].storedCard.setUsed(true);
+					slots[i].storedCard.setMoveable(false);
+					break;
+				}
+			}
+		
+			completeDoor.setEnabled(false);
+			update();
+			update();
+		}
+	}
 }

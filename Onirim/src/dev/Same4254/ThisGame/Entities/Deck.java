@@ -91,6 +91,9 @@ public class Deck extends Entity{
 	
 	public void update() {
 		if(!Prophecy.prophecyFull && hitBox.contains(MouseManager.mouseX, MouseManager.mouseY) && MouseManager.justReleased){
+			if(game.getCompleteDoor().isEnabled()){
+				game.getGameState().getPlayArea().overRide();
+			}
 			for(int i = 0; i < slots.length; i++){
 				if(slots[i].storedCard == null){
 					Card temp = null;
@@ -146,7 +149,7 @@ public class Deck extends Entity{
 	}
 
 	public void render(Graphics g) {
-		g.drawImage(Assets.cardBack, x, y, null);
+		g.drawImage(Assets.cardBack, x, y,100,158, null);
 	}
 
 	public ArrayList<Card> getCards() {

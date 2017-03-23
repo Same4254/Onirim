@@ -52,7 +52,6 @@ public class Hand extends Entity{
 		for(int i = 0; i < slots.length; i++){
 			slots[i].render(g);
 		}
-		g.setColor(Color.RED);
 		g.drawRect(x, y, width, height);
 	}
 
@@ -74,6 +73,8 @@ public class Hand extends Entity{
 					}
 				}
 				slots[i].addCard(c);
+				c.setInPlayArea(false);
+				c.setInProphecy(false);
 			}
 		}
 	}

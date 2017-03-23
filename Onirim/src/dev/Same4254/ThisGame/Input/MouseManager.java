@@ -8,7 +8,7 @@ import dev.Same4254.ThisGame.Game;
 
 public class MouseManager implements MouseListener, MouseMotionListener{
 
-	public static boolean leftPressed, rightPressed;
+	public static boolean leftPressed, rightPressed, middlePressed;
 	public static boolean mouseDragged;
 	public static int mouseX, mouseY;
 	
@@ -21,15 +21,31 @@ public class MouseManager implements MouseListener, MouseMotionListener{
 	}
 	
 	public void mouseDragged(MouseEvent e) {
-		mouseX = e.getX();
-		mouseY = e.getY();
+		if(!(e.getX() < game.getWidthOffSet() || e.getX() > game.getWidth() - game.getWidthOffSet())){
+			float percent = ((float)e.getX() - game.getWidthOffSet()) / (game.getWidth()-game.getWidthOffSet()*2);
+			mouseX = (int) (percent * game.getField().getWidth());
+		}
+		
+		if(!(e.getY() < game.getHeightOffSet() || e.getY() > game.getHeight() - game.getHeightOffSet())){
+			float percent = ((float)e.getY() - game.getHeightOffSet()) / (game.getHeight()-game.getHeight()*2);
+			mouseY = (int) -(percent * game.getField().getHeight());
+		}
+		
 		mouseDragged = true;
 		game.update();
 	}
 
 	public void mouseMoved(MouseEvent e) {
-		mouseX = e.getX();
-		mouseY = e.getY();
+		if(!(e.getX() < game.getWidthOffSet() || e.getX() > game.getWidth() - game.getWidthOffSet())){
+			float percent = ((float)e.getX() - game.getWidthOffSet()) / (game.getWidth()-game.getWidthOffSet()*2);
+			mouseX = (int) (percent * game.getField().getWidth());
+		}
+		
+		if(!(e.getY() < game.getHeightOffSet() || e.getY() > game.getHeight() - game.getHeightOffSet())){
+			float percent = ((float)e.getY() - game.getHeightOffSet()) / (game.getHeight()-game.getHeight()*2);
+			mouseY = (int) -(percent * game.getField().getHeight());
+		}
+//		System.out.println("X: " + mouseX + " Y: " + mouseY);
 	}
 
 	@Override
@@ -45,6 +61,11 @@ public class MouseManager implements MouseListener, MouseMotionListener{
 			justEntered = true;
 			justReleased = false;
 		}
+		
+		if(e.getButton() == MouseEvent.BUTTON2){
+			middlePressed = true;
+		}
+		
 		if(e.getButton() == MouseEvent.BUTTON3){
 			System.out.println("RIGHT");
 			rightPressed = true;
@@ -61,6 +82,7 @@ public class MouseManager implements MouseListener, MouseMotionListener{
 		mouseDragged = false;
 		justEntered = false;
 		justReleased = true;
+		middlePressed = false;
 		game.update();
 	}
 

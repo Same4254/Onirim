@@ -63,7 +63,7 @@ public class Limbo extends Entity{
 
 	public void render(Graphics g) {
 //		g.setColor(Color.CYAN);
-		g.drawRect(x, y, width*2, height);
+		g.drawRect(x, y, width, height);
 		
 		for(int i = 0; i < slots.length; i++){
 //			g.setColor(Color.getHSBColor((float)i/slots.length, 1, 1));

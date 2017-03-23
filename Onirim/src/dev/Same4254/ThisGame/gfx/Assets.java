@@ -13,6 +13,8 @@ public class Assets {
 	
 	public static BufferedImage nightmare, cardBack;
 	
+	public static BufferedImage logo;
+	
 	public static String[] musicPaths = {new File("res/sound/8bitDungeonBoss.mp3").toURI().toString()};
 	
 	public static void init(){
@@ -39,5 +41,7 @@ public class Assets {
 		
 		nightmare = ImageLoader.loadImage("res/textures/Nightmare Card.png");
 		cardBack = ImageLoader.loadImage("res/textures/Card Back.png");
+		
+		logo = ImageLoader.loadImage("res/textures/logo.jpg");
 	}
 }

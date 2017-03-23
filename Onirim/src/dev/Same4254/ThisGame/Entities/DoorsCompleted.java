@@ -9,15 +9,17 @@ import dev.Same4254.ThisGame.States.GameState;
 public class DoorsCompleted extends Entity{
 
 	private Slot[] slots;
+	private Game game;
 	
 	public DoorsCompleted(Game game, GameState gameState, int x, int y, int width, int height) {
 		super(x, y, width, height);
 		
+		this.game = game;
 		slots = new Slot[8];
 		int x1 = 0;
 		for(int i = 0; i < slots.length; i++){
 			slots[i] = new Slot(game, gameState, x+x1, y, 100, 158);
-			x1+=110;
+			x1+=100;
 		}
 	}
 	
@@ -29,21 +31,22 @@ public class DoorsCompleted extends Entity{
 			System.out.println("TRIED TO DISCARD A KEY FOR A NON DOOR!");
 			return;
 		}
-		for(int i = 0; i < slots.length; i++){
+		for(int i = slots.length - 1; i >= 0; i--){
 			if(slots[i].storedCard == null){
 				slots[i].addCard(c);
+				break;
 			}
 		}
 	}
 
 	public void update() {
-		for(int i = 0; i < slots.length; i++){
-			slots[i].update();
-		}
+//		for(int i = 0; i < slots.length; i++){
+//			slots[i].update();
+//		}
 	}
 
 	public void render(Graphics g) {
-		g.drawLine(0, y+5, width, y+5);
+		g.drawLine(0, y, game.getDisplay().getWidth(), y);
 		for(int i = 0; i < slots.length; i++){
 			slots[i].render(g);
 		}

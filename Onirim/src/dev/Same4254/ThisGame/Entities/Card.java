@@ -23,8 +23,8 @@ public class Card extends Entity{
 	
 	private boolean moveable;
 	private boolean inProphecy;
-	
-	private boolean selectableDoor;
+	private boolean inPlayArea;
+	private boolean used;
 	
 	public static enum CardSymbols{
 		SUN, MOON, KEY, NIGHTMARE, DOOR
@@ -52,9 +52,10 @@ public class Card extends Entity{
 	private Discard discard;
 	private Hand hand;
 	private GameState gameState;
+	private Game game;
 	
 	public Card(Game game, GameState gameState, BufferedImage img, int x, int y, CardTypes cardType, CardSymbols cardSymbol, CardColors cardColor) {
-		super(x, y, img.getWidth(), img.getHeight());
+		super(x, y, 100, 158);
 		texture = img;
 		hitBox = new Rectangle(x, y, width, height);
 		inDeck = true;
@@ -63,6 +64,7 @@ public class Card extends Entity{
 			moveable = true;
 		
 		this.gameState = gameState;
+		this.game = game;
 		
 		this.cardType = cardType;
 		this.cardColor = cardColor;
@@ -103,6 +105,7 @@ public class Card extends Entity{
 	}
 	
 	public void update() {
+		hitBox.setLocation(x, y);
 //		System.out.println(MouseManager.mouseX.rightPressed);
 		
 		/***************************************************************************
@@ -149,11 +152,59 @@ public class Card extends Entity{
 			
 		}
 		
+		/*
+		 * Card from the Play Area
+		 */
+		else if(moveable && inPlayArea && !Prophecy.prophosizing){
+			if(MouseManager.mouseDragged && cardSelected){ 
+				x = preX + MouseManager.mouseX;
+				y = preY + MouseManager.mouseY;
+			}
+			else if(MouseManager.justEntered && hitBox.contains(MouseManager.mouseX, MouseManager.mouseY)){
+				preX = x - MouseManager.mouseX;
+				preY = y - MouseManager.mouseY;
+				MouseManager.justEntered = false;
+				cardSelected = true;
+				
+				if(game.getCompleteDoor().isEnabled()){
+					game.getCompleteDoor().setEnabled(false);
+//					gameState.getDeck().getCards().add(Limbo.currentDrawnCard);
+//					Limbo.currentDrawnCard.inSlot.storedCard = null;
+//					Limbo.currentDrawnCard = null;
+				}
+//				PlayArea.inRow = 1;
+			}	
+			
+			else if(MouseManager.justReleased && cardSelected){
+				cardSelected = false;
+
+				if(hitBox.intersects(hand.getHitBox())){
+					hand.addCard(this);
+//					PlayArea.inRow--;
+				}
+				else if(hitBox.intersects(playArea.getHitBox())){
+					playArea.addCard(this);
+//					PlayArea.inRow++;
+				}
+				
+				else if(hitBox.intersects(discard.getHitBox())){
+					discard.addCard(this);
+//					PlayArea.inRow--;
+				}
+				
+				x = (int) inSlot.getX();
+				y = (int) inSlot.getY();
+			}
+			
+			hitBox.setLocation(x, y);
+		}
+		
 		/******************************************************************************************************************
 		 * Card in Non-Full Hand Not Prophosizing
 		 */
 		else if(!moveable && !inProphecy){
 			if(MouseManager.rightPressed && hitBox.contains(MouseManager.mouseX, MouseManager.mouseY)){
+				System.out.println("Discard");
 				discard.addCard(this);
 				hitBox.setLocation(x, y);
 				MouseManager.rightPressed = false;
@@ -180,7 +231,7 @@ public class Card extends Entity{
 				preY = y - MouseManager.mouseY;
 				MouseManager.justEntered = false;
 				cardSelected = true;
-			}
+			}	
 			
 			else if(MouseManager.justReleased && cardSelected){
 				cardSelected = false;
@@ -207,9 +258,11 @@ public class Card extends Entity{
 		/*****************************************************************************************************************
 		 * Selectable Door in Limbo(Comes from getting 3 in a row)
 		 */
-		else if(selectableDoor && MouseManager.justEntered && hitBox.contains(MouseManager.mouseX, MouseManager.mouseY)){
-			gameState.getDoorsCompleted().addDoor(this);
-		}
+//		if(selectableDoor){
+//			gameState.getDoorsCompleted().addDoor(this);
+//			System.out.println("GGGGLSDFSDFASDFASDGAr");
+//		}
+		hitBox.setLocation(x, y);
 	}
 
 	public void render(Graphics g) {
@@ -226,7 +279,7 @@ public class Card extends Entity{
 //			g.setColor(Color.MAGENTA);
 //		}
 		g.drawImage(texture, x, y, 100, 158, null);
-//		g.fillRect((int)hitBox.getX(), (int)hitBox.getY(), (int)hitBox.getWidth(), (int)hitBox.getHeight());
+//		g.fillRect((int)hitBox.getX() + 20, (int)hitBox.getY() + 20, (int)hitBox.getWidth(), (int)hitBox.getHeight());
 	}
 	
 	public void makeVisible(){
@@ -258,12 +311,20 @@ public class Card extends Entity{
 		this.inProphecy = inProphecy;
 	}
 
-	public boolean isSelectableDoor() {
-		return selectableDoor;
+	public boolean isInPlayArea() {
+		return inPlayArea;
 	}
 
-	public void setSelectableDoor(boolean selectableDoor) {
-		this.selectableDoor = selectableDoor;
+	public void setInPlayArea(boolean inPlayArea) {
+		this.inPlayArea = inPlayArea;
+	}
+
+	public boolean isUsed() {
+		return used;
+	}
+
+	public void setUsed(boolean used) {
+		this.used = used;
 	}
 
 	public CardColors getColor(){return cardColor;}
