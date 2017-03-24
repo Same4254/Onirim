@@ -52,7 +52,8 @@ public class Hand extends Entity{
 		for(int i = 0; i < slots.length; i++){
 			slots[i].render(g);
 		}
-		g.drawRect(x, y, width, height);
+//		g.setColor(Color.BLACK);
+//		g.drawRect(x, y, width, height);
 	}
 
 	public Slot[] getSlots() {

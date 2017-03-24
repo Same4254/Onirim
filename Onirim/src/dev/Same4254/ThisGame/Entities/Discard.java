@@ -28,7 +28,8 @@ public class Discard extends Entity{
 	}
 
 	public void render(Graphics g) {
-		g.drawRect(x, y, width, height);
+//		g.setColor(Color.MAGENTA);
+//		g.drawRect(x, y, width, height);
 		slot.render(g);
 	}
 	

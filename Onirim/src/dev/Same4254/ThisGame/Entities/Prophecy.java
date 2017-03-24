@@ -28,10 +28,10 @@ public class Prophecy extends Entity{
 		
 		slots = new Slot[5];
 		
-		int x1 = 110;
+		int y1 = 15;
 		for(int i = 0; i < slots.length; i++){
-			slots[i] = new Slot(game, gameState, x1 + x, y, 100, 158);
-			x1+=110;
+			slots[i] = new Slot(game, gameState, x+15, y + y1, 100, 158);
+			y1+=168;
 		}
 		
 		wordLoc = new Point(x + 2, y + (height/2));
@@ -77,6 +77,8 @@ public class Prophecy extends Entity{
 	}
 	
 	public void render(Graphics g) {
+//		g.setColor(Color.GREEN);
+//		g.fillRect(x, y, width, height);
 		Card toRender = null;
 		for(int i = 0; i < slots.length; i++){
 //			g.setColor(Color.getHSBColor((float)i/slots.length, 1, 1));

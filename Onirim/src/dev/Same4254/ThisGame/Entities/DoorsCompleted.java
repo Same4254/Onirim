@@ -48,7 +48,6 @@ public class DoorsCompleted extends Entity{
 	}
 
 	public void render(Graphics g) {
-		g.drawLine(0, y, game.getDisplay().getWidth(), y);
 		for(int i = 0; i < slots.length; i++){
 			slots[i].render(g);
 		}

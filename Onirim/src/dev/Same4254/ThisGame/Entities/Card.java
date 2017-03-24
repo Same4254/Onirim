@@ -124,13 +124,13 @@ public class Card extends Entity{
 			 }
 			
 			if(MouseManager.justEntered && hitBox.contains(MouseManager.mouseX, MouseManager.mouseY)){
-				preX = x - MouseManager.mouseX;
+				preY = y - MouseManager.mouseY;
 				MouseManager.justEntered = false;
 				cardSelected = true;
 			}
 			
 			if(MouseManager.mouseDragged && cardSelected){
-				x = preX + MouseManager.mouseX;
+				y = preY + MouseManager.mouseY;
 				
 				for(int i = 0; i < proSlots.length; i++){
 					if(proSlots[i].getHitBox().contains(x, y) && proSlots[i] != inSlot){
@@ -203,14 +203,14 @@ public class Card extends Entity{
 		/******************************************************************************************************************
 		 * Card in Non-Full Hand Not Prophosizing
 		 */
-		else if(!moveable && !Prophecy.prophosizing){
-			if(MouseManager.rightPressed && hitBox.contains(MouseManager.mouseX, MouseManager.mouseY)){
-				System.out.println("Discard");
-				discard.addCard(this);
-				hitBox.setLocation(x, y);
-				MouseManager.rightPressed = false;
-			 }
-		}
+//		else if(!moveable && !Prophecy.prophosizing){
+//			if(MouseManager.rightPressed && hitBox.contains(MouseManager.mouseX, MouseManager.mouseY)){
+//				System.out.println("Discard");
+//				discard.addCard(this);
+//				hitBox.setLocation(x, y);
+//				MouseManager.rightPressed = false;
+//			 }
+//		}
 		
 		/*****************************************************************************************************************
 		 * Card in Full Hand not Prophosizing 

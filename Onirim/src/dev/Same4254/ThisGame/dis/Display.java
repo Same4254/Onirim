@@ -35,7 +35,6 @@ public class Display {
 		panel.setMaximumSize(new Dimension(width, height));
 		panel.setMinimumSize(new Dimension(width, height));
 		panel.setFocusable(false);
-		panel.setBackground(Color.BLACK);
 		
 		frame.add(panel);
 		frame.pack();

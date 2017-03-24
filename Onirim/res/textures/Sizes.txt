@@ -1,0 +1,52 @@
+Prophecy Bounds:
+ - X,Y: 50, 50
+ - W,H: 500, 3460
+
+ Slots:
+  - Start X,Y: 100, 100
+  - Gap   W,H: 0, 672
+---------------------------------
+Won Doors Bounds:
+ - X,Y: 600, 2778
+ - W,H: 3350, 732
+
+ Slots:
+  - Start X,Y: 650, 2828
+  - Gap   W,H: 406, 0
+---------------------------------
+Limbo Bounds:
+ - X,Y: 3000, 50
+ - W,H: 950, 2470
+
+ Slots:
+  - Start X,Y: 3055, 105
+  - Gap   W,H: 440, 196
+---------------------------------
+Hand Bounds:
+ - X,Y: 600, 1996
+ - W,H: 2300, 732
+
+ Slots:
+  - Start X,Y: 650, 2046
+  - Gap   W,H: 440, 0
+---------------------------------
+Play Area Bounds:
+ - X,Y: 600, 1213
+ - W,H: 2300, 732
+
+ Slots:
+  - Start X,Y: 650, 2046
+  - Gap   W,H: 440, 0
+---------------------------------
+Deck Slot:
+  - X,Y: 700, 150
+---------------------------------
+Discard Slot:
+  - X,Y: 1150, 150
+---------------------------------
+Collect Door Button:
+  - X,Y: 3001, 2574
+---------------------------------
+
+Drawing Board Layer multiple time Incresses the sharpness of the regions
+Wood Image can be streched to any size while Allowing Background to remain untouched

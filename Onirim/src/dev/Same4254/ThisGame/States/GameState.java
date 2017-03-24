@@ -37,14 +37,17 @@ public class GameState extends State{
 		
 		cardsOutOfDeck = new ArrayList<Card>();
 		
-		discard = new Discard(game, this, 400, 10, 110, 160);
-		hand = new Hand(game, 10, 420, 560, 170);
-		playArea = new PlayArea(game, 10, 180, 550, 158);
-		limbo = new Limbo(game, 585, 10, 200, 550);
-		deck = new Deck(game, this, 10, 10, 100, 158);
+		discard = new Discard(game, this, 287, 37, 100, 160);
+		hand = new Hand(game, 150, 499, 575, 183);
+		playArea = new PlayArea(game, 150, 303, 575, 183);
+		limbo = new Limbo(game, 750, 10, 237, 617);
+		deck = new Deck(game, this, 175, 37, 100, 158);
 		myFont = new Font("myFont", Font.PLAIN, 18);
-		prophecy = new Prophecy(game, this, 0, 620, game.getDisplay().getFrame().getWidth(), 170);
-		doorsCompleted = new DoorsCompleted(game, this, 0, 790, game.getDisplay().getFrame().getWidth(), 170);
+		prophecy = new Prophecy(game, this, 12, 12, 125, 865);
+		doorsCompleted = new DoorsCompleted(game, this, 150, 694, 837, 183);
+		
+//		for(int i = 0; i < hand.getSlots().length; i++)
+//			hand.getSlots()[i].addCard(deck.getCards().remove(0));
 	}
 	
 	public void update() {
@@ -56,14 +59,14 @@ public class GameState extends State{
 		discard.update();
 		doorsCompleted.update();
 		
-		game.getMouseManager();
+//		game.getMouseManager();
 		//		for(int i = 0; i < cardsOutOfDeck.size(); i++){
 //			cardsOutOfDeck.get(i).update();
 //		}
-		if(MouseManager.justReleased){
-			game.getMouseManager();
-			MouseManager.justReleased = false;
-		}
+//		if(MouseManager.justReleased){
+//			game.getMouseManager();
+//			MouseManager.justReleased = false;
+//		}
 		for(int i = 0; i < cardsOutOfDeck.size(); i++){
 			if(cardsOutOfDeck.get(i).isSelected())
 				cardsOutOfDeck.get(i).update();
@@ -74,14 +77,14 @@ public class GameState extends State{
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setStroke(new BasicStroke(6));
 		
-		g2.setColor(Color.GRAY);
-		g.fillRect(0, 0, game.getField().getWidth(), game.getField().getHeight());
-		
-		g2.setColor(Color.RED);
-		g2.drawLine(0, 610, game.getDisplay().getFrame().getWidth(), 610);
-		
-		g2.setStroke(new BasicStroke(3));
-		g2.setColor(Color.WHITE);
+//		g2.setColor(Color.GRAY);
+//		g.fillRect(0, 0, game.getField().getWidth(), game.getField().getHeight());
+//		
+//		g2.setColor(Color.RED);
+//		g2.drawLine(0, 610, game.getDisplay().getFrame().getWidth(), 610);
+//		
+//		g2.setStroke(new BasicStroke(3));
+//		g2.setColor(Color.WHITE);
 		
 		deck.render(g2);
 		limbo.render(g2);

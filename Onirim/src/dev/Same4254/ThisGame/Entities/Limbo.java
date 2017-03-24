@@ -1,5 +1,6 @@
 package dev.Same4254.ThisGame.Entities;
 
+import java.awt.Color;
 import java.awt.Graphics;
 
 import dev.Same4254.ThisGame.Game;
@@ -16,16 +17,18 @@ public class Limbo extends Entity{
 		this.game = game;
 		slots = new Slot[10];
 		
-		int vSpace = 0;
+		int vSpace = 30;
+		int x1 = 15;
 //		System.out.println(width);
 //		System.out.println(height);
 		for(int i = 0; i < slots.length; i++){
-			slots[i] = new Slot(game, game.getGameState(), x, y + vSpace, width, 158);
-			vSpace += 60;
-			if(y+vSpace >= 600 - (slots[i].height * 1.5)){
-				x+= width;
-				vSpace = 0;
+			if(i == 5){
+				x1+=110;
+				vSpace = 30;
 			}
+			slots[i] = new Slot(game, game.getGameState(), x + x1, y + vSpace, 100, 158);
+			vSpace += 100;
+			
 		}
 	}
 
@@ -62,10 +65,10 @@ public class Limbo extends Entity{
 	}
 
 	public void render(Graphics g) {
-//		g.setColor(Color.CYAN);
-		g.drawRect(x, y, width, height);
+//		g.setColor(Color.CYAN);	
 		
 		for(int i = 0; i < slots.length; i++){
+//			g.setColor(Color.getHSBColor((float)i/slots.length, 1, 1));
 //			g.setColor(Color.getHSBColor((float)i/slots.length, 1, 1));
 			slots[i].render(g);
 		}

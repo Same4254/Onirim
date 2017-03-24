@@ -3,6 +3,8 @@ package dev.Same4254.ThisGame.gfx;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
+import javax.swing.ImageIcon;
+
 public class Assets {
 	public static BufferedImage blueDoor, greenDoor, redDoor, tanDoor;
 
@@ -11,9 +13,15 @@ public class Assets {
 	public static BufferedImage tanCardKey, tanCardSun, tanCardMoon; 
 	public static BufferedImage blueCardKey, blueCardSun, blueCardMoon;
 	
+	public static BufferedImage blankDoor;
+	
 	public static BufferedImage nightmare, cardBack;
 	
 	public static BufferedImage logo;
+	
+	public static ImageIcon buttonActive, buttonDisabled, buttonClicked;
+	
+	public static BufferedImage boardCover, wood;
 	
 	public static String[] musicPaths = {new File("res/sound/8bitDungeonBoss.mp3").toURI().toString()};
 	
@@ -41,6 +49,14 @@ public class Assets {
 		
 		nightmare = ImageLoader.loadImage("res/textures/Nightmare Card.png");
 		cardBack = ImageLoader.loadImage("res/textures/Card Back.png");
+		blankDoor = ImageLoader.loadImage("res/textures/Door Blank.png");
+		
+		wood = ImageLoader.loadImage("res/textures/Wood.png");
+		boardCover = ImageLoader.loadImage("res/textures/Board Cover.png");
+		
+		buttonActive = ImageLoader.loadIcon("res/textures/Button Active.png");
+		buttonClicked = ImageLoader.loadIcon("res/textures/Button Clicked.png");
+		buttonDisabled = ImageLoader.loadIcon("res/textures/Button Disabled.png");
 		
 		logo = ImageLoader.loadImage("res/textures/logo.jpg");
 	}

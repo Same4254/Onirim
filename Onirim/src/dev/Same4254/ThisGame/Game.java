@@ -9,10 +9,12 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import dev.Same4254.ThisGame.Entities.Card;
+import dev.Same4254.ThisGame.Entities.DoorsCompleted;
 import dev.Same4254.ThisGame.Entities.PlayArea;
 import dev.Same4254.ThisGame.Entities.Prophecy;
 import dev.Same4254.ThisGame.Entities.Slot;
@@ -99,7 +101,7 @@ public class Game extends JPanel implements ActionListener{
 
 	public void init(){
 		Assets.init();
-		completeDoor = new JButton("Complete The Door!");
+		completeDoor = new JButton();
 		field = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		display = new Display(this, title, width, height);
 		addMouseListener(mouseManager);
@@ -117,7 +119,10 @@ public class Game extends JPanel implements ActionListener{
 		add(completeDoor);
 		completeDoor.setSize(200,40);
 		completeDoor.setLocation((int)gameState.getLimbo().getX(), (int)gameState.getLimbo().getY()+ gameState.getLimbo().getHeight());
-		completeDoor.setFont(new Font("myFont",0, 16));
+//		completeDoor.setFont(new Font("myFont",0, 16));
+		completeDoor.setDisabledIcon((Icon) Assets.buttonDisabled);
+		completeDoor.setPressedIcon((Icon) Assets.buttonClicked);
+		completeDoor.setSelectedIcon((Icon) Assets.buttonActive);
 		
 		/*
 		 * starts the game
@@ -152,11 +157,16 @@ public class Game extends JPanel implements ActionListener{
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 		
-		heightOffSet = widthOffSet = 0;
-//		((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, .5f));
 		Graphics2D g2 = field.createGraphics();
 		g2.setBackground(new Color(255, 255, 255, 0));
 		g2.clearRect(0, 0, width, height);
+		
+		g.drawImage(Assets.wood, 0, 0, display.getFrame().getWidth(), display.getFrame().getHeight(), null);
+		
+		heightOffSet = widthOffSet = 0;
+//		((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, .5f));
+		
+		g2.drawImage(Assets.boardCover, 0, 0, field.getWidth(), field.getHeight(), null);
 		
 		if(State.getCurrentState() != null)
 			State.getCurrentState().render(g2);
@@ -179,7 +189,7 @@ public class Game extends JPanel implements ActionListener{
 		if(gameState != null){
 			float percentX = (float)gameState.getLimbo().getX() / field.getWidth();
 			float percentY = ((float)gameState.getLimbo().getY() + gameState.getLimbo().getHeight()) / field.getHeight();
-			completeDoor.setLocation((int)(percentX * (getWidth() - widthOffSet*2) + widthOffSet), (int)(percentY * (getHeight() - heightOffSet*2) + heightOffSet));
+			completeDoor.setLocation((int)(percentX * (getWidth() - widthOffSet*2) + widthOffSet), (int)(percentY * (getHeight() - heightOffSet*2) + heightOffSet) + 16);
 			
 			
 			float percentWidth = (float)gameState.getLimbo().getWidth() / field.getWidth();
@@ -228,6 +238,8 @@ public class Game extends JPanel implements ActionListener{
 	public float getWidthOffSet() {
 		return widthOffSet;
 	}
+	
+	
 
 	public void actionPerformed(ActionEvent e) {
 		/*

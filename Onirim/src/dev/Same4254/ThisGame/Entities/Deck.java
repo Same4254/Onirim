@@ -1,5 +1,6 @@
 package dev.Same4254.ThisGame.Entities;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.ArrayList;
@@ -86,6 +87,7 @@ public class Deck extends Entity{
 	}
 
 	public void shuffle(){
+		System.out.println("SHUFFLE");
 		Collections.shuffle(cards);
 	}
 	
@@ -160,6 +162,8 @@ public class Deck extends Entity{
 	}
 
 	public void render(Graphics g) {
+//		g.setColor(Color.RED);
+//		g.fillRect(x, y, width, height);
 		g.drawImage(Assets.cardBack, x, y,100,158, null);
 	}
 

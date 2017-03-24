@@ -1,5 +1,6 @@
 package dev.Same4254.ThisGame.Entities;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Rectangle;
@@ -23,11 +24,11 @@ public class PlayArea extends Entity{
 		
 		slots = new Slot[5];
 		
-		int hSpace = 0;
+		int hSpace = 15;
 		inRow = 0;
 		
 		for(int i = 0; i < slots.length; i++){
-			slots[i] = new Slot(game, gameState, x + hSpace, y, 100, height);
+			slots[i] = new Slot(game, gameState, x + hSpace, y+15, 100, height);
 			hSpace += 110;
 		}
 		
@@ -168,8 +169,8 @@ public class PlayArea extends Entity{
 		for(int i = 0; i < slots.length; i++){
 			slots[i].render(g);
 		}
-//		g.setColor(Color.red);
-		g.drawRect(x, y, width, height);
+//		g.setColor(Color.BLUE);
+//		g.drawRect(x, y, width, height);
 		g.setFont(new Font("myFont", Font.PLAIN, 18));
 		g.drawString("In Row: " + String.valueOf(inRow), x + 150, y - 20);
 	}

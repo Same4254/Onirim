@@ -50,8 +50,8 @@ public class Slot extends Entity{
 			storedCard.render(g);
 		}
 //		else{
-//			g.setColor(Color.WHITE);
-//			g.drawRect(x, y, width, height);
+////			g.setColor(Color.WHITE);
+//			g.fillRect(x, y, width, height);
 //		}
 	}
 	
