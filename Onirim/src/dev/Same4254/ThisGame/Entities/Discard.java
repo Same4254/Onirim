@@ -35,6 +35,7 @@ public class Discard extends Entity{
 	
 	//Method for just simply adding a card to the discard without checking with other components
 	public void addCardWithoutCheck(Card c){
+//		System.out.println("------------------ \n Discard " + c.getType() + "\n----------------------------");
 		slot.addCard(c);
 	}
 	
@@ -43,8 +44,10 @@ public class Discard extends Entity{
 			game.getCompleteDoor().setEnabled(false);
 		}
 		
-		System.out.println(c);
-		gameState.getCardsOutOfDeck().remove(c);
+		game.getDiscarded().addCard(c);
+		
+//		System.out.println(c);
+//		gameState.getCardsOutOfDeck().remove(c);
 		slot.addCard(c);
 		c.setInPlayArea(false);
 		c.setInProphecy(false);
@@ -64,6 +67,7 @@ public class Discard extends Entity{
 		if(c.getSymbol() == Card.CardSymbols.KEY && Limbo.currentDrawnCard != null && !Prophecy.prophosizing){
 			if(Limbo.currentDrawnCard.getType() == Card.CardTypes.DREAM){
 				addCardWithoutCheck(Limbo.currentDrawnCard);
+//				gameState.getCardsOutOfDeck().remove(Limbo.currentDrawnCard);
 			}
 			else if(Limbo.currentDrawnCard.getType() == Card.CardTypes.DOOR && Limbo.currentDrawnCard.getColor() == c.getColor()){
 				gameState.getDoorsCompleted().addDoor(Limbo.currentDrawnCard);
@@ -71,7 +75,7 @@ public class Discard extends Entity{
 			else{
 				gameState.getProphecy().clearAllProphecy();
 				gameState.getProphecy().restockProphecy(); 
-				System.out.println("Start Pro");
+//				System.out.println("Start Pro");
 			}
 			Limbo.currentDrawnCard = null;
 		}
@@ -80,7 +84,7 @@ public class Discard extends Entity{
 		else if(c.getSymbol() == Card.CardSymbols.KEY && !Prophecy.prophosizing){
 			gameState.getProphecy().clearAllProphecy();
 			gameState.getProphecy().restockProphecy(); 
-			System.out.println("Start Pro");
+//			System.out.println("Start Pro");
 		}
 	}
 	

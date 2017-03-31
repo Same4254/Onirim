@@ -10,7 +10,7 @@ import javax.swing.ImageIcon;
 public class ImageLoader {
 	public static BufferedImage loadImage(String path){
 		try {
-			return ImageIO.read(new File(path));
+			return ImageIO.read(ImageLoader.class.getResource(path));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

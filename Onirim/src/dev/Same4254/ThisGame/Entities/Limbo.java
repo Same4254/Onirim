@@ -17,8 +17,8 @@ public class Limbo extends Entity{
 		this.game = game;
 		slots = new Slot[10];
 		
-		int vSpace = 30;
-		int x1 = 15;
+		int vSpace = 12;
+		int x1 = 14;
 //		System.out.println(width);
 //		System.out.println(height);
 		for(int i = 0; i < slots.length; i++){
@@ -27,7 +27,7 @@ public class Limbo extends Entity{
 				vSpace = 30;
 			}
 			slots[i] = new Slot(game, game.getGameState(), x + x1, y + vSpace, 100, 158);
-			vSpace += 100;
+			vSpace += 100;//49
 			
 		}
 	}
@@ -41,7 +41,11 @@ public class Limbo extends Entity{
 			}
 		}
 	}
-	
+	/*
+	 * Puts card into deck
+	 * Clears Proph
+	 * Shuffles deck
+	 */
 	public void shuffleToDeck(){
 		for(Slot s : slots){
 			if(s.storedCard == null){
@@ -50,20 +54,28 @@ public class Limbo extends Entity{
 			s.storedCard.setInSlot(null);
 			s.storedCard.inDeck = true;
 			game.getGameState().getDeck().getCards().add(s.storedCard);
-			game.getGameState().getCardsOutOfDeck().remove(s.storedCard);
+//			game.getGameState().getCardsOutOfDeck().remove(s.storedCard);
 			s.storedCard = null;
+			currentDrawnCard = null;
 		}
-		System.out.println("SHUFFLE");
+//		System.out.println("SHUFFLE");
 		game.getGameState().getDeck().shuffle();
 	}
 	
 	public void update() {
+		for(Slot s : slots){
+			if(s.storedCard == null){
+				break;
+			}
+			
+			s.storedCard.update();
+		}
 //		System.out.println(currentDrawnCard);
 //		if(Hand.handSize == 5){
 //			shuffleToDeck();
 //		}
 	}
-
+	
 	public void render(Graphics g) {
 //		g.setColor(Color.CYAN);	
 		

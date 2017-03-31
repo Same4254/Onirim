@@ -16,10 +16,10 @@ public class DoorsCompleted extends Entity{
 		
 		this.game = game;
 		slots = new Slot[8];
-		int x1 = 0;
+		int x1 = 12;
 		for(int i = 0; i < slots.length; i++){
-			slots[i] = new Slot(game, gameState, x+x1, y, 100, 158);
-			x1+=100;
+			slots[i] = new Slot(game, gameState, x+x1, y+12, 100, 158);
+			x1+=101;
 		}
 	}
 	
@@ -28,7 +28,7 @@ public class DoorsCompleted extends Entity{
 		 * check to see that the card is a door
 		 */
 		if(c.getType() != Card.CardTypes.DOOR){
-			System.out.println("TRIED TO DISCARD A KEY FOR A NON DOOR!");
+//			System.out.println("TRIED TO DISCARD A KEY FOR A NON DOOR!");
 			return;
 		}
 		for(int i = 0; i < slots.length; i++){

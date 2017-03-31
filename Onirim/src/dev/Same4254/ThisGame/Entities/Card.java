@@ -49,13 +49,14 @@ public class Card extends Entity{
 	private PlayArea playArea;
 	private Slot[] playAreaSlots;
 	private Slot inSlot;
-	private ArrayList<Card> cardsOutOfDeck;
+//	private ArrayList<Card> cardsOutOfDeck;
 	private Discard discard;
 	private Hand hand;
 	private GameState gameState;
 	private Game game;
+	private int discardIndex;
 	
-	public Card(Game game, GameState gameState, BufferedImage img, int x, int y, CardTypes cardType, CardSymbols cardSymbol, CardColors cardColor) {
+	public Card(Game game, GameState gameState, BufferedImage img, int x, int y, CardTypes cardType, CardSymbols cardSymbol, CardColors cardColor, int discardIndex){
 		super(x, y, 100, 158);
 		texture = img;
 		hitBox = new Rectangle(x, y, width, height);
@@ -66,6 +67,7 @@ public class Card extends Entity{
 		
 		this.gameState = gameState;
 		this.game = game;
+		this.discardIndex = discardIndex;
 		
 		this.cardType = cardType;
 		this.cardColor = cardColor;
@@ -75,7 +77,7 @@ public class Card extends Entity{
 		this.discard = gameState.getDiscard();
 		this.hand = gameState.getHand();
 		
-		cardsOutOfDeck = gameState.getCardsOutOfDeck();
+//		cardsOutOfDeck = gameState.getCardsOutOfDeck();
 		playAreaSlots = playArea.getSlots();
 	}
 	
@@ -96,8 +98,9 @@ public class Card extends Entity{
 		this.playArea = gameState.getPlayArea();
 		this.discard = gameState.getDiscard();
 		this.hand = gameState.getHand();
+		this.discardIndex = card.getDiscardIndex();
 		
-		cardsOutOfDeck = gameState.getCardsOutOfDeck();
+//		cardsOutOfDeck = gameState.getCardsOutOfDeck();
 		playAreaSlots = playArea.getSlots();
 	}
 
@@ -107,29 +110,85 @@ public class Card extends Entity{
 	
 	public void update() {
 		hitBox.setLocation(x, y);
-//		System.out.println(MouseManager.mouseX.rightPressed);
+		
+		if(cardSymbol == CardSymbols.NIGHTMARE && !inProphecy && MouseManager.rightPressed && hitBox.contains(MouseManager.mouseX, MouseManager.mouseY)){
+			discard.addCard(this);
+			hand.clear();
+			hand.refill();
+			game.getGameState().getLimbo().shuffleToDeck();
+			Limbo.currentDrawnCard = null;
+			
+			MouseManager.rightPressed = false;
+		}
+		
+		/*****************************************************************************************************************
+		 * Card in Full Hand not Prophosizing 
+		 */
+		else if(moveable && !Prophecy.prophosizing && !inPlayArea){
+			if(MouseManager.rightPressed && hitBox.contains(MouseManager.mouseX, MouseManager.mouseY) && !MouseManager.mouseDragged){
+//				System.out.println("end");
+				discard.addCard(this);
+				hitBox.setLocation(x, y);
+				MouseManager.rightPressed = false;
+			 }
+			
+			else if(MouseManager.mouseDragged && cardSelected){ 
+				x = preX + MouseManager.mouseX;
+				y = preY + MouseManager.mouseY;
+			}
+			else if(MouseManager.justEntered && hitBox.contains(MouseManager.mouseX, MouseManager.mouseY)){
+				preX = x - MouseManager.mouseX;
+				preY = y - MouseManager.mouseY;
+				MouseManager.justEntered = false;
+				cardSelected = true;
+				System.out.println("1");
+			}	
+			
+			else if(MouseManager.justReleased && cardSelected){
+				cardSelected = false;
+
+				if(hitBox.intersects(hand.getHitBox())){
+					hand.addCard(this);
+				}
+				
+				else if(hitBox.intersects(playArea.getHitBox())){
+					playArea.addCard(this);
+					
+				}
+				
+				else if(hitBox.intersects(discard.getHitBox())){
+					discard.addCard(this);
+				}
+				
+				x = (int) inSlot.getX();
+				y = (int) inSlot.getY();
+			}
+			
+			hitBox.setLocation(x, y);
+		}
 		
 		/***************************************************************************
 		 * Card In Prophecy and Prophosizing 
 		 */
-		if(inProphecy && Prophecy.prophosizing){
+		else if(inProphecy && Prophecy.prophosizing){
 			Slot[] proSlots = gameState.getProphecy().getSlots();
 //			System.out.println(cardSelected);
 			
-			if(Prophecy.prophosizing && cardType != CardTypes.DOOR &&  MouseManager.rightPressed && hitBox.contains(MouseManager.mouseX, MouseManager.mouseY)){
+			if(Prophecy.prophosizing && cardType != CardTypes.DOOR &&  MouseManager.rightPressed && hitBox.contains(MouseManager.mouseX, MouseManager.mouseY) && !MouseManager.mouseDragged){
 //				System.out.println("Pro: " + Prophecy.prophosizing);
 				discard.addCard(this);
 				hitBox.setLocation(x, y);
 				MouseManager.rightPressed = false;
 			 }
 			
-			if(MouseManager.justEntered && hitBox.contains(MouseManager.mouseX, MouseManager.mouseY)){
+			else if(MouseManager.justEntered && hitBox.contains(MouseManager.mouseX, MouseManager.mouseY)){
 				preY = y - MouseManager.mouseY;
 				MouseManager.justEntered = false;
 				cardSelected = true;
+				System.out.println("2");
 			}
 			
-			if(MouseManager.mouseDragged && cardSelected){
+			else if(MouseManager.mouseDragged && cardSelected){
 				y = preY + MouseManager.mouseY;
 				
 				for(int i = 0; i < proSlots.length; i++){
@@ -140,7 +199,7 @@ public class Card extends Entity{
 				}
 			}
 			 
-			if(MouseManager.justReleased && cardSelected){
+			else if(MouseManager.justReleased && cardSelected){
 				cardSelected = false;
 				x = (int) inSlot.getX();
 				y = (int) inSlot.getY();
@@ -153,7 +212,7 @@ public class Card extends Entity{
 			
 		}
 		
-		else if(completed && MouseManager.rightPressed && hitBox.contains(MouseManager.mouseX, MouseManager.mouseY)){
+		else if(completed && MouseManager.rightPressed && hitBox.contains(MouseManager.mouseX, MouseManager.mouseY) && !MouseManager.mouseDragged && !Prophecy.prophosizing){
 			if(Limbo.currentDrawnCard.getType() == CardTypes.DREAM){
 				discard.addCard(Limbo.currentDrawnCard);
 				gameState.getLimbo().addCard(this);
@@ -174,6 +233,7 @@ public class Card extends Entity{
 				preY = y - MouseManager.mouseY;
 				MouseManager.justEntered = false;
 				cardSelected = true;
+				System.out.println("3");
 			}	
 			
 			else if(MouseManager.justReleased && cardSelected){
@@ -203,67 +263,26 @@ public class Card extends Entity{
 		/******************************************************************************************************************
 		 * Card in Non-Full Hand Not Prophosizing
 		 */
-//		else if(!moveable && !Prophecy.prophosizing){
-//			if(MouseManager.rightPressed && hitBox.contains(MouseManager.mouseX, MouseManager.mouseY)){
-//				System.out.println("Discard");
-//				discard.addCard(this);
-//				hitBox.setLocation(x, y);
-//				MouseManager.rightPressed = false;
-//			 }
-//		}
-		
-		/*****************************************************************************************************************
-		 * Card in Full Hand not Prophosizing 
-		 */
-		else if(moveable && !Prophecy.prophosizing){
-			if(MouseManager.rightPressed && hitBox.contains(MouseManager.mouseX, MouseManager.mouseY)){
-//				System.out.println("end");
-				discard.addCard(this);
+		else if(!moveable && !Prophecy.prophosizing && cardSymbol == CardSymbols.KEY){
+			if(MouseManager.rightPressed && hitBox.contains(MouseManager.mouseX, MouseManager.mouseY) && !MouseManager.mouseDragged){
+				if(Limbo.currentDrawnCard != null && (Limbo.currentDrawnCard.getColor() == cardColor || Limbo.currentDrawnCard.getSymbol() == CardSymbols.NIGHTMARE)){
+					discard.addCard(this);
+					Limbo.currentDrawnCard = null;
+				}
+				
 				hitBox.setLocation(x, y);
 				MouseManager.rightPressed = false;
 			 }
-			
-			if(MouseManager.mouseDragged && cardSelected){ 
-				x = preX + MouseManager.mouseX;
-				y = preY + MouseManager.mouseY;
-			}
-			else if(MouseManager.justEntered && hitBox.contains(MouseManager.mouseX, MouseManager.mouseY)){
-				preX = x - MouseManager.mouseX;
-				preY = y - MouseManager.mouseY;
-				MouseManager.justEntered = false;
-				cardSelected = true;
-			}	
-			
-			else if(MouseManager.justReleased && cardSelected){
-				cardSelected = false;
-
-				if(hitBox.intersects(hand.getHitBox())){
-					hand.addCard(this);
-				}
-				else if(hitBox.intersects(playArea.getHitBox())){
-					playArea.addCard(this);
-					
-				}
-				
-				else if(hitBox.intersects(discard.getHitBox())){
-					discard.addCard(this);
-				}
-				
-				x = (int) inSlot.getX();
-				y = (int) inSlot.getY();
-			}
-			
-			hitBox.setLocation(x, y);
 		}
 		
-		/*****************************************************************************************************************
-		 * Selectable Door in Limbo(Comes from getting 3 in a row)
-		 */
-//		if(selectableDoor){
-//			gameState.getDoorsCompleted().addDoor(this);
-//			System.out.println("GGGGLSDFSDFASDFASDGAr");
-//		}
-		hitBox.setLocation(x, y);
+			/*****************************************************************************************************************
+			 * Selectable Door in Limbo(Comes from getting 3 in a row)
+			 */
+	//		if(selectableDoor){
+	//			gameState.getDoorsCompleted().addDoor(this);
+	//			System.out.println("GGGGLSDFSDFASDFASDGAr");
+	//		}
+			hitBox.setLocation(x, y);
 	}
 
 	public void render(Graphics g) {
@@ -279,7 +298,12 @@ public class Card extends Entity{
 //		else if(inProphecy && !Prophecy.prophosizing){
 //			g.setColor(Color.MAGENTA);
 //		}
+		if(used){
+			g.setColor(Color.RED);
+			g.fillRect(x-5, y-5, width+10, height+10);
+		}
 		g.drawImage(texture, x, y, 100, 158, null);
+		
 //		g.fillRect((int)hitBox.getX() + 20, (int)hitBox.getY() + 20, (int)hitBox.getWidth(), (int)hitBox.getHeight());
 	}
 	
@@ -342,6 +366,11 @@ public class Card extends Entity{
 
 	public void setCompleted(boolean completed) {
 		this.completed = completed;
+	}
+
+	
+	public int getDiscardIndex() {
+		return discardIndex;
 	}
 
 	public CardColors getColor(){return cardColor;}

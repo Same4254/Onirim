@@ -1,7 +1,6 @@
 package dev.Same4254.ThisGame;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
@@ -9,23 +8,27 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import dev.Same4254.ThisGame.Entities.Card;
-import dev.Same4254.ThisGame.Entities.DoorsCompleted;
-import dev.Same4254.ThisGame.Entities.PlayArea;
+import dev.Same4254.ThisGame.Entities.Card.CardSymbols;
+import dev.Same4254.ThisGame.Entities.Discard;
+import dev.Same4254.ThisGame.Entities.Limbo;
 import dev.Same4254.ThisGame.Entities.Prophecy;
 import dev.Same4254.ThisGame.Entities.Slot;
 import dev.Same4254.ThisGame.Input.KeyManager;
 import dev.Same4254.ThisGame.Input.MouseManager;
 import dev.Same4254.ThisGame.Sound.Music;
 import dev.Same4254.ThisGame.States.GameState;
+import dev.Same4254.ThisGame.States.LoseState;
 import dev.Same4254.ThisGame.States.MenuState;
 import dev.Same4254.ThisGame.States.State;
+import dev.Same4254.ThisGame.States.WinState;
+import dev.Same4254.ThisGame.dis.DiscardedMenu;
 import dev.Same4254.ThisGame.dis.Display;
 import dev.Same4254.ThisGame.gfx.Assets;
+import dev.Same4254.ThisGame.gfx.ButtonUI;
 
 public class Game extends JPanel implements ActionListener{
 	private static final long serialVersionUID = 1L;
@@ -45,11 +48,14 @@ public class Game extends JPanel implements ActionListener{
 	//States
 	private GameState gameState;
 	private MenuState menuState;
+	private WinState winState;
+	private LoseState loseState;
 	
 	private Music music;
-	private Prophecy prophecy;
 	
+	private DiscardedMenu discarded;
 	private JButton completeDoor;
+	private boolean firstTurn;
 	
 	/*
 	 * This is the image that the paint component will draw to then will get scaled
@@ -58,13 +64,11 @@ public class Game extends JPanel implements ActionListener{
 	
 	private float heightOffSet, widthOffSet;
 	
+	private boolean getByKey;
 	/**
 	 * TODO LIST
 	 * 
-	 * Nightmare
-	 *	 Send a Played Door to Limbo to discard Nightmare
-	 *	 Draw 5 cards (locations go to discard, dreams & doors go to limbo)
-	 * Helper Menu
+	 * Winning and losing
 	 * 
 	 * Clean up/Comments 
 	 * TEST TEST TEST
@@ -79,12 +83,14 @@ public class Game extends JPanel implements ActionListener{
 	 */
 	
 	/**
-	 * Qs
+	 * Bugs
 	 * 
-	 * Trigger prophecy while Prophesizing?
-	 * Draw 5 cards from hand or deck?
-	 * Multiple nightmares in the reshuffle to the deck?
-	 *  
+	 * dragging back last card in play after a draw
+	 * Hit boxes screw up when top is limited
+	 */
+	
+	/**
+	 * Qs
 	 */
 	public Game(String title, int width, int height){
 		this.title = title;
@@ -110,9 +116,12 @@ public class Game extends JPanel implements ActionListener{
 		
 		gameState = new GameState(this);
 		menuState = new MenuState(this);
-		State.setCurrentState(gameState);
+		winState = new WinState(this);
+		loseState = new LoseState(this);
+		State.setCurrentState(menuState);
+		gameState.getDeck().shuffle();
 		
-		completeDoor.setVisible(true);
+		completeDoor.setVisible(false);
 		completeDoor.setEnabled(false);
 		completeDoor.addActionListener(this);
 		setLayout(null);
@@ -120,19 +129,31 @@ public class Game extends JPanel implements ActionListener{
 		completeDoor.setSize(200,40);
 		completeDoor.setLocation((int)gameState.getLimbo().getX(), (int)gameState.getLimbo().getY()+ gameState.getLimbo().getHeight());
 //		completeDoor.setFont(new Font("myFont",0, 16));
-		completeDoor.setDisabledIcon((Icon) Assets.buttonDisabled);
-		completeDoor.setPressedIcon((Icon) Assets.buttonClicked);
-		completeDoor.setSelectedIcon((Icon) Assets.buttonActive);
+		
+		completeDoor.setUI(new ButtonUI());
+		completeDoor.setOpaque(false);
+		completeDoor.setBorderPainted(false);
+		
+		firstTurn = true;
+		
+		discarded = new DiscardedMenu(this);
 		
 		/*
 		 * starts the game
 		 * don't be concerned about this....
 		 */
-		for(int i = 0; i < 50; i++)
+		for(int i = 0; i < 30; i++)
 			update();
 	}
 	
+	public DiscardedMenu getDiscarded() {
+		return discarded;
+	}
+
 	public void update(){
+//		if(keyManager.downArrow)
+//			gameState.getDeck().dump5Cards();
+		
 		width = display.getFrame().getWidth();
 		height = display.getFrame().getHeight();
 		
@@ -157,16 +178,16 @@ public class Game extends JPanel implements ActionListener{
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 		
+//		System.out.println("PRINT PRINT __________________________________________");
+		
 		Graphics2D g2 = field.createGraphics();
 		g2.setBackground(new Color(255, 255, 255, 0));
 		g2.clearRect(0, 0, width, height);
 		
-		g.drawImage(Assets.wood, 0, 0, display.getFrame().getWidth(), display.getFrame().getHeight(), null);
+//		g.drawImage(Assets.wood, 0, 0, display.getFrame().getWidth(), display.getFrame().getHeight(), null);
 		
 		heightOffSet = widthOffSet = 0;
 //		((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, .5f));
-		
-		g2.drawImage(Assets.boardCover, 0, 0, field.getWidth(), field.getHeight(), null);
 		
 		if(State.getCurrentState() != null)
 			State.getCurrentState().render(g2);
@@ -200,11 +221,13 @@ public class Game extends JPanel implements ActionListener{
 	}
 	
 	public void lose(){
-		System.out.println("YOU LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOSSSSSSSSSSSSSSSSSSSEEEEEEEEEEEEe");
+		completeDoor.setVisible(false);
+		State.setCurrentState(loseState);
 	}
 	
 	public void win(){
-		System.out.println("YYYYYYYYYYYYYYYYYYYYOOOOOOOOOOOOUUUUUUUUUUUU WWWWWWWWOOOOOOOOOONNNNNNNNNNNN");
+		completeDoor.setVisible(false);
+		State.setCurrentState(winState);
 	}
 
     public void endMenuState(){
@@ -213,10 +236,6 @@ public class Game extends JPanel implements ActionListener{
     
 	public GameState getGameState() {
 		return gameState;
-	}
-
-	public Prophecy getProphecy() {
-		return prophecy;
 	}
 
 	public KeyManager getKeyManager(){return keyManager;}
@@ -239,8 +258,6 @@ public class Game extends JPanel implements ActionListener{
 		return widthOffSet;
 	}
 	
-	
-
 	public void actionPerformed(ActionEvent e) {
 		/*
 		 * This button is only enabled when the 3 cards get matched up
@@ -254,34 +271,69 @@ public class Game extends JPanel implements ActionListener{
 //					gameState.getDoorsCompleted().addDoor(slots[i].storedCard);
 //				}
 //			}
-			Slot[] slots = gameState.getPlayArea().getSlots();
-			Card.CardColors color = null;
-			for(int i = slots.length - 1; i >= 0; i--){
-				if(slots[i].storedCard != null){
-					color = slots[i].storedCard.getColor();
-					break;
+			if(!getByKey){
+				Slot[] slots = gameState.getPlayArea().getSlots();
+				Card.CardColors color = null;
+				for(int i = slots.length - 1; i >= 0; i--){
+					if(slots[i].storedCard != null){
+						color = slots[i].storedCard.getColor();
+						break;
+					}
 				}
+			
+				ArrayList<Card> deck = gameState.getDeck().getCards();
+				for(Card c : deck){
+					if(c.getType() == Card.CardTypes.DOOR && c.getColor() == color){
+						deck.remove(c);
+						gameState.getDoorsCompleted().addDoor(c);
+						break;
+					}
+				}
+				
+				for(int i = slots.length - 1; i >= 0; i--){
+					if(slots[i].storedCard != null){
+						slots[i].storedCard.setUsed(true);
+						slots[i].storedCard.setMoveable(false);
+					}
+				}
+				gameState.getLimbo().shuffleToDeck();
 			}
-		
-			ArrayList<Card> deck = gameState.getDeck().getCards();
-			for(Card c : deck){
-				if(c.getType() == Card.CardTypes.DOOR && c.getColor() == color){
-					deck.remove(c);
-					gameState.getDoorsCompleted().addDoor(c);
-					break;
+			else{
+				Slot[] slots = gameState.getHand().getSlots();
+				for(int i = 0; i < slots.length; i++){
+					if(slots[i].storedCard != null){
+						if(slots[i].storedCard.getSymbol() == CardSymbols.KEY && slots[i].storedCard.getColor() == Limbo.currentDrawnCard.getColor()){
+							gameState.getDiscard().addCard(slots[i].storedCard);
+							break;
+						}
+					}
 				}
 			}
 			
-			for(int i = slots.length - 1; i >= 0; i--){
-				if(slots[i].storedCard != null){
-					slots[i].storedCard.setUsed(true);
-					slots[i].storedCard.setMoveable(false);
-				}
-			}
-		
+			getByKey = false;
 			completeDoor.setEnabled(false);
 			update();
 			update();
 		}
+	}
+	
+	public boolean isGetByKey() {
+		return getByKey;
+	}
+
+	public void setGetByKey(boolean getByKey) {
+		this.getByKey = getByKey;
+	}
+
+	public boolean isFirstTurn() {
+		return firstTurn;
+	}
+	
+	public State getcurrentState(){
+		return State.getCurrentState();
+	}
+
+	public void setFirstTurn(boolean firstTurn) {
+		this.firstTurn = firstTurn;
 	}
 }

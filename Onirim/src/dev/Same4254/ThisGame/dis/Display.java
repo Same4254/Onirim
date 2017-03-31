@@ -40,6 +40,28 @@ public class Display {
 		frame.pack();
 	}
 	
+	public Display(JPanel panel, String title, int width, int height){
+		this.height = height;
+		this.width = width;
+		
+		frame = new JFrame(title);
+		frame.setSize(width, height);
+//		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setResizable(true);
+		frame.setLocationRelativeTo(null);
+		frame.setIconImage(Assets.logo);
+		frame.setVisible(true);
+		
+		this.panel = panel;
+		panel.setPreferredSize(new Dimension(width, height));
+		panel.setMaximumSize(new Dimension(width, height));
+		panel.setMinimumSize(new Dimension(width, height));
+		panel.setFocusable(false);
+		
+		frame.add(panel);
+		frame.pack();
+	}
+	
 	public JFrame getFrame() {
 		return frame;
 	}

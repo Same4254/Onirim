@@ -1,12 +1,10 @@
 package dev.Same4254.ThisGame.Entities;
 
-import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Rectangle;
-import java.util.ArrayList;
 
 import dev.Same4254.ThisGame.Game;
+import dev.Same4254.ThisGame.Entities.Card.CardColors;
 import dev.Same4254.ThisGame.States.GameState;
 
 public class PlayArea extends Entity{
@@ -23,22 +21,29 @@ public class PlayArea extends Entity{
 		this.gameState = game.getGameState();
 		
 		slots = new Slot[5];
-		
-		int hSpace = 15;
 		inRow = 0;
 		
+		int x1 = 19;
 		for(int i = 0; i < slots.length; i++){
-			slots[i] = new Slot(game, gameState, x + hSpace, y+15, 100, height);
-			hSpace += 110;
+			slots[i] = new Slot(game, gameState, x + x1, y + (height-158) / 2, 100, 158);
+			x1+=110;
 		}
 		
 		hitBox = new Rectangle(x, y, width, height);
 	}
 
 	public void update() {
+		Slot tempSlot = null;
 		for(int i = 0; i < slots.length; i++){
+			if(slots[i].storedCard!=null && slots[i].storedCard.isSelected()){
+				tempSlot = slots[i];
+				continue;
+			}
 			slots[i].update();
 		}
+		
+		if(tempSlot!= null)
+			tempSlot.update();
 		
 		if(slots[4].storedCard != null){
 			slots[0].storedCard = slots[1].storedCard;
@@ -144,11 +149,36 @@ public class PlayArea extends Entity{
 //					}
 //				}
 //			}
-			game.getCompleteDoor().setEnabled(true);
+			CardColors color = null;
+			for(int i = slots.length - 1; i >= 0; i--){
+				if(slots[i].storedCard != null){
+					color = slots[i].storedCard.getColor();
+					break;
+				}
+			}
+			
+			int tempNum = 0;
+			if(color != null){
+				for(Slot s : game.getGameState().getDoorsCompleted().getSlots()){
+					if(s.storedCard != null && s.storedCard.getColor() == color){
+						tempNum++;                                         
+					}
+				}
+			}
+			
+			if(tempNum < 2)
+				game.getCompleteDoor().setEnabled(true);
+			else
+				game.getCompleteDoor().setEnabled(false);
 			inRow = 0;
 		}
 		else{
-			game.getCompleteDoor().setEnabled(false);
+			if(!game.isGetByKey())
+				game.getCompleteDoor().setEnabled(false);
+		}
+		
+		if(slots[1].storedCard == null && slots[0].storedCard != null && Hand.handSize < 5){
+			slots[0].storedCard.setMoveable(true);
 		}
 	}
 
@@ -166,13 +196,21 @@ public class PlayArea extends Entity{
 	}
 	
 	public void render(Graphics g) {
+		Slot tempSlot = null;
 		for(int i = 0; i < slots.length; i++){
+			if(slots[i].storedCard!=null && slots[i].storedCard.isSelected()){
+				tempSlot = slots[i];
+				continue;
+			}
 			slots[i].render(g);
 		}
+		
+		if(tempSlot!= null)
+			tempSlot.render(g);
 //		g.setColor(Color.BLUE);
 //		g.drawRect(x, y, width, height);
-		g.setFont(new Font("myFont", Font.PLAIN, 18));
-		g.drawString("In Row: " + String.valueOf(inRow), x + 150, y - 20);
+//		g.setFont(new Font("myFont", Font.PLAIN, 18));
+//		g.drawString("In Row: " + String.valueOf(inRow), x + 150, y - 20);
 	}
 	
 	public void addCard(Card c){
@@ -183,13 +221,15 @@ public class PlayArea extends Entity{
 					slots[i].addCard(c);
 					c.setInPlayArea(true);
 					c.setInProphecy(false);
-					System.out.println("Card Added");
+//					System.out.println("Card Added");
 					break;
 				}
 			}
 			else if(slots[i].storedCard == null){
 				slots[i].addCard(c);
-				System.out.println("Card Added");
+				c.setInPlayArea(true);
+				c.setInProphecy(false);
+//				System.out.println("Card Added");
 				break;
 			}
 		}

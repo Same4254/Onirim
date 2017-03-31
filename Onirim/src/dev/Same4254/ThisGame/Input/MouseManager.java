@@ -5,6 +5,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 import dev.Same4254.ThisGame.Game;
+import dev.Same4254.ThisGame.Entities.Prophecy;
 
 public class MouseManager implements MouseListener, MouseMotionListener{
 
@@ -67,7 +68,7 @@ public class MouseManager implements MouseListener, MouseMotionListener{
 		}
 		
 		if(e.getButton() == MouseEvent.BUTTON3){
-			System.out.println("RIGHT");
+//			System.out.println("RIGHT");
 			rightPressed = true;
 			justEntered = true;
 			justReleased = false;
@@ -81,8 +82,15 @@ public class MouseManager implements MouseListener, MouseMotionListener{
 		rightPressed = false;
 		mouseDragged = false;
 		justEntered = false;
-		justReleased = true;
 		middlePressed = false;
+		
+		if(e.getButton() == MouseEvent.BUTTON2){
+			if(!Prophecy.prophosizing && game.getcurrentState() == game.getGameState())
+				game.getGameState().getDeck().deckPressed();
+		}
+		else{
+			justReleased = true;
+		}
 		game.update();
 	}
 
