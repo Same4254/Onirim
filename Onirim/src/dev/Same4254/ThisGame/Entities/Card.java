@@ -300,11 +300,11 @@ public class Card extends Entity{
 //		}
 		if(used){
 			g.setColor(Color.RED);
-			g.fillRect(x-5, y-5, width+10, height+10);
+			g.fillRect(x-5, y-5, 110, 168);
 		}
 		g.drawImage(texture, x, y, 100, 158, null);
 		
-//		g.fillRect((int)hitBox.getX() + 20, (int)hitBox.getY() + 20, (int)hitBox.getWidth(), (int)hitBox.getHeight());
+//		g.fillRect((int)hitBox.getX(), (int)hitBox.getY(), (int)hitBox.getWidth(), (int)hitBox.getHeight());
 	}
 	
 	public void clearAllDependencies(){

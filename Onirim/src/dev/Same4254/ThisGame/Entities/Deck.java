@@ -41,35 +41,36 @@ public class Deck extends Entity{
 		
 		hitBox = new Rectangle((int)x, (int)y, width, height);
 		
-		for(int i = 0; i < 58; i++){
-			if(i < 6)
-				cards.add(new Card(game, gameState, Assets.tanCardSun, x, y, CardTypes.LOCATION, CardSymbols.SUN, CardColors.TAN, 0));
-			else if(i < 10)                
-				cards.add(new Card(game, gameState, Assets.tanCardMoon, x, y, CardTypes.LOCATION, CardSymbols.MOON, CardColors.TAN, 1));
-			else if(i < 13)                
-				cards.add(new Card(game, gameState, Assets.tanCardKey, x, y, CardTypes.LOCATION, CardSymbols.KEY, CardColors.TAN, 2));
-			                               
-			else if(i < 22)                
-				cards.add(new Card(game, gameState, Assets.redCardSun, x, y, CardTypes.LOCATION, CardSymbols.SUN, CardColors.RED, 3));
-			else if(i < 26)                
-				cards.add(new Card(game, gameState, Assets.redCardMoon, x, y, CardTypes.LOCATION, CardSymbols.MOON, CardColors.RED, 4));
-			else if(i < 29)                
-				cards.add(new Card(game, gameState, Assets.redCardKey, x, y, CardTypes.LOCATION, CardSymbols.KEY, CardColors.RED, 5));
-			                               
-			else if(i < 37)                
-				cards.add(new Card(game, gameState, Assets.blueCardSun, x, y, CardTypes.LOCATION, CardSymbols.SUN, CardColors.BLUE, 6));
-			else if(i < 41)                
-				cards.add(new Card(game, gameState, Assets.blueCardMoon, x, y, CardTypes.LOCATION, CardSymbols.MOON, CardColors.BLUE, 7));
-			else if(i < 44)                
-				cards.add(new Card(game, gameState, Assets.blueCardKey, x, y, CardTypes.LOCATION, CardSymbols.KEY, CardColors.BLUE, 8));
-			                               
-			else if(i < 51)                
-				cards.add(new Card(game, gameState, Assets.greenCardSun, x, y, CardTypes.LOCATION, CardSymbols.SUN, CardColors.GREEN, 9));
-			else if(i < 55)                
-				cards.add(new Card(game, gameState, Assets.greenCardMoon, x, y, CardTypes.LOCATION, CardSymbols.MOON, CardColors.GREEN, 10));
-			else if(i < 58)                
-				cards.add(new Card(game, gameState, Assets.greenCardKey, x, y, CardTypes.LOCATION, CardSymbols.KEY, CardColors.GREEN, 11));
+		for(int i = 0; i < 6; i++){
+			cards.add(new Card(game, gameState, Assets.tanCardSun, x, y, CardTypes.LOCATION, CardSymbols.SUN, CardColors.TAN, 0));
 		}
+		
+		for(int i = 0; i < 9; i++){
+			cards.add(new Card(game, gameState, Assets.redCardSun, x, y, CardTypes.LOCATION, CardSymbols.SUN, CardColors.RED, 3));
+		}
+		
+		for(int i = 0; i < 8; i++){
+			cards.add(new Card(game, gameState, Assets.blueCardSun, x, y, CardTypes.LOCATION, CardSymbols.SUN, CardColors.BLUE, 6));
+		}
+		
+		for(int i = 0; i < 7; i++){
+			cards.add(new Card(game, gameState, Assets.greenCardSun, x, y, CardTypes.LOCATION, CardSymbols.SUN, CardColors.GREEN, 9));
+		}
+		
+		for(int i = 0; i < 4; i++){
+			cards.add(new Card(game, gameState, Assets.tanCardMoon, x, y, CardTypes.LOCATION, CardSymbols.MOON, CardColors.TAN, 1));
+			cards.add(new Card(game, gameState, Assets.redCardMoon, x, y, CardTypes.LOCATION, CardSymbols.MOON, CardColors.RED, 4));
+			cards.add(new Card(game, gameState, Assets.blueCardMoon, x, y, CardTypes.LOCATION, CardSymbols.MOON, CardColors.BLUE, 7));
+			cards.add(new Card(game, gameState, Assets.greenCardMoon, x, y, CardTypes.LOCATION, CardSymbols.MOON, CardColors.GREEN, 10));
+		}
+		
+		for(int i = 0; i < 3; i++){
+			cards.add(new Card(game, gameState, Assets.tanCardKey, x, y, CardTypes.LOCATION, CardSymbols.KEY, CardColors.TAN, 2));
+			cards.add(new Card(game, gameState, Assets.redCardKey, x, y, CardTypes.LOCATION, CardSymbols.KEY, CardColors.RED, 5));
+			cards.add(new Card(game, gameState, Assets.blueCardKey, x, y, CardTypes.LOCATION, CardSymbols.KEY, CardColors.BLUE, 8));
+			cards.add(new Card(game, gameState, Assets.greenCardKey, x, y, CardTypes.LOCATION, CardSymbols.KEY, CardColors.GREEN, 11));
+		}
+		
 		for(int i = 0; i < 10; i++){
 			cards.add(new Card(game, gameState, Assets.nightmare, x, y, CardTypes.DREAM, CardSymbols.NIGHTMARE, CardColors.BLACK, 12));
 		}
@@ -85,14 +86,24 @@ public class Deck extends Entity{
 	}
 
 	public void dump5Cards(){
+		Slot[] propSlots = game.getGameState().getProphecy().getSlots();
 		for(int i = 0; i < 5; i++){
 			if(cards.size() < 5){
 				game.lose();
 				return;
 			}
 			
-			//index out of bounds
-			Card temp = cards.remove(cards.size()-1);
+			Card temp = null;
+			for(Slot s : propSlots){
+				if(s.storedCard != null){
+					temp = s.storedCard;
+				}
+			}
+			
+			if(temp == null){
+				temp = cards.remove(cards.size()-1);
+			}
+			
 			if(temp.getType() == CardTypes.LOCATION){
 				game.getGameState().getDiscard().addCardWithoutCheck(temp);
 			}
@@ -104,8 +115,13 @@ public class Deck extends Entity{
 	}
 	
 	public void shuffle(){
-//		System.out.println("SHUFFLE");
+		System.out.println("SHUFFLE");
 		game.getGameState().getProphecy().clearAllProphecy();
+		Collections.shuffle(cards);
+	}
+	
+	public void shuffleWithoutClear(){
+		System.out.println("SHUFFLE");
 		Collections.shuffle(cards);
 	}
 	

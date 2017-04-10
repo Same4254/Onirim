@@ -22,7 +22,9 @@ public class Assets {
 	
 	public static BufferedImage buttonActive, buttonDisabled, buttonClicked;
 	
-	public static BufferedImage boardCover, wood;
+	public static BufferedImage boardCover, woodWithCover, wood;
+	
+	public static BufferedImage lostText, returnButtonArmed, returnButton, winText;
 	
 	public static String[] musicPaths = {new File("res/sound/Thunder Dreams.mp3").toURI().toString()};
 	
@@ -53,6 +55,7 @@ public class Assets {
 		blankDoor = ImageLoader.loadImage("/textures/Door Blank.png");
 		
 		wood = ImageLoader.loadImage("/textures/Wood.png");
+		woodWithCover = ImageLoader.loadImage("/textures/Wood.png");
 		boardCover = ImageLoader.loadImage("/textures/Board Cover.png");
 		
 		buttonActive = ImageLoader.loadImage("/textures/Button Active.png");
@@ -60,10 +63,14 @@ public class Assets {
 		buttonDisabled = ImageLoader.loadImage("/textures/Button Disabled.png");
 		
 		logo = ImageLoader.loadImage("/textures/Icon.png");
-
 		
-		Graphics g = wood.getGraphics();
-		g.drawImage(boardCover, 0, 0, wood.getWidth(), wood.getHeight(), null);
+		lostText = ImageLoader.loadImage("/textures/Lost Text.png");
+		returnButtonArmed = ImageLoader.loadImage("/textures/Return-Button Armed.png");
+		returnButton = ImageLoader.loadImage("/textures/Return-Button.png");
+		winText = ImageLoader.loadImage("/textures/Win Text.png");
+				
+		Graphics g = woodWithCover.getGraphics();
+		g.drawImage(boardCover, 0, 0, woodWithCover.getWidth(), woodWithCover.getHeight(), null);
 		g.dispose();
 	}
 }

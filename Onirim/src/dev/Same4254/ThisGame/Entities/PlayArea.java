@@ -220,7 +220,6 @@ public class PlayArea extends Entity{
 					slots[i - 1].storedCard.setMoveable(false);
 					slots[i].addCard(c);
 					c.setInPlayArea(true);
-					c.setInProphecy(false);
 //					System.out.println("Card Added");
 					break;
 				}
@@ -228,8 +227,6 @@ public class PlayArea extends Entity{
 			else if(slots[i].storedCard == null){
 				slots[i].addCard(c);
 				c.setInPlayArea(true);
-				c.setInProphecy(false);
-//				System.out.println("Card Added");
 				break;
 			}
 		}

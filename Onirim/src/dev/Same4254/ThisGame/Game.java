@@ -5,6 +5,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -25,12 +27,13 @@ import dev.Same4254.ThisGame.States.LoseState;
 import dev.Same4254.ThisGame.States.MenuState;
 import dev.Same4254.ThisGame.States.State;
 import dev.Same4254.ThisGame.States.WinState;
-import dev.Same4254.ThisGame.dis.DiscardedMenu;
+import dev.Same4254.ThisGame.dis.DeckMenu;
 import dev.Same4254.ThisGame.dis.Display;
 import dev.Same4254.ThisGame.gfx.Assets;
-import dev.Same4254.ThisGame.gfx.ButtonUI;
+import dev.Same4254.ThisGame.gfx.CompleteDoorUI;
+import dev.Same4254.ThisGame.gfx.ReturnToMenuButtonUI;
 
-public class Game extends JPanel implements ActionListener{
+public class Game extends JPanel implements ActionListener, ComponentListener{
 	private static final long serialVersionUID = 1L;
 
 	private Display display;
@@ -53,14 +56,15 @@ public class Game extends JPanel implements ActionListener{
 	
 	private Music music;
 	
-	private DiscardedMenu discarded;
+	private DeckMenu deckMenu;
 	private JButton completeDoor;
+	private JButton returnToMenu;
 	private boolean firstTurn;
 	
 	/*
 	 * This is the image that the paint component will draw to then will get scaled
 	 */
-	private BufferedImage field;
+	private BufferedImage field; 
 	
 	private float heightOffSet, widthOffSet;
 	
@@ -85,8 +89,10 @@ public class Game extends JPanel implements ActionListener{
 	/**
 	 * Bugs
 	 * 
-	 * dragging back last card in play after a draw
-	 * Hit boxes screw up when top is limited
+	 * Z ordering
+	 * Having a key for a door, then drawing a nightmare doesn't diable the button
+	 * discard menu counts
+	 * 
 	 */
 	
 	/**
@@ -108,35 +114,58 @@ public class Game extends JPanel implements ActionListener{
 	public void init(){
 		Assets.init();
 		completeDoor = new JButton();
+		returnToMenu = new JButton();
+		
 		field = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		display = new Display(this, title, width, height);
+		
 		addMouseListener(mouseManager);
 		addMouseMotionListener(mouseManager);
 		addKeyListener(keyManager);
+		addComponentListener(this);
+//		display.getFrame().addKeyListener(keyManager);
 		
 		gameState = new GameState(this);
 		menuState = new MenuState(this);
 		winState = new WinState(this);
 		loseState = new LoseState(this);
 		State.setCurrentState(menuState);
+		
 		gameState.getDeck().shuffle();
 		
 		completeDoor.setVisible(false);
 		completeDoor.setEnabled(false);
 		completeDoor.addActionListener(this);
-		setLayout(null);
-		add(completeDoor);
 		completeDoor.setSize(200,40);
 		completeDoor.setLocation((int)gameState.getLimbo().getX(), (int)gameState.getLimbo().getY()+ gameState.getLimbo().getHeight());
-//		completeDoor.setFont(new Font("myFont",0, 16));
-		
-		completeDoor.setUI(new ButtonUI());
+		completeDoor.setUI(new CompleteDoorUI());
 		completeDoor.setOpaque(false);
 		completeDoor.setBorderPainted(false);
 		
+		returnToMenu.setVisible(false);
+		returnToMenu.setEnabled(true);
+		returnToMenu.addActionListener(this);
+		returnToMenu.setSize(400,80);
+		returnToMenu.setLocation((int)((display.getWidth()/2) - (returnToMenu.getWidth()/2)), (int)((display.getHeight()/1.5) - (returnToMenu.getHeight()/2))); 
+		returnToMenu.setUI(new ReturnToMenuButtonUI());
+		returnToMenu.setOpaque(false);
+		returnToMenu.setBorderPainted(false);
+		
+		setLayout(null);
+		add(completeDoor);
+		add(returnToMenu);
+		
 		firstTurn = true;
 		
-		discarded = new DiscardedMenu(this);
+		deckMenu = new DeckMenu(this);
+		
+		float percentX = (float)gameState.getLimbo().getX() / field.getWidth();
+		float percentY = ((float)gameState.getLimbo().getY() + gameState.getLimbo().getHeight()) / field.getHeight();
+		completeDoor.setLocation((int)(percentX * (getWidth() - widthOffSet*2) + widthOffSet), (int)(percentY * (getHeight() - heightOffSet*2) + heightOffSet) + 16);
+		
+		float percentWidth = (float)gameState.getLimbo().getWidth() / field.getWidth();
+		float percentHeight = ((float)40 / field.getHeight());
+		completeDoor.setSize((int)(percentWidth * (getWidth() - widthOffSet*2)), (int)(percentHeight * (getHeight() - heightOffSet*2)));
 		
 		/*
 		 * starts the game
@@ -146,8 +175,8 @@ public class Game extends JPanel implements ActionListener{
 			update();
 	}
 	
-	public DiscardedMenu getDiscarded() {
-		return discarded;
+	public DeckMenu getDeckMenu() {
+		return deckMenu;
 	}
 
 	public void update(){
@@ -166,6 +195,9 @@ public class Game extends JPanel implements ActionListener{
 				System.out.println(gameState.getDeck().getCards().get(i));
 			}
 			System.out.println("---------------------------------------------------");
+		}
+		if(keyManager.backspace){
+			lose();
 		}
 		
 		if(State.getCurrentState() != null)
@@ -207,31 +239,26 @@ public class Game extends JPanel implements ActionListener{
 			widthOffSet /= 2;
 			g.drawImage(field, (int)widthOffSet, 0, (int)width, getHeight(), null);
 		}
-		if(gameState != null){
-			float percentX = (float)gameState.getLimbo().getX() / field.getWidth();
-			float percentY = ((float)gameState.getLimbo().getY() + gameState.getLimbo().getHeight()) / field.getHeight();
-			completeDoor.setLocation((int)(percentX * (getWidth() - widthOffSet*2) + widthOffSet), (int)(percentY * (getHeight() - heightOffSet*2) + heightOffSet) + 16);
-			
-			
-			float percentWidth = (float)gameState.getLimbo().getWidth() / field.getWidth();
-			float percentHeight = ((float)40 / field.getHeight());
-			completeDoor.setSize((int)(percentWidth * (getWidth() - widthOffSet*2)), (int)(percentHeight * (getHeight() - heightOffSet*2)));
-		}
+		
 //		System.out.println("Width: " + getWidth() + " Height: " + getHeight());
 	}
 	
 	public void lose(){
 		completeDoor.setVisible(false);
+		returnToMenu.setVisible(true);
 		State.setCurrentState(loseState);
 	}
 	
 	public void win(){
 		completeDoor.setVisible(false);
+		returnToMenu.setVisible(true);
 		State.setCurrentState(winState);
 	}
 
     public void endMenuState(){
+    	gameState = new GameState(this);
     	State.setCurrentState(gameState);
+    	deckMenu.update();
     }
     
 	public GameState getGameState() {
@@ -315,6 +342,15 @@ public class Game extends JPanel implements ActionListener{
 			update();
 			update();
 		}
+		else if(e.getSource() == returnToMenu){
+			gameState = null;
+			menuState = new MenuState(this);
+			State.setCurrentState(menuState);
+			returnToMenu.setVisible(false);
+			keyManager.enter = false;
+			update();
+			update();
+		}
 	}
 	
 	public boolean isGetByKey() {
@@ -335,5 +371,35 @@ public class Game extends JPanel implements ActionListener{
 
 	public void setFirstTurn(boolean firstTurn) {
 		this.firstTurn = firstTurn;
+	}
+
+	@Override
+	public void componentHidden(ComponentEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void componentMoved(ComponentEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void componentResized(ComponentEvent e) {
+		if(gameState != null){
+			float percentX = (float)gameState.getLimbo().getX() / field.getWidth();
+			float percentY = ((float)gameState.getLimbo().getY() + gameState.getLimbo().getHeight()) / field.getHeight();
+			completeDoor.setLocation((int)(percentX * (getWidth() - widthOffSet*2) + widthOffSet), (int)(percentY * (getHeight() - heightOffSet*2) + heightOffSet) + 16);
+			
+			float percentWidth = (float)gameState.getLimbo().getWidth() / field.getWidth();
+			float percentHeight = ((float)40 / field.getHeight());
+			completeDoor.setSize((int)(percentWidth * (getWidth() - widthOffSet*2)), (int)(percentHeight * (getHeight() - heightOffSet*2)));
+		}
+	}
+
+	@Override
+	public void componentShown(ComponentEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }

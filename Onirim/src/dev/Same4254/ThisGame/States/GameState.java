@@ -46,7 +46,7 @@ public class GameState extends State{
 		prophecy = new Prophecy(game, this, 12, 12, 125, 865);
 		doorsCompleted = new DoorsCompleted(game, this, 150, 694, 837, 183);
 		
-//		deck.shuffle();
+		deck.shuffleWithoutClear();
 		
 //		for(int i = 0; i < hand.getSlots().length; i++)
 //			hand.getSlots()[i].addCard(deck.getCards().remove(0));
@@ -66,14 +66,16 @@ public class GameState extends State{
 			doorsCompleted.update();
 		}
 		
+		game.getDeckMenu().update();
+		
 //		game.getMouseManager();
 		//		for(int i = 0; i < cardsOutOfDeck.size(); i++){
 //			cardsOutOfDeck.get(i).update();
 //		}
-//		if(MouseManager.justReleased){
-//			game.getMouseManager();
-//			MouseManager.justReleased = false;
-//		}
+		if(MouseManager.justReleased){
+			game.getMouseManager();
+			MouseManager.justReleased = false;
+		}
 //		for(int i = 0; i < cardsOutOfDeck.size(); i++){
 //			if(cardsOutOfDeck.get(i).isSelected())
 //				cardsOutOfDeck.get(i).update();
@@ -84,7 +86,7 @@ public class GameState extends State{
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setStroke(new BasicStroke(6));
 		
-		g2.drawImage(Assets.wood, 0, 0, game.getField().getWidth(), game.getField().getHeight(), null);
+		g2.drawImage(Assets.woodWithCover, 0, 0, game.getField().getWidth(), game.getField().getHeight(), null);
 		
 //		g2.setColor(Color.GRAY);
 //		g.fillRect(0, 0, game.getField().getWidth(), game.getField().getHeight());

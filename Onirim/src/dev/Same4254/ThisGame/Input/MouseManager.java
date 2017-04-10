@@ -28,24 +28,19 @@ public class MouseManager implements MouseListener, MouseMotionListener{
 		}
 		
 		if(!(e.getY() < game.getHeightOffSet() || e.getY() > game.getHeight() - game.getHeightOffSet())){
-			float percent = ((float)e.getY() - game.getHeightOffSet()) / (game.getHeight()-game.getHeight()*2);
-			mouseY = (int) -(percent * game.getField().getHeight());
+			float percent = ((float)e.getY() - game.getHeightOffSet()) / (game.getHeight()-game.getHeightOffSet()*2);
+			mouseY = (int) (percent * game.getField().getHeight());
 		}
 		
+//		System.out.println("Mouse X: " + mouseX + ", Mouse Y: " + mouseY);
+		
 		mouseDragged = true;
+		justEntered = false;
 		game.update();
 	}
 
 	public void mouseMoved(MouseEvent e) {
-		if(!(e.getX() < game.getWidthOffSet() || e.getX() > game.getWidth() - game.getWidthOffSet())){
-			float percent = ((float)e.getX() - game.getWidthOffSet()) / (game.getWidth()-game.getWidthOffSet()*2);
-			mouseX = (int) (percent * game.getField().getWidth());
-		}
-		
-		if(!(e.getY() < game.getHeightOffSet() || e.getY() > game.getHeight() - game.getHeightOffSet())){
-			float percent = ((float)e.getY() - game.getHeightOffSet()) / (game.getHeight()-game.getHeight()*2);
-			mouseY = (int) -(percent * game.getField().getHeight());
-		}
+//		
 //		System.out.println("X: " + mouseX + " Y: " + mouseY);
 	}
 
@@ -57,6 +52,16 @@ public class MouseManager implements MouseListener, MouseMotionListener{
 
 	@Override
 	public void mousePressed(MouseEvent e) {
+		if(!(e.getX() < game.getWidthOffSet() || e.getX() > game.getWidth() - game.getWidthOffSet())){
+			float percent = ((float)e.getX() - game.getWidthOffSet()) / (game.getWidth()-game.getWidthOffSet()*2);
+			mouseX = (int) (percent * game.getField().getWidth());
+		}
+		
+		if(!(e.getY() < game.getHeightOffSet() || e.getY() > game.getHeight() - game.getHeightOffSet())){
+			float percent = ((float)e.getY() - game.getHeightOffSet()) / (game.getHeight()-game.getHeightOffSet()*2);
+			mouseY = (int) (percent * game.getField().getHeight());
+		}
+		
 		if(e.getButton() == MouseEvent.BUTTON1){
 			leftPressed = true;
 			justEntered = true;

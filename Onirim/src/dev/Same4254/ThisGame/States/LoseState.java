@@ -1,19 +1,19 @@
 package dev.Same4254.ThisGame.States;
 
-import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 
 import dev.Same4254.ThisGame.Game;
+import dev.Same4254.ThisGame.gfx.Assets;
 
 public class LoseState extends State{
 
-	private Font myFont;
+	private Game game;
 	
 	public LoseState(Game game) {
 		super(game);
 		
-		myFont = new Font("MyFont", Font.PLAIN, 24);
+		this.game = game;
 	}
 
 	public void update() {
@@ -21,9 +21,8 @@ public class LoseState extends State{
 	}
 
 	public void render(Graphics g) {
-		g.setFont(myFont);
-		g.setColor(Color.BLACK);
-		g.drawString("YOU LOSE :P           git gud scrub", 5, 50);
+		g.drawImage(Assets.wood, 0, 0, game.getDisplay().getWidth(), game.getDisplay().getHeight(), null);
+		g.drawImage(Assets.lostText, 0,10, 1000, 500, null);
 	}
 
 }

@@ -29,12 +29,13 @@ public class Display {
 		frame.setIconImage(Assets.logo);
 		frame.setVisible(true);
 		frame.addKeyListener(game.getKeyManager());
+		frame.setFocusable(true);
 		
 		panel = game;
 		panel.setPreferredSize(new Dimension(width, height));
 		panel.setMaximumSize(new Dimension(width, height));
 		panel.setMinimumSize(new Dimension(width, height));
-		panel.setFocusable(false);
+		panel.setFocusable(true);
 		
 		frame.add(panel);
 		frame.pack();

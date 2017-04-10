@@ -7,8 +7,8 @@ import dev.Same4254.ThisGame.Game;
 
 public class KeyManager implements KeyListener{
 
-	private boolean[] keys;
-	public boolean up, down, left, right, space, upArrow, downArrow, leftArrow, rightArrow, enter, backspace;
+	public boolean[] keys;
+	public static boolean up, down, left, right, space, upArrow, downArrow, leftArrow, rightArrow, enter, backspace;
 	private Game game;
 	
 	public KeyManager(Game game){
@@ -30,15 +30,21 @@ public class KeyManager implements KeyListener{
 		
 		backspace = keys[KeyEvent.VK_BACK_SPACE];
 		enter = keys[KeyEvent.VK_ENTER];
+		
+		if(enter)
+			System.out.println("ENTER");
 	}
 	
 	public void keyPressed(KeyEvent e) {
 		keys[e.getKeyCode()] = true;
+		update();
 		game.update();
 	}
 
 	public void keyReleased(KeyEvent e) {
 		keys[e.getKeyCode()] = false;
+		System.out.println("released");
+		update();
 		game.update();
 	}
 
