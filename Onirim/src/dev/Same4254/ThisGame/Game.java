@@ -69,6 +69,9 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 	private float heightOffSet, widthOffSet;
 	
 	private boolean getByKey;
+	
+	private boolean lostFound = false;
+	
 	/**
 	 * TODO LIST
 	 * 
@@ -90,8 +93,7 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 	 * Bugs
 	 * 
 	 * Z ordering
-	 * Having a key for a door, then drawing a nightmare doesn't diable the button
-	 * discard menu counts
+	 * Having a key for a door, then drawing a nightmare doesn't disable the button
 	 * 
 	 */
 	
@@ -203,6 +205,8 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 		if(State.getCurrentState() != null)
 			State.getCurrentState().update();
 		repaint();
+		
+		System.out.println(gameState.getDoorsCompleted().getOrder());
 //		render();
 //		System.out.println("Pro: " + Prophecy.prophosizing);
 	}
@@ -256,7 +260,7 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 	}
 
     public void endMenuState(){
-    	gameState = new GameState(this);
+//    	gameState = new GameState(this);
     	State.setCurrentState(gameState);
     	deckMenu.update();
     }
@@ -308,30 +312,42 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 					}
 				}
 			
+				boolean added = false;
+				
 				ArrayList<Card> deck = gameState.getDeck().getCards();
 				for(Card c : deck){
 					if(c.getType() == Card.CardTypes.DOOR && c.getColor() == color){
-						deck.remove(c);
-						gameState.getDoorsCompleted().addDoor(c);
+//						deck.remove(c);
+						added = gameState.getDoorsCompleted().addDoor(c);
 						break;
 					}
 				}
 				
-				for(int i = slots.length - 1; i >= 0; i--){
-					if(slots[i].storedCard != null){
-						slots[i].storedCard.setUsed(true);
-						slots[i].storedCard.setMoveable(false);
+				if(added){
+					for(int i = slots.length - 1; i >= 0; i--){
+						if(slots[i].storedCard != null){
+							slots[i].storedCard.setUsed(true);
+							slots[i].storedCard.setMoveable(false);
+						}
 					}
+					gameState.getLimbo().shuffleToDeck();
 				}
-				gameState.getLimbo().shuffleToDeck();
 			}
 			else{
-				Slot[] slots = gameState.getHand().getSlots();
-				for(int i = 0; i < slots.length; i++){
-					if(slots[i].storedCard != null){
-						if(slots[i].storedCard.getSymbol() == CardSymbols.KEY && slots[i].storedCard.getColor() == Limbo.currentDrawnCard.getColor()){
-							gameState.getDiscard().addCard(slots[i].storedCard);
-							break;
+				Slot[] handSlots = gameState.getHand().getSlots();
+				for(int i = 0; i < handSlots.length; i++){
+					if(handSlots[i].storedCard != null){
+						if(lostFound){
+							if(handSlots[i].storedCard.getSymbol() == CardSymbols.KEY && handSlots[i].storedCard.getColor() == Limbo.currentDrawnCard.getColor() && getGameState().getDoorsCompleted().getOrder().get(0) == Limbo.currentDrawnCard.getColor()){
+								gameState.getDiscard().addCard(handSlots[i].storedCard);
+								break;
+							}
+						}
+						else{
+							if(handSlots[i].storedCard.getSymbol() == CardSymbols.KEY && handSlots[i].storedCard.getColor() == Limbo.currentDrawnCard.getColor()){
+								gameState.getDiscard().addCard(handSlots[i].storedCard);
+								break;
+							}
 						}
 					}
 				}
@@ -363,6 +379,10 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 
 	public boolean isFirstTurn() {
 		return firstTurn;
+	}
+	
+	public boolean isLostFound() {
+		return lostFound;
 	}
 	
 	public State getcurrentState(){

@@ -35,7 +35,7 @@ public class PlayArea extends Entity{
 	public void update() {
 		Slot tempSlot = null;
 		for(int i = 0; i < slots.length; i++){
-			if(slots[i].storedCard!=null && slots[i].storedCard.isSelected()){
+			if(slots[i].storedCard != null && slots[i].storedCard.isSelected()){
 				tempSlot = slots[i];
 				continue;
 			}
@@ -137,6 +137,26 @@ public class PlayArea extends Entity{
 		}
 		
 		if(inRow == 3){
+			boolean match = true;
+			
+			if(game.isLostFound()){
+				for(int i = slots.length - 1; i >= 0; i--){
+					if(slots[i].storedCard != null){
+						System.out.println(game.getGameState().getDoorsCompleted().getOrder());
+						if(slots[i].storedCard.getColor() != game.getGameState().getDoorsCompleted().getOrder().get(0)){
+							System.out.println(game.getGameState().getDoorsCompleted().getOrder());
+							System.out.println(game.getGameState().getDoorsCompleted().getOrder().get(0));
+							match = false;
+							System.out.println("Now False");
+						}
+						else{
+							System.out.println(game.getGameState().getDoorsCompleted().getOrder().get(0));
+							System.out.println("Still true");
+						}
+						break;
+					}
+				}
+			}
 //			mark:
 //			for(int i = slots.length - 1; i >= 0; i--){
 //				if(slots[i].storedCard != null){
@@ -149,6 +169,8 @@ public class PlayArea extends Entity{
 //					}
 //				}
 //			}
+			
+			//checks for the current color that is trying to be matched
 			CardColors color = null;
 			for(int i = slots.length - 1; i >= 0; i--){
 				if(slots[i].storedCard != null){
@@ -157,6 +179,7 @@ public class PlayArea extends Entity{
 				}
 			}
 			
+			//checks to see how many of that color has already been played (door)
 			int tempNum = 0;
 			if(color != null){
 				for(Slot s : game.getGameState().getDoorsCompleted().getSlots()){
@@ -166,8 +189,10 @@ public class PlayArea extends Entity{
 				}
 			}
 			
-			if(tempNum < 2)
+			//if there are less than 2 of those doors enable the button
+			if(tempNum < 2 && match){
 				game.getCompleteDoor().setEnabled(true);
+			}
 			else
 				game.getCompleteDoor().setEnabled(false);
 			inRow = 0;
@@ -184,13 +209,14 @@ public class PlayArea extends Entity{
 
 	/*
 	 * The player is an idiot that needs help
-	 * This is called when the player does something other than complete the door
+	 * This is called when the player does something other than complete the door when they could have
 	 */
 	public void overRide(){
 		for(int i = slots.length - 1; i >= 0; i--){
 			if(slots[i].storedCard != null){
 				slots[i].storedCard.setUsed(true);
 				slots[i].storedCard.setMoveable(false);
+				game.getCompleteDoor().setEnabled(false);
 			}
 		}
 	}
@@ -198,7 +224,7 @@ public class PlayArea extends Entity{
 	public void render(Graphics g) {
 		Slot tempSlot = null;
 		for(int i = 0; i < slots.length; i++){
-			if(slots[i].storedCard!=null && slots[i].storedCard.isSelected()){
+			if(slots[i].storedCard != null && slots[i].storedCard.isSelected()){
 				tempSlot = slots[i];
 				continue;
 			}

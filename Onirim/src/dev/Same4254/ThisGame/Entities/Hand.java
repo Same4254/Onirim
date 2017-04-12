@@ -68,11 +68,24 @@ public class Hand extends Entity{
 //			System.out.println(Limbo.currentDrawnCard);
 			for(int i = 0; i < slots.length; i++){
 				if(slots[i].storedCard != null){
-					if(slots[i].storedCard.getSymbol() == CardSymbols.KEY && slots[i].storedCard.getColor() == Limbo.currentDrawnCard.getColor()){
-//						System.out.println("MREH");
-						game.setGetByKey(true);
-						game.getCompleteDoor().setEnabled(true);
-						break;
+					if(game.isLostFound()){
+						if(slots[i].storedCard.getSymbol() == CardSymbols.KEY && slots[i].storedCard.getColor() == Limbo.currentDrawnCard.getColor() && game.getGameState().getDoorsCompleted().getOrder().get(0) == Limbo.currentDrawnCard.getColor()){
+							game.setGetByKey(true);
+							game.getCompleteDoor().setEnabled(true);
+							break;
+						}
+					}
+					else{
+						if(slots[i].storedCard.getSymbol() == CardSymbols.KEY && slots[i].storedCard.getColor() == Limbo.currentDrawnCard.getColor()){
+	//						System.out.println("MREH");
+							game.setGetByKey(true);
+							game.getCompleteDoor().setEnabled(true);
+							break;
+						}
+						
+						else{
+							game.getCompleteDoor().setEnabled(false);
+						}
 					}
 				}
 			}

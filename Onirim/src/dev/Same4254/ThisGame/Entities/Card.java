@@ -214,9 +214,17 @@ public class Card extends Entity{
 		
 		else if(completed && MouseManager.rightPressed && hitBox.contains(MouseManager.mouseX, MouseManager.mouseY) && !MouseManager.mouseDragged && !Prophecy.prophosizing){
 			if(Limbo.currentDrawnCard.getType() == CardTypes.DREAM){
-				discard.addCard(Limbo.currentDrawnCard);
-				gameState.getLimbo().addCard(this);
-				Limbo.currentDrawnCard = this;
+				if(game.isLostFound()){
+					gameState.getDoorsCompleted().getOrder().add(0, cardColor);
+					discard.addCard(Limbo.currentDrawnCard);
+					gameState.getLimbo().addCard(this);
+					Limbo.currentDrawnCard = this;
+				}
+				else{
+					discard.addCard(Limbo.currentDrawnCard);
+					gameState.getLimbo().addCard(this);
+					Limbo.currentDrawnCard = this;
+				}
 			}
 		}
 		

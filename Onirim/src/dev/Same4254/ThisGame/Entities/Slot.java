@@ -55,6 +55,20 @@ public class Slot extends Entity{
 //		}
 	}
 	
+	/*
+	 * Render Method with a check if card is in the slot
+	 * Will draw a box if there is no card
+	 */
+	public void renderWithCheck(Graphics g, Color c){
+		if(storedCard == null){
+			g.setColor(c);
+			g.fillRect(x, y, width, height);
+		}
+		else{
+			storedCard.render(g);
+		}
+	}
+	
 	public void addCard(Card c){
 		if(c.getInSlot() != null)
 			c.getInSlot().storedCard = null;

@@ -144,8 +144,14 @@ public class Deck extends Entity{
 	}
 	
 	public void deckPressed(){
-		if(game.getCompleteDoor().isEnabled()){
+		if(game.getCompleteDoor().isEnabled() && Limbo.currentDrawnCard != null && Limbo.currentDrawnCard.getType() != CardTypes.DOOR){
 			game.getGameState().getPlayArea().overRide();
+		}
+		else if(game.getCompleteDoor().isEnabled() && Limbo.currentDrawnCard == null){
+			game.getGameState().getPlayArea().overRide();
+		}
+		else if(game.getCompleteDoor().isEnabled()){
+			game.getCompleteDoor().setEnabled(false);
 		}
 		
 		if(Limbo.currentDrawnCard != null && !game.isFirstTurn() && Limbo.currentDrawnCard.getSymbol() == CardSymbols.NIGHTMARE){
