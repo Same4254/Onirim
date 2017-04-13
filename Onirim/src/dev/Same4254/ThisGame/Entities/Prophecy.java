@@ -61,7 +61,6 @@ public class Prophecy extends Entity{
 	}
 	
 	public void update() {
-		
 		Slot tempSlot = null;
 		boolean temp = true;
 		int temp2 = 0;

@@ -16,6 +16,8 @@ public class Assets {
 	
 	public static BufferedImage blankDoor;
 	
+	public static BufferedImage spellBook;
+	
 	public static BufferedImage nightmare, cardBack;
 	
 	public static BufferedImage logo;
@@ -63,6 +65,8 @@ public class Assets {
 		buttonDisabled = ImageLoader.loadImage("/textures/Button Disabled.png");
 		
 		logo = ImageLoader.loadImage("/textures/Icon.png");
+		
+		spellBook = ImageLoader.loadImage("/textures/SpellBook.png");
 		
 		lostText = ImageLoader.loadImage("/textures/Lost Text.png");
 		returnButtonArmed = ImageLoader.loadImage("/textures/Return-Button Armed.png");

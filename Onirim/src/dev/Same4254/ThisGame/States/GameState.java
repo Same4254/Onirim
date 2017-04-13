@@ -13,6 +13,7 @@ import dev.Same4254.ThisGame.Entities.Hand;
 import dev.Same4254.ThisGame.Entities.Limbo;
 import dev.Same4254.ThisGame.Entities.PlayArea;
 import dev.Same4254.ThisGame.Entities.Prophecy;
+import dev.Same4254.ThisGame.Entities.SpellBook;
 import dev.Same4254.ThisGame.Input.KeyManager;
 import dev.Same4254.ThisGame.Input.MouseManager;
 import dev.Same4254.ThisGame.gfx.Assets;
@@ -27,6 +28,7 @@ public class GameState extends State{
 	private Font myFont;
 	private Prophecy prophecy;
 	private DoorsCompleted doorsCompleted;
+	private SpellBook spellBook;
 	
 	public GameState(Game game){
 		super(game);
@@ -43,6 +45,9 @@ public class GameState extends State{
 		doorsCompleted = new DoorsCompleted(game, this, 150, 694, 837, 183);
 		
 		deck.shuffleWithoutClear();
+		
+		if(game.isLostFound())
+			spellBook = new SpellBook(game, 620, 37, 100, 158);
 		
 //		for(int i = 0; i < hand.getSlots().length; i++)
 //			hand.getSlots()[i].addCard(deck.getCards().remove(0));
@@ -72,6 +77,9 @@ public class GameState extends State{
 			game.getMouseManager();
 			MouseManager.justReleased = false;
 		}
+		
+		if(game.isLostFound())
+			spellBook.update();
 //		for(int i = 0; i < cardsOutOfDeck.size(); i++){
 //			if(cardsOutOfDeck.get(i).isSelected())
 //				cardsOutOfDeck.get(i).update();
@@ -100,6 +108,9 @@ public class GameState extends State{
 		discard.render(g2);
 		prophecy.render(g2);
 		doorsCompleted.render(g2);
+		
+		if(game.isLostFound())
+			spellBook.render(g2);
 //		for(int i = 0; i < playerHandSlots.length; i++){
 //			playerHandSlots[i].render(g2);
 //		}
