@@ -1,6 +1,5 @@
 package dev.Same4254.ThisGame.States;
 
-import java.awt.Font;
 import java.awt.Graphics;
 
 import dev.Same4254.ThisGame.Game;

@@ -1,14 +1,11 @@
 package dev.Same4254.ThisGame.States;
 
 import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.util.ArrayList;
 
 import dev.Same4254.ThisGame.Game;
-import dev.Same4254.ThisGame.Entities.Card;
 import dev.Same4254.ThisGame.Entities.Deck;
 import dev.Same4254.ThisGame.Entities.Discard;
 import dev.Same4254.ThisGame.Entities.DoorsCompleted;
@@ -18,7 +15,6 @@ import dev.Same4254.ThisGame.Entities.PlayArea;
 import dev.Same4254.ThisGame.Entities.Prophecy;
 import dev.Same4254.ThisGame.Input.KeyManager;
 import dev.Same4254.ThisGame.Input.MouseManager;
-import dev.Same4254.ThisGame.dis.Display;
 import dev.Same4254.ThisGame.gfx.Assets;
 
 public class GameState extends State{

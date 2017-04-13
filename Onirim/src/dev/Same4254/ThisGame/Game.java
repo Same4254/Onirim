@@ -13,11 +13,12 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import com.sun.glass.events.KeyEvent;
+
 import dev.Same4254.ThisGame.Entities.Card;
 import dev.Same4254.ThisGame.Entities.Card.CardSymbols;
-import dev.Same4254.ThisGame.Entities.Discard;
+import dev.Same4254.ThisGame.Entities.Card.CardTypes;
 import dev.Same4254.ThisGame.Entities.Limbo;
-import dev.Same4254.ThisGame.Entities.Prophecy;
 import dev.Same4254.ThisGame.Entities.Slot;
 import dev.Same4254.ThisGame.Input.KeyManager;
 import dev.Same4254.ThisGame.Input.MouseManager;
@@ -30,8 +31,9 @@ import dev.Same4254.ThisGame.States.WinState;
 import dev.Same4254.ThisGame.dis.DeckMenu;
 import dev.Same4254.ThisGame.dis.Display;
 import dev.Same4254.ThisGame.gfx.Assets;
-import dev.Same4254.ThisGame.gfx.CompleteDoorUI;
-import dev.Same4254.ThisGame.gfx.ReturnToMenuButtonUI;
+import dev.Same4254.ThisGame.gfx.ButtonUIs.CompleteDoorUI;
+import dev.Same4254.ThisGame.gfx.ButtonUIs.ReturnToMenuUI;
+import dev.Same4254.ThisGame.gfx.ButtonUIs.StartGameUI;
 
 public class Game extends JPanel implements ActionListener, ComponentListener{
 	private static final long serialVersionUID = 1L;
@@ -57,8 +59,11 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 	private Music music;
 	
 	private DeckMenu deckMenu;
+	
 	private JButton completeDoor;
 	private JButton returnToMenu;
+	private JButton startGame;
+	
 	private boolean firstTurn;
 	
 	/*
@@ -75,7 +80,7 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 	/**
 	 * TODO LIST
 	 * 
-	 * Winning and losing
+	 * Menus
 	 * 
 	 * Clean up/Comments 
 	 * TEST TEST TEST
@@ -92,9 +97,7 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 	/**
 	 * Bugs
 	 * 
-	 * Z ordering
-	 * Having a key for a door, then drawing a nightmare doesn't disable the button
-	 * 
+	 * Z-ordering
 	 */
 	
 	/**
@@ -117,6 +120,7 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 		Assets.init();
 		completeDoor = new JButton();
 		returnToMenu = new JButton();
+		startGame = new JButton();
 		
 		field = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		display = new Display(this, title, width, height);
@@ -127,13 +131,23 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 		addComponentListener(this);
 //		display.getFrame().addKeyListener(keyManager);
 		
+		startGame.setText("Start Game");
+		startGame.setVisible(true);
+		startGame.setEnabled(true);
+		startGame.addActionListener(this);
+		startGame.setSize(400,80);
+		startGame.setLocation((int)((display.getWidth()/2) - (startGame.getWidth()/2)), (int)((display.getHeight()/1.5) - (startGame.getHeight()/2))); 
+//		startGame.setUI(new StartGameUI());
+		startGame.setOpaque(true);
+		startGame.setBorderPainted(false);
+		
 		gameState = new GameState(this);
 		menuState = new MenuState(this);
 		winState = new WinState(this);
 		loseState = new LoseState(this);
 		State.setCurrentState(menuState);
 		
-		gameState.getDeck().shuffle();
+//		gameState.getDeck().shuffle();
 		
 		completeDoor.setVisible(false);
 		completeDoor.setEnabled(false);
@@ -149,13 +163,14 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 		returnToMenu.addActionListener(this);
 		returnToMenu.setSize(400,80);
 		returnToMenu.setLocation((int)((display.getWidth()/2) - (returnToMenu.getWidth()/2)), (int)((display.getHeight()/1.5) - (returnToMenu.getHeight()/2))); 
-		returnToMenu.setUI(new ReturnToMenuButtonUI());
+		returnToMenu.setUI(new ReturnToMenuUI());
 		returnToMenu.setOpaque(false);
 		returnToMenu.setBorderPainted(false);
 		
 		setLayout(null);
 		add(completeDoor);
 		add(returnToMenu);
+		add(startGame);
 		
 		firstTurn = true;
 		
@@ -169,12 +184,7 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 		float percentHeight = ((float)40 / field.getHeight());
 		completeDoor.setSize((int)(percentWidth * (getWidth() - widthOffSet*2)), (int)(percentHeight * (getHeight() - heightOffSet*2)));
 		
-		/*
-		 * starts the game
-		 * don't be concerned about this....
-		 */
-		for(int i = 0; i < 30; i++)
-			update();
+		update();
 	}
 	
 	public DeckMenu getDeckMenu() {
@@ -199,14 +209,14 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 			System.out.println("---------------------------------------------------");
 		}
 		if(keyManager.backspace){
-			lose();
+			win();
 		}
 		
 		if(State.getCurrentState() != null)
 			State.getCurrentState().update();
 		repaint();
 		
-		System.out.println(gameState.getDoorsCompleted().getOrder());
+//		System.out.println(gameState.getDoorsCompleted().getOrder());
 //		render();
 //		System.out.println("Pro: " + Prophecy.prophosizing);
 	}
@@ -323,6 +333,16 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 					}
 				}
 				
+				if(!added){
+					Slot[] proSlots = gameState.getProphecy().getSlots();
+					for(Slot s : proSlots){
+						if(s.storedCard != null && s.storedCard.getType() == CardTypes.DOOR && s.storedCard.getColor() == color){
+							added = gameState.getDoorsCompleted().addDoor(s.storedCard);
+							break;
+						}
+					}
+				}
+				
 				if(added){
 					for(int i = slots.length - 1; i >= 0; i--){
 						if(slots[i].storedCard != null){
@@ -356,19 +376,32 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 			getByKey = false;
 			completeDoor.setEnabled(false);
 			update();
-			update();
 		}
 		else if(e.getSource() == returnToMenu){
-			gameState = null;
+			gameState = new GameState(this);
 			menuState = new MenuState(this);
 			State.setCurrentState(menuState);
 			returnToMenu.setVisible(false);
-			keyManager.enter = false;
+			startGame.setVisible(true);
 			update();
+		}
+		else if(e.getSource() == startGame){
+			completeDoor.setVisible(true);
+			deckMenu.getDis().getFrame().setVisible(true);
+			startGame.setVisible(false);
+			
+			KeyManager.enter = false;
+			keyManager.keys[KeyEvent.VK_ENTER] = false;
+			
+			endMenuState();
 			update();
 		}
 	}
 	
+	public JButton getStartGame() {
+		return startGame;
+	}
+
 	public boolean isGetByKey() {
 		return getByKey;
 	}
@@ -408,8 +441,8 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 	public void componentResized(ComponentEvent e) {
 		if(gameState != null){
 			float percentX = (float)gameState.getLimbo().getX() / field.getWidth();
-			float percentY = ((float)gameState.getLimbo().getY() + gameState.getLimbo().getHeight()) / field.getHeight();
-			completeDoor.setLocation((int)(percentX * (getWidth() - widthOffSet*2) + widthOffSet), (int)(percentY * (getHeight() - heightOffSet*2) + heightOffSet) + 16);
+			float percentY = (float)(644) / field.getHeight();
+			completeDoor.setLocation((int)(percentX * (getWidth() - widthOffSet*2) + widthOffSet), (int)(percentY * (getHeight() - heightOffSet*2) + heightOffSet));
 			
 			float percentWidth = (float)gameState.getLimbo().getWidth() / field.getWidth();
 			float percentHeight = ((float)40 / field.getHeight());

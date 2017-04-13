@@ -142,7 +142,7 @@ public class PlayArea extends Entity{
 			if(game.isLostFound()){
 				for(int i = slots.length - 1; i >= 0; i--){
 					if(slots[i].storedCard != null){
-						System.out.println(game.getGameState().getDoorsCompleted().getOrder());
+//						System.out.println(game.getGameState().getDoorsCompleted().getOrder());
 						if(slots[i].storedCard.getColor() != game.getGameState().getDoorsCompleted().getOrder().get(0)){
 							System.out.println(game.getGameState().getDoorsCompleted().getOrder());
 							System.out.println(game.getGameState().getDoorsCompleted().getOrder().get(0));

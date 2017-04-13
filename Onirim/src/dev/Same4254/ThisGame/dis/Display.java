@@ -1,5 +1,4 @@
 package dev.Same4254.ThisGame.dis;
-import java.awt.Color;
 import java.awt.Dimension;
 
 import javax.swing.JFrame;

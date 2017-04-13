@@ -1,4 +1,4 @@
-package dev.Same4254.ThisGame.gfx;
+package dev.Same4254.ThisGame.gfx.ButtonUIs;
 
 import java.awt.Graphics;
 
@@ -6,7 +6,9 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.plaf.basic.BasicButtonUI;
 
-public class ReturnToMenuButtonUI extends BasicButtonUI{
+import dev.Same4254.ThisGame.gfx.Assets;
+
+public class ReturnToMenuUI extends BasicButtonUI{
 	public void paint(Graphics g, JComponent c){
 		JButton b = (JButton)c;
 		
