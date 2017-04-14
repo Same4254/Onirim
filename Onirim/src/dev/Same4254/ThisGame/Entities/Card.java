@@ -119,7 +119,7 @@ public class Card extends Entity{
 			discard.addCard(this);
 			hand.clear();
 			hand.refill();
-			game.getGameState().getLimbo().shuffleToDeck();
+			gameState.getLimbo().shuffleToDeck();
 			Limbo.currentDrawnCard = null;
 			
 			MouseManager.rightPressed = false;

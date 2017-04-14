@@ -66,7 +66,7 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 	private JButton returnToMenu;
 	private JButton startGame;
 	
-	private boolean firstTurn;
+	private boolean firstTurn = true;
 	
 	/*
 	 * This is the image that the paint component will draw to then will get scaled

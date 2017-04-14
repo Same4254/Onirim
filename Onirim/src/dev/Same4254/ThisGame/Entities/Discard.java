@@ -50,8 +50,6 @@ public class Discard extends Entity{
 			game.getCompleteDoor().setEnabled(false);
 		}
 		
-		size++;
-		
 //		game.getDiscarded().addCard(c);
 		
 //		System.out.println(c);
@@ -79,11 +77,13 @@ public class Discard extends Entity{
 			}
 			else if(Limbo.currentDrawnCard.getType() == Card.CardTypes.DOOR && Limbo.currentDrawnCard.getColor() == c.getColor()){
 				gameState.getDoorsCompleted().addDoor(Limbo.currentDrawnCard);
+				size++;
 			}
 			else{
 				gameState.getProphecy().clearAllProphecy();
 				gameState.getProphecy().restockProphecy(); 
 //				System.out.println("Start Pro");
+				size++;
 			}
 			Limbo.currentDrawnCard = null;
 		}
@@ -93,6 +93,10 @@ public class Discard extends Entity{
 			gameState.getProphecy().clearAllProphecy();
 			gameState.getProphecy().restockProphecy(); 
 //			System.out.println("Start Pro");
+			size++;
+		}
+		else{
+			size++;
 		}
 	}
 	

@@ -58,10 +58,16 @@ public class Hand extends Entity{
 			for(int i = 0; i < slots.length; i++)
 				if(slots[i].storedCard != null)
 					slots[i].storedCard.setMoveable(handSize==5);
+//			
+//			if(handSize == 5){
+//				System.out.println("Hand Made it to handsizee==5");
+//	//			game.getGameState().getLimbo().shuffleToDeck();
+//				game.setFirstTurn(false);
+//			}
 			
-			if(handSize == 5){
-	//			game.getGameState().getLimbo().shuffleToDeck();
+			if(slots[slots.length-1].storedCard!=null){
 				game.setFirstTurn(false);
+				System.out.println("Not First Turn");
 			}
 			
 			checkForDoorToKeyMatch();
@@ -161,6 +167,10 @@ public class Hand extends Entity{
 			else if(i == tempDeck.size()-1 && tempDeck.get(i).getType() != CardTypes.LOCATION){
 				game.lose();
 			}
+		}
+		
+		if(slots[slots.length-1].storedCard == null){
+			game.lose();
 		}
 		
 //		for(int i = 0; i < slots.length; i++){

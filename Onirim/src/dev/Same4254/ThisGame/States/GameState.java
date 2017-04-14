@@ -49,6 +49,8 @@ public class GameState extends State{
 		
 		deck.shuffleWithoutClear();
 		
+		game.setFirstTurn(true);
+		
 		if(game.isLostFound())
 			spellBook = new SpellBook(game, game.isLostFoundHard(), 600, 37, 140, 200);
 		
@@ -63,6 +65,7 @@ public class GameState extends State{
 		hand.update();
 		
 		if(!game.isFirstTurn()){
+			System.out.println("Wat");
 			prophecy.update();
 			limbo.update();
 			playArea.update();
