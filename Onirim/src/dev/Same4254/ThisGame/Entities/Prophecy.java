@@ -19,12 +19,15 @@ public class Prophecy extends Entity{
 	
 	public static boolean prophosizing = false;
 	public static boolean prophecyFull = false;
+	public static boolean enabled;
 	
 	public Prophecy(Game game, GameState gameState, int x, int y, int width, int height) {
 		super(x,y,width,height);
 		
 		this.game = game;
 		this.gameState = gameState;
+		
+		enabled = true;
 		
 		slots = new Slot[5];
 		
@@ -61,32 +64,34 @@ public class Prophecy extends Entity{
 	}
 	
 	public void update() {
-		Slot tempSlot = null;
-		boolean temp = true;
-		int temp2 = 0;
-		for(int i = 0; i < slots.length; i++){
-			slots[i].update();
-			
-			if(slots[i].storedCard!=null && slots[i].storedCard.isSelected()){
-				tempSlot = slots[i];
+		if(enabled){
+			Slot tempSlot = null;
+			boolean temp = true;
+			int temp2 = 0;
+			for(int i = 0; i < slots.length; i++){
+				slots[i].update();
+				
+				if(slots[i].storedCard!=null && slots[i].storedCard.isSelected()){
+					tempSlot = slots[i];
+				}
+				
+				if(slots[i].storedCard == null){
+					temp = false;
+				}
+				else{
+					temp2++;
+				}
 			}
-			
-			if(slots[i].storedCard == null){
-				temp = false;
+			if(temp2 == 5){
+				prophosizing = true;
 			}
 			else{
-				temp2++;
+				prophosizing = false;
 			}
+			prophecyFull = temp;
+			if(tempSlot!= null)
+				tempSlot.update();
 		}
-		if(temp2 == 5){
-			prophosizing = true;
-		}
-		else{
-			prophosizing = false;
-		}
-		prophecyFull = temp;
-		if(tempSlot!= null)
-			tempSlot.update();
 	}
 	
 	public void render(Graphics g) {

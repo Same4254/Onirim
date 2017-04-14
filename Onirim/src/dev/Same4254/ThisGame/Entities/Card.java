@@ -111,6 +111,10 @@ public class Card extends Entity{
 	public void update() {
 		hitBox.setLocation(x, y);
 		
+		if(cardSelected){
+			GameState.selectedCard = this;
+		}
+		
 		if(cardSymbol == CardSymbols.NIGHTMARE && !inProphecy && MouseManager.rightPressed && hitBox.contains(MouseManager.mouseX, MouseManager.mouseY)){
 			discard.addCard(this);
 			hand.clear();

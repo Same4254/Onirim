@@ -10,12 +10,15 @@ public class Limbo extends Entity{
 	private Slot[] slots;
 	private Game game;
 	public static Card currentDrawnCard;
+	public static boolean enabled;
 	
 	public Limbo(Game game, int x, int y, int width, int height) {
 		super(x, y, width, height);
 		
 		this.game = game;
 		slots = new Slot[10];
+		
+		enabled = true;
 		
 		int vSpace = 12;
 		int x1 = 14;
@@ -63,17 +66,15 @@ public class Limbo extends Entity{
 	}
 	
 	public void update() {
-		for(Slot s : slots){
-			if(s.storedCard == null){
-				break;
+		if(enabled){
+			for(Slot s : slots){
+				if(s.storedCard == null){
+					break;
+				}
+				
+				s.storedCard.update();
 			}
-			
-			s.storedCard.update();
 		}
-//		System.out.println(currentDrawnCard);
-//		if(Hand.handSize == 5){
-//			shuffleToDeck();
-//		}
 	}
 	
 	public void render(Graphics g) {

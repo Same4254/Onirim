@@ -16,8 +16,10 @@ import javax.swing.JPanel;
 import com.sun.glass.events.KeyEvent;
 
 import dev.Same4254.ThisGame.Entities.Card;
+import dev.Same4254.ThisGame.Entities.Card.CardColors;
 import dev.Same4254.ThisGame.Entities.Card.CardSymbols;
 import dev.Same4254.ThisGame.Entities.Card.CardTypes;
+import dev.Same4254.ThisGame.Entities.Discard;
 import dev.Same4254.ThisGame.Entities.Limbo;
 import dev.Same4254.ThisGame.Entities.Slot;
 import dev.Same4254.ThisGame.Input.KeyManager;
@@ -75,12 +77,17 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 	
 	private boolean getByKey;
 	
-	private boolean lostFound = true;
+	private boolean lostFoundHard = false;
+	private boolean lostFound = false;
 	
 	/**
 	 * TODO LIST
 	 * 
 	 * Menus
+	 * 
+	 * X-Packs
+	 * 	Other Prophecy
+	 * 	Deselect switch door
 	 * 
 	 * Clean up/Comments 
 	 * TEST TEST TEST
@@ -96,8 +103,6 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 	
 	/**
 	 * Bugs
-	 * 
-	 * Z-ordering
 	 */
 	
 	/**
@@ -209,7 +214,7 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 			System.out.println("---------------------------------------------------");
 		}
 		if(keyManager.backspace){
-			win();
+			lose();
 		}
 		
 		if(State.getCurrentState() != null)
@@ -271,6 +276,8 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 
     public void endMenuState(){
 //    	gameState = new GameState(this);
+    	completeDoor.setEnabled(false);
+    	Discard.size = 0;
     	State.setCurrentState(gameState);
     	deckMenu.update();
     }
@@ -358,7 +365,18 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 				for(int i = 0; i < handSlots.length; i++){
 					if(handSlots[i].storedCard != null){
 						if(lostFound){
-							if(handSlots[i].storedCard.getSymbol() == CardSymbols.KEY && handSlots[i].storedCard.getColor() == Limbo.currentDrawnCard.getColor() && getGameState().getDoorsCompleted().getOrder().get(0) == Limbo.currentDrawnCard.getColor()){
+							CardColors tempColor = null;
+							
+							ArrayList<CardColors> tempOrder = gameState.getDoorsCompleted().getOrder();
+							
+							for(CardColors c : tempOrder){
+								if(c != null){
+									tempColor = c;
+									break;
+								}
+							}
+							
+							if(handSlots[i].storedCard.getSymbol() == CardSymbols.KEY && handSlots[i].storedCard.getColor() == Limbo.currentDrawnCard.getColor() && tempColor == Limbo.currentDrawnCard.getColor()){
 								gameState.getDiscard().addCard(handSlots[i].storedCard);
 								break;
 							}
@@ -414,6 +432,10 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 		return firstTurn;
 	}
 	
+	public boolean isLostFoundHard() {
+		return lostFoundHard;
+	}
+
 	public boolean isLostFound() {
 		return lostFound;
 	}
@@ -447,6 +469,16 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 			float percentWidth = (float)gameState.getLimbo().getWidth() / field.getWidth();
 			float percentHeight = ((float)40 / field.getHeight());
 			completeDoor.setSize((int)(percentWidth * (getWidth() - widthOffSet*2)), (int)(percentHeight * (getHeight() - heightOffSet*2)));
+			
+//			startGame.setLocation((int)((display.getWidth()/2) - (startGame.getWidth()/2)), (int)((display.getHeight()/1.5) - (startGame.getHeight()/2)));
+			
+			percentX = (float)((display.getWidth()/2) - (startGame.getWidth()/2)) / field.getWidth();
+			percentY = (float)(644) / field.getHeight();
+			startGame.setLocation((int)(percentX * (getWidth() - widthOffSet*2) + widthOffSet), (int)(percentY * (getHeight() - heightOffSet*2) + heightOffSet));
+			
+			percentWidth = (float)400 / field.getWidth();
+			percentHeight = ((float)80 / field.getHeight());
+			startGame.setSize((int)(percentWidth * (getWidth() - widthOffSet*2)), (int)(percentHeight * (getHeight() - heightOffSet*2)));
 		}
 	}
 

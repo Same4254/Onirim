@@ -26,6 +26,7 @@ public class Deck extends Entity{
 	private Slot[] slots;
 	private Limbo limbo;
 	private Game game;
+	public static boolean enabled;
 	
 	public Deck(Game game, GameState gameState, int x, int y, int width, int height) {
 		super(x, y, width, height);
@@ -36,6 +37,7 @@ public class Deck extends Entity{
 		this.slots = gameState.getHand().getSlots();
 		this.limbo = gameState.getLimbo();
 		
+		enabled = true;
 		
 //		outOfDeck = gameState.getCardsOutOfDeck();
 		
@@ -126,20 +128,22 @@ public class Deck extends Entity{
 	}
 	
 	public void update() {
-		if(game.getGameState().getDoorsCompleted().getSlots()[game.getGameState().getDoorsCompleted().getSlots().length - 1].storedCard != null){
-			game.win();
-			return;
-		}
-		
-		else if(cards.size() == 0 && Hand.handSize < 5 && !game.getCompleteDoor().isEnabled()){
-			game.lose();
-			return;
-		}
-		
-		if(!Prophecy.prophecyFull && hitBox.contains(MouseManager.mouseX, MouseManager.mouseY) && MouseManager.justReleased){
-			deckPressed();
+		if(enabled){
+			if(game.getGameState().getDoorsCompleted().getSlots()[game.getGameState().getDoorsCompleted().getSlots().length - 1].storedCard != null){
+				game.win();
+				return;
+			}
 			
-			MouseManager.justReleased = false;
+			else if(cards.size() == 0 && Hand.handSize < 5 && !game.getCompleteDoor().isEnabled()){
+				game.lose();
+				return;
+			}
+			
+			if(!Prophecy.prophecyFull && hitBox.contains(MouseManager.mouseX, MouseManager.mouseY) && MouseManager.justReleased){
+				deckPressed();
+				
+				MouseManager.justReleased = false;
+			}
 		}
 	}
 	
@@ -242,7 +246,7 @@ public class Deck extends Entity{
 			}
 		}
 		
-		g.drawString("Deck Size: " + (cards.size()+temp), x, y + height + 10);
+		g.drawString("Deck Size: " + (cards.size()+temp), x, y + height + 17);
 	}
 
 	public ArrayList<Card> getCards() {

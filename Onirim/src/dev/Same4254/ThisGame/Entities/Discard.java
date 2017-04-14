@@ -1,6 +1,7 @@
 package dev.Same4254.ThisGame.Entities;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
@@ -12,6 +13,7 @@ public class Discard extends Entity{
 	private Rectangle hitBox;
 	private Game game;
 	private GameState gameState;
+	public static int size;
 	
 	public Discard(Game game, GameState gameState, int x, int y, int width, int height) {
 		super(x, y, width, height);
@@ -31,18 +33,24 @@ public class Discard extends Entity{
 //		g.setColor(Color.MAGENTA);
 //		g.drawRect(x, y, width, height);
 		slot.render(g);
+		g.setColor(Color.WHITE);
+		g.setFont(new Font("MyFont", Font.PLAIN, 18));
+		g.drawString("Size: " + size, x+20, y+height+15);
 	}
 	
 	//Method for just simply adding a card to the discard without checking with other components
 	public void addCardWithoutCheck(Card c){
 //		System.out.println("------------------ \n Discard " + c.getType() + "\n----------------------------");
 		slot.addCard(c);
+		size++;
 	}
 	
 	public void addCard(Card c){
 		if(game.getCompleteDoor().isEnabled()){
 			game.getCompleteDoor().setEnabled(false);
 		}
+		
+		size++;
 		
 //		game.getDiscarded().addCard(c);
 		

@@ -19,6 +19,10 @@ public class Slot extends Entity{
 	private Game game;
 	private GameState gameState;
 	
+	private boolean half;
+	
+	private Color color;
+	
 	public Slot(Game game, GameState gameState, int x, int y, int width, int height) {
 		super(x, y, width, height);
 		hitBox = new Rectangle(x, y, width - (width/10), height - (height/10));
@@ -59,10 +63,13 @@ public class Slot extends Entity{
 	 * Render Method with a check if card is in the slot
 	 * Will draw a box if there is no card
 	 */
-	public void renderWithCheck(Graphics g, Color c){
+	public void renderWithCheck(Graphics g){
 		if(storedCard == null){
-			g.setColor(c);
-			g.fillRect(x, y, width, height);
+			g.setColor(color);
+			if(half)
+				g.fillRect(x + (width/4), y + (height/4), width/2, height/2);
+			else
+				g.fillRect(x, y, width, height);
 		}
 		else{
 			storedCard.render(g);
@@ -102,8 +109,20 @@ public class Slot extends Entity{
 		return temp; 
 	}
 	
+	public void setHalf(boolean half) {
+		this.half = half;
+	}
+
 	public Rectangle getHitBox() {
 		return hitBox;
+	}
+	
+	public Color getColor() {
+		return color;
+	}
+
+	public void setColor(Color color) {
+		this.color = color;
 	}
 
 	public CardSymbols getCardSymbol() {

@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 
 import dev.Same4254.ThisGame.Game;
+import dev.Same4254.ThisGame.Entities.Card;
 import dev.Same4254.ThisGame.Entities.Deck;
 import dev.Same4254.ThisGame.Entities.Discard;
 import dev.Same4254.ThisGame.Entities.DoorsCompleted;
@@ -30,6 +31,8 @@ public class GameState extends State{
 	private DoorsCompleted doorsCompleted;
 	private SpellBook spellBook;
 	
+	public static Card selectedCard;
+	
 	public GameState(Game game){
 		super(game);
 		
@@ -47,7 +50,7 @@ public class GameState extends State{
 		deck.shuffleWithoutClear();
 		
 		if(game.isLostFound())
-			spellBook = new SpellBook(game, 620, 37, 100, 158);
+			spellBook = new SpellBook(game, game.isLostFoundHard(), 600, 37, 140, 200);
 		
 //		for(int i = 0; i < hand.getSlots().length; i++)
 //			hand.getSlots()[i].addCard(deck.getCards().remove(0));
@@ -74,7 +77,7 @@ public class GameState extends State{
 //			cardsOutOfDeck.get(i).update();
 //		}
 		if(MouseManager.justReleased){
-			game.getMouseManager();
+//			game.getMouseManager();
 			MouseManager.justReleased = false;
 		}
 		
@@ -111,6 +114,12 @@ public class GameState extends State{
 		
 		if(game.isLostFound())
 			spellBook.render(g2);
+		
+		if(selectedCard != null)
+			selectedCard.render(g2);
+		
+		selectedCard = null;
+		
 //		for(int i = 0; i < playerHandSlots.length; i++){
 //			playerHandSlots[i].render(g2);
 //		}
@@ -126,6 +135,15 @@ public class GameState extends State{
 		
 //		g.setFont(myFont);
 //		g.drawString(inRow, x, y);
+	}
+	
+	public void setComponents(boolean enabled){
+		Deck.enabled = enabled;
+		Limbo.enabled = enabled;
+		PlayArea.enabled = enabled;
+		Hand.enabled = enabled;
+		Prophecy.enabled = enabled;
+		DoorsCompleted.enabled = enabled;
 	}
 	
 	public KeyManager getKeyManager(){return game.getKeyManager();}

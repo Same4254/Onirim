@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import dev.Same4254.ThisGame.Game;
+import dev.Same4254.ThisGame.Entities.Card.CardColors;
 import dev.Same4254.ThisGame.Entities.Card.CardSymbols;
 import dev.Same4254.ThisGame.Entities.Card.CardTypes;
 import dev.Same4254.ThisGame.States.GameState;
@@ -18,6 +19,7 @@ public class Hand extends Entity{
 	private Game game;
 	private GameState gameState;
 	private Deck deck;
+	public static boolean enabled;
 	
 	public Hand(Game game, int x, int y, int width, int height) {
 		super(x, y, width, height);
@@ -26,6 +28,8 @@ public class Hand extends Entity{
 		this.gameState = game.getGameState();
 		
 //		System.out.println(this.game);
+		
+		enabled = true;
 		
 		hitBox = new Rectangle(x, y, width, height);
 		
@@ -39,27 +43,29 @@ public class Hand extends Entity{
 	}
 
 	public void update() {
-		int temp = 0;
-		checked = false;
-		for(int i = 0; i < slots.length; i++){
-			if(slots[i].storedCard != null){
-				if(!game.isFirstTurn())
-					slots[i].update();
-				temp++;
+		if(enabled){
+			int temp = 0;
+			checked = false;
+			for(int i = 0; i < slots.length; i++){
+				if(slots[i].storedCard != null){
+					if(!game.isFirstTurn())
+						slots[i].update();
+					temp++;
+				}
 			}
+			
+			handSize = temp; 
+			for(int i = 0; i < slots.length; i++)
+				if(slots[i].storedCard != null)
+					slots[i].storedCard.setMoveable(handSize==5);
+			
+			if(handSize == 5){
+	//			game.getGameState().getLimbo().shuffleToDeck();
+				game.setFirstTurn(false);
+			}
+			
+			checkForDoorToKeyMatch();
 		}
-		
-		handSize = temp; 
-		for(int i = 0; i < slots.length; i++)
-			if(slots[i].storedCard != null)
-				slots[i].storedCard.setMoveable(handSize==5);
-		
-		if(handSize == 5){
-//			game.getGameState().getLimbo().shuffleToDeck();
-			game.setFirstTurn(false);
-		}
-		
-		checkForDoorToKeyMatch();
 	}
 
 	public void checkForDoorToKeyMatch(){
@@ -69,7 +75,17 @@ public class Hand extends Entity{
 			for(int i = 0; i < slots.length; i++){
 				if(slots[i].storedCard != null){
 					if(game.isLostFound()){
-						if(slots[i].storedCard.getSymbol() == CardSymbols.KEY && slots[i].storedCard.getColor() == Limbo.currentDrawnCard.getColor() && game.getGameState().getDoorsCompleted().getOrder().get(0) == Limbo.currentDrawnCard.getColor()){
+						CardColors tempColor = null;
+						ArrayList<CardColors> tempOrder = game.getGameState().getDoorsCompleted().getOrder();
+						
+						for(CardColors c : tempOrder){
+							if(c != null){
+								tempColor = c;
+								break;
+							}
+						}
+						
+						if(slots[i].storedCard.getSymbol() == CardSymbols.KEY && slots[i].storedCard.getColor() == Limbo.currentDrawnCard.getColor() && tempColor == Limbo.currentDrawnCard.getColor()){
 							game.setGetByKey(true);
 							game.getCompleteDoor().setEnabled(true);
 							break;
