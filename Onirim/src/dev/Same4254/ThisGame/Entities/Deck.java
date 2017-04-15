@@ -139,7 +139,7 @@ public class Deck extends Entity{
 				return;
 			}
 			
-			if(!Prophecy.prophecyFull && hitBox.contains(MouseManager.mouseX, MouseManager.mouseY) && MouseManager.justReleased){
+			if(!Prophecy.prophosizing && hitBox.contains(MouseManager.mouseX, MouseManager.mouseY) && MouseManager.justReleased){
 				deckPressed();
 				
 				MouseManager.justReleased = false;
@@ -197,6 +197,8 @@ public class Deck extends Entity{
 				temp.makeVisible();
 //				outOfDeck.add(temp);
 				
+				
+				//make cards in the play area not moveable
 				Slot[] playAreaSlots = game.getGameState().getPlayArea().getSlots();
 				for(int k = playAreaSlots.length-1; k >= 0; k--){
 					if(playAreaSlots[k].storedCard != null){
@@ -204,6 +206,8 @@ public class Deck extends Entity{
 					}
 				}
 				
+				
+				//hand out the card depending on what it is
 				if(temp.getType() != CardTypes.LOCATION){
 					limbo.addCard(temp);
 					break;
@@ -220,25 +224,18 @@ public class Deck extends Entity{
 			}
 		}
 		
+		//checks to see if there is a match of a key and a door in limbo
 		game.getGameState().getHand().checkForDoorToKeyMatch();
 	}
 	
-//	public void notifyProphecy(){
-//		Slot[] proSlots = game.getGameState().getProphecy().getSlots();
-//		for(int i = 0; i < proSlots.length; i++){
-//			if(proSlots[i].storedCard != null){
-//				proSlots[i].storedCard = null;
-//				return;
-//			}
-//		}
-//	}
-
 	public void render(Graphics g) {
 //		g.setColor(Color.RED);
 //		g.fillRect(x, y, width, height);
 		g.drawImage(Assets.cardBack, x, y,100,158, null);
 		g.setFont(new Font("MyFont", Font.PLAIN, 18));
 		
+		
+		//counts up the cards in prophecy
 		int temp = 0;
 		for(Slot s : game.getGameState().getProphecy().getSlots()){
 			if(s.storedCard != null){

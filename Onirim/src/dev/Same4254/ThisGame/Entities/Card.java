@@ -178,7 +178,7 @@ public class Card extends Entity{
 			Slot[] proSlots = gameState.getProphecy().getSlots();
 //			System.out.println(cardSelected);
 			
-			if(Prophecy.prophosizing && cardType != CardTypes.DOOR &&  MouseManager.rightPressed && hitBox.contains(MouseManager.mouseX, MouseManager.mouseY) && !MouseManager.mouseDragged){
+			if(MouseManager.rightPressed && cardType != CardTypes.DOOR && hitBox.contains(MouseManager.mouseX, MouseManager.mouseY) && !MouseManager.mouseDragged){
 //				System.out.println("Pro: " + Prophecy.prophosizing);
 				discard.addCard(this);
 				hitBox.setLocation(x, y);

@@ -127,32 +127,37 @@ public class DoorsCompleted extends Entity{
 		if(switching){
 			for(int i = 0; i < slots.length; i++){
 				if(MouseManager.justEntered && slots[i].getHitBox().contains(MouseManager.mouseX, MouseManager.mouseY) && slots[i].storedCard == null){
-					System.out.println("Slot hit");
-					for(int k = 0; k < 2; k++){
-						if(swingers[k] == -1){
-							swingers[k] = i;
-							slots[i].setHalf(true);
-							break;
-						}
+					if(slots[i].isHalf()){
+						slots[i].setHalf(false);
+						swingers[0] = -1;
 					}
-					if(swingers[0] != -1 && swingers[1] != -1){
-						System.out.println("Got to the if");
-						CardColors temp = order.get(swingers[0]);
-						order.set(swingers[0], order.get(swingers[1]));
-						order.set(swingers[1], temp);
-						
-						Color temp2 = slots[swingers[0]].getColor();
-						slots[swingers[0]].setColor(slots[swingers[1]].getColor());
-						slots[swingers[1]].setColor(temp2);
-						
-						slots[swingers[0]].setHalf(false);
-						slots[swingers[1]].setHalf(false);
-						
-						swingers[0] = swingers[1] = -1;
-						switching = false;
-						game.getGameState().setComponents(true);
-						System.out.println(order);
-						game.update();
+					else{
+						for(int k = 0; k < 2; k++){
+							if(swingers[k] == -1){
+								swingers[k] = i;
+								slots[i].setHalf(true);
+								break;
+							}
+						}
+						if(swingers[0] != -1 && swingers[1] != -1){
+							System.out.println("Got to the if");
+							CardColors temp = order.get(swingers[0]);
+							order.set(swingers[0], order.get(swingers[1]));
+							order.set(swingers[1], temp);
+							
+							Color temp2 = slots[swingers[0]].getColor();
+							slots[swingers[0]].setColor(slots[swingers[1]].getColor());
+							slots[swingers[1]].setColor(temp2);
+							
+							slots[swingers[0]].setHalf(false);
+							slots[swingers[1]].setHalf(false);
+							
+							swingers[0] = swingers[1] = -1;
+							switching = false;
+							game.getGameState().setComponents(true);
+							System.out.println(order);
+							game.update();
+						}
 					}
 				}
 			}

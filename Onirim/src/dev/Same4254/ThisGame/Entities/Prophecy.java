@@ -6,6 +6,7 @@ import java.awt.Point;
 import java.util.ArrayList;
 
 import dev.Same4254.ThisGame.Game;
+import dev.Same4254.ThisGame.Entities.Card.CardTypes;
 import dev.Same4254.ThisGame.States.GameState;
 
 public class Prophecy extends Entity{
@@ -68,10 +69,17 @@ public class Prophecy extends Entity{
 			Slot tempSlot = null;
 			boolean temp = true;
 			int temp2 = 0;
+			boolean allDoors = true;
 			for(int i = 0; i < slots.length; i++){
 				slots[i].update();
 				
-				if(slots[i].storedCard!=null && slots[i].storedCard.isSelected()){
+				if(slots[i].storedCard != null && slots[i].storedCard.getType() != CardTypes.DOOR)
+					allDoors = false;
+				else if(slots[i].storedCard == null){
+					allDoors = false;
+				}
+				
+				if(slots[i].storedCard != null && slots[i].storedCard.isSelected()){
 					tempSlot = slots[i];
 				}
 				
@@ -88,6 +96,13 @@ public class Prophecy extends Entity{
 			else{
 				prophosizing = false;
 			}
+			
+			if(allDoors){
+				prophosizing = false;
+			}
+			
+			System.out.println(prophosizing);
+			
 			prophecyFull = temp;
 			if(tempSlot!= null)
 				tempSlot.update();

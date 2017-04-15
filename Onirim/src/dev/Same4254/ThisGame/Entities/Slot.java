@@ -120,6 +120,10 @@ public class Slot extends Entity{
 	public Color getColor() {
 		return color;
 	}
+	
+	public boolean isHalf() {
+		return half;
+	}
 
 	public void setColor(Color color) {
 		this.color = color;

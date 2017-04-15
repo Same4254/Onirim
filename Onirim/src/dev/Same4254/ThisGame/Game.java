@@ -77,8 +77,8 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 	
 	private boolean getByKey;
 	
-	private boolean lostFoundHard = false;
-	private boolean lostFound = false;
+	private boolean lostFoundHard = true;
+	private boolean lostFound = true;
 	
 	/**
 	 * TODO LIST

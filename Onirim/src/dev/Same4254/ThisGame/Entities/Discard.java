@@ -40,7 +40,6 @@ public class Discard extends Entity{
 	
 	//Method for just simply adding a card to the discard without checking with other components
 	public void addCardWithoutCheck(Card c){
-//		System.out.println("------------------ \n Discard " + c.getType() + "\n----------------------------");
 		slot.addCard(c);
 		size++;
 	}
@@ -50,21 +49,10 @@ public class Discard extends Entity{
 			game.getCompleteDoor().setEnabled(false);
 		}
 		
-//		game.getDiscarded().addCard(c);
-		
-//		System.out.println(c);
-//		gameState.getCardsOutOfDeck().remove(c);
 		slot.addCard(c);
 		c.setInPlayArea(false);
 		c.setInProphecy(false);
 		c.setMoveable(false);
-		/*
-		 * This is a key card, meaning the user is trying to continue, so the complete card button is disabled because it is 
-		 * no imidietaely after that door was added to limbo
-		 */
-		if(c.getSymbol() == Card.CardSymbols.KEY){
-			game.getCompleteDoor().setEnabled(false);
-		}
 		
 		/*
 		* The card in Limbo is still in play, and the player just discarded a key, check if limbo card is door or nightmare

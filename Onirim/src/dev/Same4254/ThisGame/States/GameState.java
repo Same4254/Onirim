@@ -65,7 +65,7 @@ public class GameState extends State{
 		hand.update();
 		
 		if(!game.isFirstTurn()){
-			System.out.println("Wat");
+//			System.out.println("Wat");
 			prophecy.update();
 			limbo.update();
 			playArea.update();

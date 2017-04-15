@@ -67,7 +67,7 @@ public class Hand extends Entity{
 			
 			if(slots[slots.length-1].storedCard!=null){
 				game.setFirstTurn(false);
-				System.out.println("Not First Turn");
+//				System.out.println("Not First Turn");
 			}
 			
 			checkForDoorToKeyMatch();
