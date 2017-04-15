@@ -162,9 +162,6 @@ public class PlayArea extends Entity{
 							if(slots[i].storedCard.getColor() != tempColor){
 								match = false;
 							}
-							else{
-								System.out.println("Still true");
-							}
 							break;
 						}
 					}

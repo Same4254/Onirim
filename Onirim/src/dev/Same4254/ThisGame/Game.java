@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JToggleButton;
 
 import com.sun.glass.events.KeyEvent;
 
@@ -65,6 +66,7 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 	private JButton completeDoor;
 	private JButton returnToMenu;
 	private JButton startGame;
+	private JToggleButton lostFoundButton;
 	
 	private boolean firstTurn = true;
 	
@@ -77,8 +79,8 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 	
 	private boolean getByKey;
 	
-	private boolean lostFoundHard = true;
-	private boolean lostFound = true;
+	private boolean lostFoundHard = false;
+	private boolean lostFound = false;
 	
 	/**
 	 * TODO LIST
@@ -87,7 +89,6 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 	 * 
 	 * X-Packs
 	 * 	Other Prophecy
-	 * 	Deselect switch door
 	 * 
 	 * Clean up/Comments 
 	 * TEST TEST TEST
@@ -126,6 +127,7 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 		completeDoor = new JButton();
 		returnToMenu = new JButton();
 		startGame = new JButton();
+		lostFoundButton = new JToggleButton("Lost & Found XPack");
 		
 		field = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		display = new Display(this, title, width, height);
@@ -143,7 +145,7 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 		startGame.setSize(400,80);
 		startGame.setLocation((int)((display.getWidth()/2) - (startGame.getWidth()/2)), (int)((display.getHeight()/1.5) - (startGame.getHeight()/2))); 
 //		startGame.setUI(new StartGameUI());
-		startGame.setOpaque(true);
+		startGame.setOpaque(false);
 		startGame.setBorderPainted(false);
 		
 		gameState = new GameState(this);
@@ -151,6 +153,16 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 		winState = new WinState(this);
 		loseState = new LoseState(this);
 		State.setCurrentState(menuState);
+		
+		
+		lostFoundButton.setVisible(true);
+		lostFoundButton.setEnabled(true);
+		lostFoundButton.addActionListener(this);
+		lostFoundButton.setSize(400,80);
+		lostFoundButton.setLocation((int)((display.getWidth()/2) - (lostFoundButton.getWidth()/2)), (int)((display.getHeight()/1.25) - (lostFoundButton.getHeight()/2)));
+		lostFoundButton.setOpaque(false);
+		lostFoundButton.setBorderPainted(false);
+		lostFoundButton.setFocusable(false);
 		
 //		gameState.getDeck().shuffle();
 		
@@ -176,6 +188,7 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 		add(completeDoor);
 		add(returnToMenu);
 		add(startGame);
+		add(lostFoundButton);
 		
 		firstTurn = true;
 		
@@ -277,6 +290,7 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
     public void endMenuState(){
 //    	gameState = new GameState(this);
     	completeDoor.setEnabled(false);
+    	lostFoundButton.setVisible(false);
     	Discard.size = 0;
     	State.setCurrentState(gameState);
     	deckMenu.update();
@@ -401,6 +415,7 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 			State.setCurrentState(menuState);
 			returnToMenu.setVisible(false);
 			startGame.setVisible(true);
+			lostFoundButton.setVisible(true);
 			update();
 		}
 		else if(e.getSource() == startGame){
@@ -413,6 +428,10 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 			
 			endMenuState();
 			update();
+		}
+		else if(e.getSource() == lostFoundButton){
+			lostFound = lostFoundButton.isSelected();
+			gameState = new GameState(this);
 		}
 	}
 	
@@ -473,12 +492,17 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 //			startGame.setLocation((int)((display.getWidth()/2) - (startGame.getWidth()/2)), (int)((display.getHeight()/1.5) - (startGame.getHeight()/2)));
 			
 			percentX = (float)((display.getWidth()/2) - (startGame.getWidth()/2)) / field.getWidth();
-			percentY = (float)(644) / field.getHeight();
+			percentY = (float)(((display.getHeight()/1.5) - (startGame.getHeight()/2))) / field.getHeight();
 			startGame.setLocation((int)(percentX * (getWidth() - widthOffSet*2) + widthOffSet), (int)(percentY * (getHeight() - heightOffSet*2) + heightOffSet));
+			
+			percentX = (float)((display.getWidth()/2) - (lostFoundButton.getWidth()/2)) / field.getWidth();
+			percentY = (float)((display.getHeight()/1.25) - (lostFoundButton.getHeight()/2)) / field.getHeight();
+			lostFoundButton.setLocation((int)(percentX * (getWidth() - widthOffSet*2) + widthOffSet), (int)(percentY * (getHeight() - heightOffSet*2) + heightOffSet));
 			
 			percentWidth = (float)400 / field.getWidth();
 			percentHeight = ((float)80 / field.getHeight());
 			startGame.setSize((int)(percentWidth * (getWidth() - widthOffSet*2)), (int)(percentHeight * (getHeight() - heightOffSet*2)));
+			lostFoundButton.setSize((int)(percentWidth * (getWidth() - widthOffSet*2)), (int)(percentHeight * (getHeight() - heightOffSet*2)));
 		}
 	}
 

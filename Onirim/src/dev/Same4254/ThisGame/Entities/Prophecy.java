@@ -53,7 +53,7 @@ public class Prophecy extends Entity{
 	}
 	
 	public void clearAllProphecy(){
-		System.out.println("clear");
+//		System.out.println("clear");
 		ArrayList<Card> deckCards = gameState.getDeck().getCards();
 		for(int i = 0; i < slots.length; i++){
 			if(slots[i].storedCard != null){
@@ -101,7 +101,7 @@ public class Prophecy extends Entity{
 				prophosizing = false;
 			}
 			
-			System.out.println(prophosizing);
+//			System.out.println(prophosizing);
 			
 			prophecyFull = temp;
 			if(tempSlot!= null)

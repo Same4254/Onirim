@@ -117,13 +117,13 @@ public class Deck extends Entity{
 	}
 	
 	public void shuffle(){
-		System.out.println("SHUFFLE");
+//		System.out.println("SHUFFLE");
 		game.getGameState().getProphecy().clearAllProphecy();
 		Collections.shuffle(cards);
 	}
 	
 	public void shuffleWithoutClear(){
-		System.out.println("SHUFFLE");
+//		System.out.println("SHUFFLE");
 		Collections.shuffle(cards);
 	}
 	

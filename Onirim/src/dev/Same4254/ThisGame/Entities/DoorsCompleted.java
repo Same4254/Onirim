@@ -73,7 +73,7 @@ public class DoorsCompleted extends Entity{
 				}
 				slots[i].setColor(c);
 			}
-			System.out.println(order);
+//			System.out.println(order);
 		}
 	}
 	
@@ -82,7 +82,7 @@ public class DoorsCompleted extends Entity{
 			for(int i = 0; i < slots.length; i++){
 				if(order.get(i) != null){
 					if(c.getColor() == order.get(i)){
-						System.out.println("Removed");
+//						System.out.println("Removed");
 						order.set(i, null);
 						game.getGameState().getDeck().getCards().remove(c);
 						for(int k = 0; k < slots.length; k++){
@@ -140,7 +140,7 @@ public class DoorsCompleted extends Entity{
 							}
 						}
 						if(swingers[0] != -1 && swingers[1] != -1){
-							System.out.println("Got to the if");
+//							System.out.println("Got to the if");
 							CardColors temp = order.get(swingers[0]);
 							order.set(swingers[0], order.get(swingers[1]));
 							order.set(swingers[1], temp);
@@ -155,7 +155,7 @@ public class DoorsCompleted extends Entity{
 							swingers[0] = swingers[1] = -1;
 							switching = false;
 							game.getGameState().setComponents(true);
-							System.out.println(order);
+//							System.out.println(order);
 							game.update();
 						}
 					}

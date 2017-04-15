@@ -145,7 +145,7 @@ public class Card extends Entity{
 				preY = y - MouseManager.mouseY;
 				MouseManager.justEntered = false;
 				cardSelected = true;
-				System.out.println("1");
+//				System.out.println("1");
 			}	
 			
 			else if(MouseManager.justReleased && cardSelected){
@@ -189,7 +189,7 @@ public class Card extends Entity{
 				preY = y - MouseManager.mouseY;
 				MouseManager.justEntered = false;
 				cardSelected = true;
-				System.out.println("2");
+//				System.out.println("2");
 			}
 			
 			else if(MouseManager.mouseDragged && cardSelected){
@@ -245,7 +245,7 @@ public class Card extends Entity{
 				preY = y - MouseManager.mouseY;
 				MouseManager.justEntered = false;
 				cardSelected = true;
-				System.out.println("3");
+//				System.out.println("3");
 			}	
 			
 			else if(MouseManager.justReleased && cardSelected){
