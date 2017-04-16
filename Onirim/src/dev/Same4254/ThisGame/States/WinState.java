@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 
 import dev.Same4254.ThisGame.Game;
+import dev.Same4254.ThisGame.gfx.Assets;
 
 public class WinState extends State{
 
@@ -21,9 +22,8 @@ public class WinState extends State{
 	}
 
 	public void render(Graphics g) {
-		g.setColor(Color.BLACK);
-		g.setFont(myFont);
-		g.drawString("YOU WIN! :)", 5, 50);
+		g.drawImage(Assets.wood, 0, 0, game.getDisplay().getWidth(), game.getDisplay().getHeight(), null);
+		g.drawString("You Win!", 0, 0);
 	}
 
 }

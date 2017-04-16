@@ -28,7 +28,14 @@ public class Assets {
 	
 	public static BufferedImage lostText, returnButtonArmed, returnButton, winText;
 	
-	public static String[] musicPaths = {new File("res/sound/Thunder Dreams.mp3").toURI().toString()};
+	public static BufferedImage menuImage;
+	
+	public static String[] musicPaths = {new File("res/sound/bounce.wav").toURI().toString(),
+				new File("res/sound/Lunar Outpost.mp3").toURI().toString(), 
+				new File("res/sound/Thunder Dreams.mp3").toURI().toString(),
+				new File("res/sound/Arabesque.mp3").toURI().toString(),
+				new File("res/sound/Nightmare.mp3").toURI().toString(),
+				new File("res/sound/Terror.mp3").toURI().toString()};
 	
 	public static void init(){
 		greenCardKey = ImageLoader.loadImage("/textures/Green Card Key.png");
@@ -73,6 +80,8 @@ public class Assets {
 		returnButton = ImageLoader.loadImage("/textures/Return-Button.png");
 		winText = ImageLoader.loadImage("/textures/Win Text.png");
 				
+		menuImage = ImageLoader.loadImage("/textures/menuImage.jpg");
+		
 		Graphics g = woodWithCover.getGraphics();
 		g.drawImage(boardCover, 0, 0, woodWithCover.getWidth(), woodWithCover.getHeight(), null);
 		g.dispose();

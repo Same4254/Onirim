@@ -1,4 +1,5 @@
 package dev.Same4254.ThisGame.dis;
+import java.awt.Color;
 import java.awt.Dimension;
 
 import javax.swing.JFrame;
@@ -35,6 +36,7 @@ public class Display {
 		panel.setMaximumSize(new Dimension(width, height));
 		panel.setMinimumSize(new Dimension(width, height));
 		panel.setFocusable(true);
+		panel.setBackground(Color.DARK_GRAY);
 		
 		frame.add(panel);
 		frame.pack();

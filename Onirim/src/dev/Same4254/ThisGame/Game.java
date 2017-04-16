@@ -68,7 +68,7 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 	private JButton startGame;
 	private JToggleButton lostFoundButton;
 	
-	private boolean firstTurn = true;
+	private boolean firstTurn;
 	
 	/*
 	 * This is the image that the paint component will draw to then will get scaled
@@ -104,6 +104,8 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 	
 	/**
 	 * Bugs
+	 * 
+	 * Can't play after a forced restart sometimes
 	 */
 	
 	/**
@@ -114,7 +116,7 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 		this.width = width;
 		this.height = height;
 		
-//		music = new Music(Assets.musicPaths[0]);
+		music = new Music(Assets.musicPaths);
 		
 		keyManager = new KeyManager(this);
 		mouseManager = new MouseManager(this);

@@ -1,5 +1,7 @@
 package dev.Same4254.ThisGame.Sound;
 
+import java.util.Random;
+
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
@@ -10,11 +12,20 @@ import javafx.scene.media.MediaView;
 
 public class Music {
 	private MediaPlayer player;
-	private Runnable onEnd; 
+	private JFXPanel panel;
 	
-	public Music(String path){
-		JFXPanel panel = new JFXPanel();
-		Platform.runLater(() -> initFX(panel, path));
+	private Runnable onEnd;
+	private Random randy;
+	
+	private String[] paths;
+	private int index;
+	
+	public Music(String[] paths){
+		this.paths = paths;
+		randy = new Random();
+		
+		panel = new JFXPanel();
+		Platform.runLater(() -> initFX(panel, paths[0]));
 		setOnEnd(this::nextSong);
 	}
 	
@@ -23,6 +34,7 @@ public class Music {
 			Media media = new Media(path);
 			player.stop();
 			player = new MediaPlayer(media);
+			player.setAutoPlay(true);
 			player.setOnEndOfMedia(onEnd);
 		});
 	}
@@ -46,7 +58,15 @@ public class Music {
 	}
 
 	public void nextSong(){
-		//TODO do this choo choo!
+		System.out.println("Next Song");
+		
+		int lastIndex = index;
+		index = randy.nextInt(paths.length);
+		
+		if(index == lastIndex)
+			nextSong();
+		
+		changeSong(paths[index]);
 	}
 	
 	public void setOnEnd(Runnable onEnd) {
