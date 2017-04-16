@@ -4,6 +4,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import dev.Same4254.ThisGame.Game;
+import javafx.scene.media.MediaPlayer;
 
 public class KeyManager implements KeyListener{
 
@@ -43,7 +44,18 @@ public class KeyManager implements KeyListener{
 
 	public void keyReleased(KeyEvent e) {
 		keys[e.getKeyCode()] = false;
-		System.out.println("released");
+
+		if(e.getKeyCode() == KeyEvent.VK_M){
+			if(game.getMusic().getPlayer().getStatus() == MediaPlayer.Status.PAUSED)
+				game.getMusic().resume();
+			else{
+				game.getMusic().pauseSong();
+			}
+		}
+		else if(e.getKeyCode() == KeyEvent.VK_N){
+			game.getMusic().nextSong();
+		}
+		
 		update();
 		game.update();
 	}

@@ -9,10 +9,12 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
+import javafx.util.Duration;
 
 public class Music {
 	private MediaPlayer player;
 	private JFXPanel panel;
+	private Duration startTime;
 	
 	private Runnable onEnd;
 	private Random randy;
@@ -31,6 +33,7 @@ public class Music {
 	
 	public void changeSong(String path){
 		Platform.runLater(()->{
+			startTime = Duration.ZERO;
 			Media media = new Media(path);
 			player.stop();
 			player = new MediaPlayer(media);
@@ -40,7 +43,13 @@ public class Music {
 	}
 
 	public void pauseSong(){
+		startTime = player.getCurrentTime();
 		Platform.runLater(player::pause);
+	}
+	
+	public void resume(){
+		player.setStartTime(startTime);
+		Platform.runLater(player::play);
 	}
 	
 	public void play(){
@@ -58,7 +67,7 @@ public class Music {
 	}
 
 	public void nextSong(){
-		System.out.println("Next Song");
+//		System.out.println("Next Song");
 		
 		int lastIndex = index;
 		index = randy.nextInt(paths.length);
@@ -72,5 +81,9 @@ public class Music {
 	public void setOnEnd(Runnable onEnd) {
 		this.onEnd = onEnd;
 		Platform.runLater(()->player.setOnEndOfMedia(onEnd));
+	}
+
+	public MediaPlayer getPlayer() {
+		return player;
 	}
 }

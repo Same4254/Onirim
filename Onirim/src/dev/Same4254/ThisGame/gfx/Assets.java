@@ -30,8 +30,7 @@ public class Assets {
 	
 	public static BufferedImage menuImage;
 	
-	public static String[] musicPaths = {new File("res/sound/bounce.wav").toURI().toString(),
-				new File("res/sound/Lunar Outpost.mp3").toURI().toString(), 
+	public static String[] musicPaths = {new File("res/sound/Lunar Outpost.mp3").toURI().toString(), 
 				new File("res/sound/Thunder Dreams.mp3").toURI().toString(),
 				new File("res/sound/Arabesque.mp3").toURI().toString(),
 				new File("res/sound/Nightmare.mp3").toURI().toString(),

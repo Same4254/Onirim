@@ -469,6 +469,10 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 		this.firstTurn = firstTurn;
 	}
 
+	public Music getMusic() {
+		return music;
+	}
+
 	@Override
 	public void componentHidden(ComponentEvent e) {
 		// TODO Auto-generated method stub
