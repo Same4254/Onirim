@@ -26,7 +26,7 @@ public class Discard extends Entity{
 	}
 
 	public void update() {
-		slot.update();
+//		slot.update();
 	}
 
 	public void render(Graphics g) {
