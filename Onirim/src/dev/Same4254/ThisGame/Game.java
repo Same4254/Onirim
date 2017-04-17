@@ -116,7 +116,7 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 		this.width = width;
 		this.height = height;
 		
-		music = new Music(Assets.musicPaths);
+//		music = new Music(Assets.musicPaths);
 		
 		keyManager = new KeyManager(this);
 		mouseManager = new MouseManager(this);
@@ -221,14 +221,14 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 		keyManager.update();
 //		System.out.println(keyManager.space);
 //		
-		if(keyManager.space){
+		if(KeyManager.space && State.getCurrentState() == gameState){
 			System.out.println("---------------------------------------------------" + "\nTOP");
 			for(int i = gameState.getDeck().getCards().size()-1; i >= 0; i--){
 				System.out.println(gameState.getDeck().getCards().get(i));
 			}
 			System.out.println("---------------------------------------------------");
 		}
-		if(keyManager.backspace){
+		if(KeyManager.backspace && State.getCurrentState() == gameState){
 			lose();
 		}
 		
@@ -497,17 +497,19 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 			
 //			startGame.setLocation((int)((display.getWidth()/2) - (startGame.getWidth()/2)), (int)((display.getHeight()/1.5) - (startGame.getHeight()/2)));
 			
-			percentX = (float)((display.getWidth()/2) - (startGame.getWidth()/2)) / field.getWidth();
-			percentY = (float)(((display.getHeight()/1.5) - (startGame.getHeight()/2))) / field.getHeight();
+			percentX = (float)((field.getWidth()/2) - (startGame.getWidth()/2)) / field.getWidth();
+			percentY = (float)(((field.getHeight()/1.5) - (startGame.getHeight()/2))) / field.getHeight();
 			startGame.setLocation((int)(percentX * (getWidth() - widthOffSet*2) + widthOffSet), (int)(percentY * (getHeight() - heightOffSet*2) + heightOffSet));
+			returnToMenu.setLocation((int)(percentX * (getWidth() - widthOffSet*2) + widthOffSet), (int)(percentY * (getHeight() - heightOffSet*2) + heightOffSet));
 			
-			percentX = (float)((display.getWidth()/2) - (lostFoundButton.getWidth()/2)) / field.getWidth();
-			percentY = (float)((display.getHeight()/1.25) - (lostFoundButton.getHeight()/2)) / field.getHeight();
+			percentX = (float)((field.getWidth()/2) - (lostFoundButton.getWidth()/2)) / field.getWidth();
+			percentY = (float)((field.getHeight()/1.25) - (lostFoundButton.getHeight()/2)) / field.getHeight();
 			lostFoundButton.setLocation((int)(percentX * (getWidth() - widthOffSet*2) + widthOffSet), (int)(percentY * (getHeight() - heightOffSet*2) + heightOffSet));
 			
 			percentWidth = (float)400 / field.getWidth();
 			percentHeight = ((float)80 / field.getHeight());
 			startGame.setSize((int)(percentWidth * (getWidth() - widthOffSet*2)), (int)(percentHeight * (getHeight() - heightOffSet*2)));
+			returnToMenu.setSize((int)(percentWidth * (getWidth() - widthOffSet*2)), (int)(percentHeight * (getHeight() - heightOffSet*2)));
 			lostFoundButton.setSize((int)(percentWidth * (getWidth() - widthOffSet*2)), (int)(percentHeight * (getHeight() - heightOffSet*2)));
 		}
 	}
