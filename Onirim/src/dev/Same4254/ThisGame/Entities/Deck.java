@@ -26,12 +26,14 @@ public class Deck extends Entity{
 	private Slot[] slots;
 	private Limbo limbo;
 	private Game game;
+	private GameState gameState;
 	public static boolean enabled;
 	
 	public Deck(Game game, GameState gameState, int x, int y, int width, int height) {
 		super(x, y, width, height);
 		cards = new ArrayList<Card>();
 		this.game = game;
+		this.gameState = gameState;
 //		mouse = game.getMouseManager();
 		
 		this.slots = gameState.getHand().getSlots();
@@ -90,10 +92,10 @@ public class Deck extends Entity{
 	public void dump5Cards(){
 		Slot[] propSlots = game.getGameState().getProphecy().getSlots();
 		for(int i = 0; i < 5; i++){
-			if(cards.size() < 5){
-				game.lose();
-				return;
-			}
+//			if(cards.size() < 5){
+//				game.lose();
+//				return;
+//			}
 			
 			Card temp = null;
 			for(Slot s : propSlots){
@@ -103,7 +105,12 @@ public class Deck extends Entity{
 			}
 			
 			if(temp == null){
-				temp = cards.remove(cards.size()-1);
+				if(cards.size() != 0)
+					temp = cards.remove(cards.size()-1);
+				else{
+					game.lose();
+					return;
+				}
 			}
 			
 			if(temp.getType() == CardTypes.LOCATION){
@@ -141,8 +148,6 @@ public class Deck extends Entity{
 			
 			if(!Prophecy.prophosizing && hitBox.contains(MouseManager.mouseX, MouseManager.mouseY) && MouseManager.justReleased){
 				deckPressed();
-				
-				MouseManager.justReleased = false;
 			}
 		}
 	}
@@ -159,7 +164,7 @@ public class Deck extends Entity{
 		}
 		
 		if(Limbo.currentDrawnCard != null && !game.isFirstTurn() && Limbo.currentDrawnCard.getSymbol() == CardSymbols.NIGHTMARE){
-			game.getGameState().getDiscard().addCard(Limbo.currentDrawnCard);
+			gameState.getDiscard().addCard(Limbo.currentDrawnCard);
 //			game.getGameState().getCardsOutOfDeck().remove(Limbo.currentDrawnCard);
 			Limbo.currentDrawnCard = null;
 			dump5Cards();
@@ -213,7 +218,7 @@ public class Deck extends Entity{
 					break;
 				}
 				else{
-					game.getGameState().getHand().addCard(temp);
+					gameState.getHand().addCard(temp);
 					Limbo.currentDrawnCard = null;
 					Hand.handSize++;
 					if(Hand.handSize == 5 && game.getGameState().getLimbo().getSlots()[0].storedCard != null){

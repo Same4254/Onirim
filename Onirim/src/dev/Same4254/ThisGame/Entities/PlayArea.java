@@ -200,7 +200,7 @@ public class PlayArea extends Entity{
 				
 				//if there are less than 2 of those doors enable the button
 				if(tempNum < 2 && match){
-					System.out.println("Button Enabled");
+//					System.out.println("Button Enabled");
 					game.getCompleteDoor().setEnabled(true);
 				}
 				else

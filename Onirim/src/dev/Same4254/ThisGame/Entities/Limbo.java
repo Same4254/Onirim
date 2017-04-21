@@ -1,21 +1,23 @@
 package dev.Same4254.ThisGame.Entities;
 
-import java.awt.Color;
 import java.awt.Graphics;
 
 import dev.Same4254.ThisGame.Game;
+import dev.Same4254.ThisGame.States.GameState;
 
 public class Limbo extends Entity{
 
 	private Slot[] slots;
 	private Game game;
+	private GameState gameState;
 	public static Card currentDrawnCard;
 	public static boolean enabled;
 	
-	public Limbo(Game game, int x, int y, int width, int height) {
+	public Limbo(Game game, GameState gameState, int x, int y, int width, int height) {
 		super(x, y, width, height);
 		
 		this.game = game;
+		this.gameState = gameState;
 		slots = new Slot[10];
 		
 		enabled = true;
@@ -62,7 +64,7 @@ public class Limbo extends Entity{
 			currentDrawnCard = null;
 		}
 //		System.out.println("SHUFFLE");
-		game.getGameState().getDeck().shuffle();
+		gameState.getDeck().shuffle();
 	}
 	
 	public void update() {

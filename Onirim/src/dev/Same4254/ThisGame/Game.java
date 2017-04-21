@@ -1,5 +1,7 @@
 package dev.Same4254.ThisGame;
 
+import java.awt.AlphaComposite;
+//import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -36,7 +38,6 @@ import dev.Same4254.ThisGame.dis.Display;
 import dev.Same4254.ThisGame.gfx.Assets;
 import dev.Same4254.ThisGame.gfx.ButtonUIs.CompleteDoorUI;
 import dev.Same4254.ThisGame.gfx.ButtonUIs.ReturnToMenuUI;
-import dev.Same4254.ThisGame.gfx.ButtonUIs.StartGameUI;
 
 public class Game extends JPanel implements ActionListener, ComponentListener{
 	private static final long serialVersionUID = 1L;
@@ -85,17 +86,11 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 	/**
 	 * TODO LIST
 	 * 
-	 * Menus
-	 * 
 	 * X-Packs
 	 * 	Other Prophecy
 	 * 
 	 * Clean up/Comments 
 	 * TEST TEST TEST
-	 * 
-	 * EXTRA:
-	 * Menu
-	 * Music
 	 * 
 	 * EXTRA EXTRA:
 	 * Saving/Loading
@@ -104,8 +99,6 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 	
 	/**
 	 * Bugs
-	 * 
-	 * Can't play after a forced restart sometimes
 	 */
 	
 	/**
@@ -116,7 +109,7 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 		this.width = width;
 		this.height = height;
 		
-//		music = new Music(Assets.musicPaths);
+		music = new Music(Assets.musicPaths);
 		
 		keyManager = new KeyManager(this);
 		mouseManager = new MouseManager(this);
@@ -230,8 +223,10 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 		}
 		if(KeyManager.backspace && State.getCurrentState() == gameState){
 			lose();
+			KeyManager.backspace = false;
+//			return;
 		}
-		
+		 
 		if(State.getCurrentState() != null)
 			State.getCurrentState().update();
 		repaint();
@@ -253,7 +248,7 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 //		g.drawImage(Assets.wood, 0, 0, display.getFrame().getWidth(), display.getFrame().getHeight(), null);
 		
 		heightOffSet = widthOffSet = 0;
-//		((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, .5f));
+		((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, .92f));
 		
 		if(State.getCurrentState() != null)
 			State.getCurrentState().render(g2);
@@ -290,11 +285,12 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 	}
 
     public void endMenuState(){
-//    	gameState = new GameState(this);
+    	gameState = new GameState(this);
     	completeDoor.setEnabled(false);
     	lostFoundButton.setVisible(false);
     	Discard.size = 0;
     	State.setCurrentState(gameState);
+    	gameState.init();
     	deckMenu.update();
     }
     
@@ -373,6 +369,7 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 							slots[i].storedCard.setMoveable(false);
 						}
 					}
+					gameState.getDeck().shuffle();
 					gameState.getLimbo().shuffleToDeck();
 				}
 			}
@@ -398,7 +395,7 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 							}
 						}
 						else{
-							if(handSlots[i].storedCard.getSymbol() == CardSymbols.KEY && handSlots[i].storedCard.getColor() == Limbo.currentDrawnCard.getColor()){
+							if(handSlots[i].storedCard.getSymbol() == CardSymbols.KEY && Limbo.currentDrawnCard != null && handSlots[i].storedCard.getColor() == Limbo.currentDrawnCard.getColor()){
 								gameState.getDiscard().addCard(handSlots[i].storedCard);
 								break;
 							}

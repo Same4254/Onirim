@@ -36,12 +36,16 @@ public class GameState extends State{
 	public GameState(Game game){
 		super(game);
 		
+		selectedCard = null;
+		
+		game.getCompleteDoor().setEnabled(false);
+		
 //		cardsOutOfDeck = new ArrayList<Card>();
 		
 		discard = new Discard(game, this, 287, 37, 100, 160);
 		hand = new Hand(game, 150, 499, 575, 183);
 		playArea = new PlayArea(game, 150, 303, 575, 183);
-		limbo = new Limbo(game, 750, 10, 237, 617);
+		limbo = new Limbo(game, this, 750, 10, 237, 617);
 		deck = new Deck(game, this, 175, 37, 100, 158);
 		myFont = new Font("myFont", Font.PLAIN, 18);
 		prophecy = new Prophecy(game, this, 12, 12, 125, 865);
@@ -51,11 +55,23 @@ public class GameState extends State{
 		
 		game.setFirstTurn(true);
 		
+//		if(hand.getSlots()[0].storedCard != null){
+//			deck.getCards().add(hand.getSlots()[0].storedCard);
+//		}
+//		else if(limbo.getSlots()[0].storedCard != null){
+//			deck.getCards().add(limbo.getSlots()[0].storedCard);
+//			Limbo.currentDrawnCard = null;
+//		}
+		
 		if(game.isLostFound())
 			spellBook = new SpellBook(game, game.isLostFoundHard(), 600, 37, 140, 200);
 		
 //		for(int i = 0; i < hand.getSlots().length; i++)
 //			hand.getSlots()[i].addCard(deck.getCards().remove(0));
+	}
+	
+	public void init(){
+		hand.refill();
 	}
 	
 	public void update() {

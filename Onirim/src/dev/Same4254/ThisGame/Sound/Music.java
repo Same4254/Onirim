@@ -27,8 +27,10 @@ public class Music {
 		randy = new Random();
 		
 		panel = new JFXPanel();
-		Platform.runLater(() -> initFX(panel, paths[0]));
+		index = randy.nextInt(paths.length);
+		Platform.runLater(() -> initFX(panel, paths[index]));
 		setOnEnd(this::nextSong);
+		
 	}
 	
 	public void changeSong(String path){

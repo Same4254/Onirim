@@ -23,7 +23,7 @@ public class WinState extends State{
 
 	public void render(Graphics g) {
 		g.drawImage(Assets.wood, 0, 0, game.getDisplay().getWidth(), game.getDisplay().getHeight(), null);
-		g.drawString("You Win!", 0, 0);
+		g.drawImage(Assets.winText, 0,10, 1000, 500, null);
 	}
 
 }

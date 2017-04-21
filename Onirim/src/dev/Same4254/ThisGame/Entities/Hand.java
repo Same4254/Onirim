@@ -164,9 +164,14 @@ public class Hand extends Entity{
 					}
 				}
 			}
-			else if(i == tempDeck.size()-1 && tempDeck.get(i).getType() != CardTypes.LOCATION){
+			
+			if(tempDeck.size() == 0){
 				game.lose();
+				return;
 			}
+//			else if(i == tempDeck.size()-1 && tempDeck.get(i).getType() != CardTypes.LOCATION){
+//				game.lose();
+//			}
 		}
 		
 		if(slots[slots.length-1].storedCard == null){

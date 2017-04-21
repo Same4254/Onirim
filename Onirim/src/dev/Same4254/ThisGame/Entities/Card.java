@@ -222,12 +222,12 @@ public class Card extends Entity{
 					gameState.getDoorsCompleted().getOrder().add(0, cardColor);
 					discard.addCard(Limbo.currentDrawnCard);
 					gameState.getLimbo().addCard(this);
-					Limbo.currentDrawnCard = this;
+					Limbo.currentDrawnCard = null;
 				}
 				else{
 					discard.addCard(Limbo.currentDrawnCard);
 					gameState.getLimbo().addCard(this);
-					Limbo.currentDrawnCard = this;
+					Limbo.currentDrawnCard = null;
 				}
 			}
 		}

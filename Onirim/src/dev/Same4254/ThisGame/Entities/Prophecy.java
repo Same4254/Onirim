@@ -43,12 +43,16 @@ public class Prophecy extends Entity{
 	
 	public void restockProphecy(){
 		ArrayList<Card> deckCards = gameState.getDeck().getCards();
-		if(deckCards.size() < 6)
-			game.lose();
 		for(int i = 0; i < 5; i++){
-			slots[i].addCard(deckCards.remove(deckCards.size()-1));
-			slots[i].storedCard.setInProphecy(true);
-			slots[i].storedCard.setMoveable(false);
+			if(deckCards.size() > 0){
+				slots[i].addCard(deckCards.remove(deckCards.size()-1));
+				slots[i].storedCard.setInProphecy(true);
+				slots[i].storedCard.setMoveable(false);
+			}
+			else{
+				game.lose();
+				return;
+			}
 		}
 	}
 	
