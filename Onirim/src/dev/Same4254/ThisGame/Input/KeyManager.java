@@ -45,15 +45,17 @@ public class KeyManager implements KeyListener{
 	public void keyReleased(KeyEvent e) {
 		keys[e.getKeyCode()] = false;
 
-		if(e.getKeyCode() == KeyEvent.VK_M){
-			if(game.getMusic().getPlayer().getStatus() == MediaPlayer.Status.PAUSED)
-				game.getMusic().resume();
-			else{
-				game.getMusic().pauseSong();
+		if(game.isPlayMusic()){
+			if(e.getKeyCode() == KeyEvent.VK_M){
+				if(game.getMusic().getPlayer().getStatus() == MediaPlayer.Status.PAUSED)
+					game.getMusic().resume();
+				else{
+					game.getMusic().pauseSong();
+				}
 			}
-		}
-		else if(e.getKeyCode() == KeyEvent.VK_N){
-			game.getMusic().nextSong();
+			else if(e.getKeyCode() == KeyEvent.VK_N){
+				game.getMusic().nextSong();
+			}
 		}
 		
 		update();

@@ -80,6 +80,8 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 	
 	private boolean getByKey;
 	
+	private boolean playMusic = true;
+	
 	private boolean lostFoundHard = false;
 	private boolean lostFound = false;
 	
@@ -109,7 +111,8 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 		this.width = width;
 		this.height = height;
 		
-		music = new Music(Assets.musicPaths);
+		if(playMusic)
+			music = new Music(Assets.musicPaths);
 		
 		keyManager = new KeyManager(this);
 		mouseManager = new MouseManager(this);
@@ -248,7 +251,7 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 //		g.drawImage(Assets.wood, 0, 0, display.getFrame().getWidth(), display.getFrame().getHeight(), null);
 		
 		heightOffSet = widthOffSet = 0;
-		((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, .92f));
+//		((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, .92f));
 		
 		if(State.getCurrentState() != null)
 			State.getCurrentState().render(g2);
@@ -308,6 +311,10 @@ public class Game extends JPanel implements ActionListener, ComponentListener{
 
 	public BufferedImage getField() {
 		return field;
+	}
+	
+	public boolean isPlayMusic() {
+		return playMusic;
 	}
 
 	public float getHeightOffSet() {
